@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makerspace RAG - Admin</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            color: #00d4ff;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #8892b0;
+            font-size: 1.1rem;
+        }
+        
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px 30px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        
+        .stat-label {
+            color: #8892b0;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .drop-zone {
+            border: 2px dashed rgba(0, 212, 255, 0.5);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 212, 255, 0.05);
+        }
+        
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+        
+        .drop-zone p {
+            color: #8892b0;
+            margin-bottom: 10px;
+        }
+        
+        .drop-zone .formats {
+            font-size: 0.85rem;
+            color: #5a6c8a;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #e0e0e0;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .message.success {
+            background: rgba(0, 200, 100, 0.2);
+            border: 1px solid rgba(0, 200, 100, 0.5);
+            color: #00c864;
+            display: block;
+        }
+        
+        .message.error {
+            background: rgba(255, 100, 100, 0.2);
+            border: 1px solid rgba(255, 100, 100, 0.5);
+            color: #ff6464;
+            display: block;
+        }
+        
+        .recent-chunks {
+            margin-top: 40px;
+        }
+        
+        .chunk {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            border-left: 3px solid #00d4ff;
+        }
+        
+        .chunk-preview {
+            max-height: 80px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .chunk-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00d4ff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛠️ Makerspace RAG Admin</h1>
+            <p class="subtitle">Add data to the knowledge base</p>
+        </header>
+        
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="chunk-count">{{ stats.chunks }}</div>
+                <div class="stat-label">Knowledge Chunks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="vault-size">{{ stats.size_kb }} KB</div>
+                <div class="stat-label">Vault Size</div>
+            </div>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <h2>📁 Upload File</h2>
+                <div class="drop-zone" id="dropZone">
+                    <div class="icon">📄</div>
+                    <p>Drag & drop a file here or click to browse</p>
+                    <span class="formats">Supported: PDF, TXT, JSON, MD</span>
+                    <input type="file" id="fileInput" accept=".pdf,.txt,.json,.md">
+                </div>
+                <div id="uploadMessage" class="message"></div>
+            </div>
+            
+            <div class="card">
+                <h2>✍️ Add Text Directly</h2>
+                <textarea id="textInput" placeholder="Paste or type text here. It will be automatically split into chunks for the knowledge base..."></textarea>
+                <button class="btn" id="addTextBtn">Add to Knowledge Base</button>
+                <div id="textMessage" class="message"></div>
+            </div>
+        </div>
+        
+        <div class="card recent-chunks">
+            <h2>📚 Recent Chunks (Last 5)</h2>
+            <div id="recentChunks">
+                {% for chunk in recent_chunks %}
+                <div class="chunk">
+                    <div class="chunk-preview">{{ chunk }}</div>
+                </div>
+                {% endfor %}
+                {% if not recent_chunks %}
+                <p style="color: #8892b0;">No chunks in the vault yet. Upload a file or add text to get started!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadMessage = document.getElementById('uploadMessage');
+        const textInput = document.getElementById('textInput');
+        const addTextBtn = document.getElementById('addTextBtn');
+        const textMessage = document.getElementById('textMessage');
+        
+        // Drop zone click
+        dropZone.addEventListener('click', () => fileInput.click());
+        
+        // Drag and drop events
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length) handleFileUpload(files[0]);
+        });
+        
+        // File input change
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) handleFileUpload(fileInput.files[0]);
+        });
+        
+        // Handle file upload
+        async function handleFileUpload(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            dropZone.innerHTML = '<span class="loading"></span> Processing...';
+            uploadMessage.className = 'message';
+            uploadMessage.style.display = 'none';
+            
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    uploadMessage.className = 'message success';
+                    uploadMessage.textContent = data.message;
+                    updateStats(data.stats);
+                    refreshRecentChunks();
+                } else {
+                    uploadMessage.className = 'message error';
+                    uploadMessage.textContent = data.error;
+                }
+            } catch (error) {
+                uploadMessage.className = 'message error';
+                uploadMessage.textContent = 'Upload failed: ' + error.message;
+            }
+            
+            // Reset drop zone
+            dropZone.innerHTML = `
+                <div class="icon">📄</div>
+                <p>Drag & drop a file here or click to browse</p>
+                <span class="formats">Supported: PDF, TXT, JSON, MD</span>
+            `;
+        }
+        
+        // Add text button
+        addTextBtn.addEventListener('click', async () => {
+            const text = textInput.value.trim();
+            if (!text) {
+                textMessage.className = 'message error';
+                textMessage.textContent = 'Please enter some text';
+                return;
+            }
+            
+            addTextBtn.disabled = true;
+            addTextBtn.innerHTML = '<span class="loading"></span> Adding...';
+            textMessage.className = 'message';
+            textMessage.style.display = 'none';
+            
+            try {
+                const response = await fetch('/add-text', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    textMessage.className = 'message success';
+                    textMessage.textContent = data.message;
+                    textInput.value = '';
+                    updateStats(data.stats);
+                    refreshRecentChunks();
+                } else {
+                    textMessage.className = 'message error';
+                    textMessage.textContent = data.error;
+                }
+            } catch (error) {
+                textMessage.className = 'message error';
+                textMessage.textContent = 'Failed: ' + error.message;
+            }
+            
+            addTextBtn.disabled = false;
+            addTextBtn.textContent = 'Add to Knowledge Base';
+        });
+        
+        // Update stats display
+        function updateStats(stats) {
+            document.getElementById('chunk-count').textContent = stats.chunks;
+            document.getElementById('vault-size').textContent = stats.size_kb + ' KB';
+        }
+        
+        // Refresh recent chunks
+        async function refreshRecentChunks() {
+            try {
+                const response = await fetch('/recent?n=5');
+                const data = await response.json();
+                
+                const container = document.getElementById('recentChunks');
+                if (data.chunks.length) {
+                    container.innerHTML = data.chunks.map(chunk => `
+                        <div class="chunk">
+                            <div class="chunk-preview">${escapeHtml(chunk)}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p style="color: #8892b0;">No chunks in the vault yet.</p>';
+                }
+            } catch (error) {
+                console.error('Failed to refresh chunks:', error);
+            }
+        }
+        
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

@@ -4639,3 +4639,27 @@ PAGE 23 2020 GUIDE TO 3D PRINTING MATERIALS 5. Drying A new feature added to MET
 
 MAKERBOT.COM/METHOD/ Industrial 3D Printing for Every Engineer PAGE 25 2020 GUIDE TO 3D PRINTING MATERIALS PAGE 25 MAKERBOT EDUCATORS GUIDEBOOK PROJECT 01:  CLOUD TYPES AND DISPLAY STANDS MAKERBOT.COM
 
+Behandling av kjemikalier Nr Handling Ansvar Komment arer 1 Verneutstyr og sikkerhet 2 Oppstart og bruk 3 Avslutning og opprydding 4 Vedlikehold Revisjonshistorikk
+Bruk av stasjonær bormaskin (Bosch PBD 40) Dokumentformål - - Nr Handling Ansvar Kommentarer 1 Verneutstyr og sikkerhet 2 Oppstart og bruk 3 Avslutning og opprydding 4 Vedlikehold Revisjonshistorikk
+Avanserte 3D printere • • • • • • Dokumentformål - - Nr Handling Ansvar Kommentarer 1 Verneutstyr og sikkerhet 2 Oppstart og bruk - 3 Avslutning og opprydding 4 Vedlikehold Revisjonshistorikk
+Behandling av kjemikalier 
+ 
+Nr Handling Ansvar Komment arer 
+1 Verneutstyr og sikkerhet 
+2 Oppstart og bruk 
+3 Avslutning og opprydding 
+
+4 Vedlikehold 
+Revisjonshistorikk
+Bruk av stasjonær bormaskin (Bosch PBD 
+40) 
+Dokumentformål 
+- 
+- 
+Nr Handling Ansvar Kommentarer 
+1 Verneutstyr og sikkerhet 
+2 Oppstart og bruk 
+
+3 Avslutning og opprydding 
+4 Vedlikehold 
+Revisjonshistorikk
