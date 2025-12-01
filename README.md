@@ -6,7 +6,7 @@ A local Retrieval-Augmented Generation (RAG) system providing AI-powered assista
 
 - **Web Interface** - Clean, professional chat interface at localhost:5000
 - **Local LLM** - Runs entirely on your machine using Ollama
-- **354+ Knowledge Chunks** - Comprehensive makerspace documentation
+- **645+ Knowledge Chunks** - Comprehensive makerspace documentation
 - **Semantic Search** - Finds relevant information based on meaning, not just keywords
 
 ## Topics Covered
