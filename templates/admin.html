@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Makerspace RAG - Admin</title>
+    <title>Makerspace RAG - Adminpanel</title>
     <style>
         * {
             box-sizing: border-box;
@@ -195,24 +195,39 @@
             border-radius: 8px;
             margin-bottom: 10px;
             font-size: 0.9rem;
-            line-height: 1.5;
+            line-height: 1.6;
             border-left: 3px solid #00d4ff;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
         
-        .chunk-preview {
-            max-height: 80px;
+        .chunk:hover {
+            background: rgba(0, 0, 0, 0.4);
+            border-left-color: #00ffcc;
+        }
+        
+        .chunk-content {
+            max-height: 60px;
             overflow: hidden;
             position: relative;
+            transition: max-height 0.3s ease;
         }
         
-        .chunk-preview::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 30px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        .chunk-content.expanded {
+            max-height: none;
+        }
+        
+        .chunk-toggle {
+            color: #00d4ff;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            display: block;
+        }
+        
+        .chunk-index {
+            color: #5a6c8a;
+            font-size: 0.75rem;
+            margin-bottom: 6px;
         }
         
         .loading {
@@ -234,56 +249,111 @@
             font-size: 2rem;
             margin-bottom: 10px;
         }
+        
+        .file-list {
+            margin-top: 15px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .file-item .file-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .file-item .file-status {
+            margin-left: 10px;
+            font-size: 0.85rem;
+        }
+        
+        .file-item.pending .file-status {
+            color: #8892b0;
+        }
+        
+        .file-item.processing .file-status {
+            color: #00d4ff;
+        }
+        
+        .file-item.success .file-status {
+            color: #00c864;
+        }
+        
+        .file-item.error .file-status {
+            color: #ff6464;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🛠️ Makerspace RAG Admin</h1>
-            <p class="subtitle">Add data to the knowledge base</p>
+            <h1>🛠️ Makerspace RAG Adminpanel</h1>
+            <p class="subtitle">Legg til data i kunnskapsbasen</p>
+            <div style="margin-top: 15px;">
+                <a href="{{ url_for('index') }}" style="color: #8892b0; text-decoration: none; margin-right: 20px;">← Tilbake til chat</a>
+                <a href="{{ url_for('logout') }}" style="color: #ff6464; text-decoration: none;">🚪 Logg ut</a>
+            </div>
         </header>
         
         <div class="stats-bar">
             <div class="stat-card">
                 <div class="stat-value" id="chunk-count">{{ stats.chunks }}</div>
-                <div class="stat-label">Knowledge Chunks</div>
+                <div class="stat-label">Kunnskapsbiter</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value" id="vault-size">{{ stats.size_kb }} KB</div>
-                <div class="stat-label">Vault Size</div>
+                <div class="stat-label">Database størrelse</div>
+            </div>
+            <div class="stat-card">
+                <button class="btn" id="reloadBtn" style="margin-top: 5px;">🔄 Last inn embeddings</button>
+                <div class="stat-label" id="reloadStatus">Klikk etter å ha lagt til innhold</div>
             </div>
         </div>
         
         <div class="grid">
             <div class="card">
-                <h2>📁 Upload File</h2>
+                <h2>📁 Last opp filer</h2>
                 <div class="drop-zone" id="dropZone">
                     <div class="icon">📄</div>
-                    <p>Drag & drop a file here or click to browse</p>
-                    <span class="formats">Supported: PDF, TXT, JSON, MD</span>
-                    <input type="file" id="fileInput" accept=".pdf,.txt,.json,.md">
+                    <p>Dra og slipp filer her eller klikk for å velge</p>
+                    <span class="formats">Støtter: PDF, TXT, JSON, MD (flere filer tillatt)</span>
+                    <input type="file" id="fileInput" accept=".pdf,.txt,.json,.md" multiple>
                 </div>
+                <div id="fileList" class="file-list"></div>
                 <div id="uploadMessage" class="message"></div>
             </div>
             
             <div class="card">
-                <h2>✍️ Add Text Directly</h2>
-                <textarea id="textInput" placeholder="Paste or type text here. It will be automatically split into chunks for the knowledge base..."></textarea>
-                <button class="btn" id="addTextBtn">Add to Knowledge Base</button>
+                <h2>✍️ Legg til tekst direkte</h2>
+                <textarea id="textInput" placeholder="Lim inn eller skriv tekst her. Den blir automatisk delt opp i biter for kunnskapsbasen..."></textarea>
+                <button class="btn" id="addTextBtn">Legg til i kunnskapsbasen</button>
                 <div id="textMessage" class="message"></div>
             </div>
         </div>
         
         <div class="card recent-chunks">
-            <h2>📚 Recent Chunks (Last 5)</h2>
+            <h2>📚 Nylige kunnskapsbiter (siste 5)</h2>
+            <p style="color: #5a6c8a; font-size: 0.85rem; margin-bottom: 15px;">Klikk på en bit for å utvide/skjule</p>
             <div id="recentChunks">
                 {% for chunk in recent_chunks %}
-                <div class="chunk">
-                    <div class="chunk-preview">{{ chunk }}</div>
+                <div class="chunk" onclick="this.querySelector('.chunk-content').classList.toggle('expanded')">
+                    <div class="chunk-index">#{{ loop.index }}</div>
+                    <div class="chunk-content">{{ chunk }}</div>
+                    <span class="chunk-toggle">Klikk for å vise mer/mindre</span>
                 </div>
                 {% endfor %}
                 {% if not recent_chunks %}
-                <p style="color: #8892b0;">No chunks in the vault yet. Upload a file or add text to get started!</p>
+                <p style="color: #8892b0;">Ingen biter i databasen ennå. Last opp en fil eller legg til tekst for å komme i gang!</p>
                 {% endif %}
             </div>
         </div>
@@ -293,6 +363,7 @@
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
         const uploadMessage = document.getElementById('uploadMessage');
+        const fileList = document.getElementById('fileList');
         const textInput = document.getElementById('textInput');
         const addTextBtn = document.getElementById('addTextBtn');
         const textMessage = document.getElementById('textMessage');
@@ -313,23 +384,41 @@
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            if (files.length) handleFileUpload(files[0]);
+            const files = Array.from(e.dataTransfer.files);
+            if (files.length) handleMultipleFileUpload(files);
         });
         
         // File input change
         fileInput.addEventListener('change', () => {
-            if (fileInput.files.length) handleFileUpload(fileInput.files[0]);
+            const files = Array.from(fileInput.files);
+            if (files.length) handleMultipleFileUpload(files);
         });
         
-        // Handle file upload
-        async function handleFileUpload(file) {
-            const formData = new FormData();
-            formData.append('file', file);
+        // Handle multiple file upload
+        async function handleMultipleFileUpload(files) {
+            // Show file list
+            fileList.innerHTML = files.map((f, i) => `
+                <div class="file-item pending" id="file-${i}">
+                    <span class="file-name">📄 ${escapeHtml(f.name)}</span>
+                    <span class="file-status">Venter</span>
+                </div>
+            `).join('');
             
-            dropZone.innerHTML = '<span class="loading"></span> Processing...';
+            dropZone.innerHTML = '<span class="loading"></span> Laster opp ' + files.length + ' fil(er)...';
             uploadMessage.className = 'message';
             uploadMessage.style.display = 'none';
+            
+            const formData = new FormData();
+            files.forEach(file => formData.append('file', file));
+            
+            // Update all to processing
+            files.forEach((_, i) => {
+                const item = document.getElementById(`file-${i}`);
+                if (item) {
+                    item.className = 'file-item processing';
+                    item.querySelector('.file-status').textContent = 'Behandler...';
+                }
+            });
             
             try {
                 const response = await fetch('/upload', {
@@ -342,23 +431,72 @@
                 if (data.success) {
                     uploadMessage.className = 'message success';
                     uploadMessage.textContent = data.message;
+                    
+                    // Update file items based on results
+                    if (data.files_processed) {
+                        data.files_processed.forEach(result => {
+                            const fileName = result.split(':')[0];
+                            files.forEach((f, i) => {
+                                if (f.name === fileName) {
+                                    const item = document.getElementById(`file-${i}`);
+                                    if (item) {
+                                        item.className = 'file-item success';
+                                        item.querySelector('.file-status').textContent = '✓ ' + result.split(':')[1];
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    
+                    if (data.errors) {
+                        data.errors.forEach(error => {
+                            const fileName = error.split(':')[0];
+                            files.forEach((f, i) => {
+                                if (f.name === fileName) {
+                                    const item = document.getElementById(`file-${i}`);
+                                    if (item) {
+                                        item.className = 'file-item error';
+                                        item.querySelector('.file-status').textContent = '✗ ' + error.split(':')[1];
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    
                     updateStats(data.stats);
                     refreshRecentChunks();
                 } else {
                     uploadMessage.className = 'message error';
                     uploadMessage.textContent = data.error;
+                    
+                    files.forEach((_, i) => {
+                        const item = document.getElementById(`file-${i}`);
+                        if (item) {
+                            item.className = 'file-item error';
+                            item.querySelector('.file-status').textContent = '✗ Feilet';
+                        }
+                    });
                 }
             } catch (error) {
                 uploadMessage.className = 'message error';
-                uploadMessage.textContent = 'Upload failed: ' + error.message;
+                uploadMessage.textContent = 'Opplasting feilet: ' + error.message;
+                
+                files.forEach((_, i) => {
+                    const item = document.getElementById(`file-${i}`);
+                    if (item) {
+                        item.className = 'file-item error';
+                        item.querySelector('.file-status').textContent = '✗ Feil';
+                    }
+                });
             }
             
             // Reset drop zone
             dropZone.innerHTML = `
                 <div class="icon">📄</div>
-                <p>Drag & drop a file here or click to browse</p>
-                <span class="formats">Supported: PDF, TXT, JSON, MD</span>
+                <p>Dra og slipp filer her eller klikk for å velge</p>
+                <span class="formats">Støtter: PDF, TXT, JSON, MD (flere filer tillatt)</span>
             `;
+            fileInput.value = '';
         }
         
         // Add text button
@@ -366,12 +504,12 @@
             const text = textInput.value.trim();
             if (!text) {
                 textMessage.className = 'message error';
-                textMessage.textContent = 'Please enter some text';
+                textMessage.textContent = 'Vennligst skriv inn tekst';
                 return;
             }
             
             addTextBtn.disabled = true;
-            addTextBtn.innerHTML = '<span class="loading"></span> Adding...';
+            addTextBtn.innerHTML = '<span class="loading"></span> Legger til...';
             textMessage.className = 'message';
             textMessage.style.display = 'none';
             
@@ -396,11 +534,11 @@
                 }
             } catch (error) {
                 textMessage.className = 'message error';
-                textMessage.textContent = 'Failed: ' + error.message;
+                textMessage.textContent = 'Feilet: ' + error.message;
             }
             
             addTextBtn.disabled = false;
-            addTextBtn.textContent = 'Add to Knowledge Base';
+            addTextBtn.textContent = 'Legg til i kunnskapsbasen';
         });
         
         // Update stats display
@@ -417,16 +555,18 @@
                 
                 const container = document.getElementById('recentChunks');
                 if (data.chunks.length) {
-                    container.innerHTML = data.chunks.map(chunk => `
-                        <div class="chunk">
-                            <div class="chunk-preview">${escapeHtml(chunk)}</div>
+                    container.innerHTML = data.chunks.map((chunk, i) => `
+                        <div class="chunk" onclick="this.querySelector('.chunk-content').classList.toggle('expanded')">
+                            <div class="chunk-index">#${i + 1}</div>
+                            <div class="chunk-content">${escapeHtml(chunk)}</div>
+                            <span class="chunk-toggle">Klikk for å vise mer/mindre</span>
                         </div>
                     `).join('');
                 } else {
-                    container.innerHTML = '<p style="color: #8892b0;">No chunks in the vault yet.</p>';
+                    container.innerHTML = '<p style="color: #8892b0;">Ingen biter i databasen ennå.</p>';
                 }
             } catch (error) {
-                console.error('Failed to refresh chunks:', error);
+                console.error('Kunne ikke oppdatere biter:', error);
             }
         }
         
@@ -436,6 +576,35 @@
             div.textContent = text;
             return div.innerHTML;
         }
+        
+        // Reload embeddings button
+        const reloadBtn = document.getElementById('reloadBtn');
+        const reloadStatus = document.getElementById('reloadStatus');
+        
+        reloadBtn.addEventListener('click', async () => {
+            reloadBtn.disabled = true;
+            reloadBtn.innerHTML = '<span class="loading"></span>';
+            reloadStatus.textContent = 'Laster inn...';
+            
+            try {
+                const response = await fetch('/reload', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    reloadStatus.textContent = `Lastet ${data.chunks} biter`;
+                    reloadStatus.style.color = '#00c864';
+                } else {
+                    reloadStatus.textContent = 'Innlasting feilet';
+                    reloadStatus.style.color = '#ff6464';
+                }
+            } catch (error) {
+                reloadStatus.textContent = 'Feil: ' + error.message;
+                reloadStatus.style.color = '#ff6464';
+            }
+            
+            reloadBtn.disabled = false;
+            reloadBtn.textContent = '🔄 Last inn embeddings';
+        });
     </script>
 </body>
 </html>

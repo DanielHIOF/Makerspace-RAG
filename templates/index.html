@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makerspace RAG - HiØ</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+        
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        
+        header { text-align: center; margin-bottom: 15px; padding-top: 10px; }
+        h1 { color: #00d4ff; font-size: 1.8rem; margin-bottom: 5px; }
+        .subtitle { color: #8892b0; font-size: 0.95rem; }
+        
+        .stats-bar {
+            display: flex; gap: 12px; justify-content: center; margin-bottom: 15px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05); padding: 8px 16px;
+            border-radius: 8px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: #00d4ff; }
+        .stat-label { color: #8892b0; font-size: 0.75rem; margin-top: 2px; }
+        .status-dot {
+            display: inline-block; width: 8px; height: 8px;
+            border-radius: 50%; margin-right: 5px;
+        }
+        .status-dot.ready { background: #00c864; }
+        .status-dot.loading { background: #ffa500; }
+        
+        .chat-container {
+            background: rgba(255,255,255,0.03); border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
+            height: calc(100vh - 200px);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-messages { 
+            flex: 1;
+            overflow-y: auto; 
+            padding: 20px; 
+        }
+</style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛠️ Makerspace Kunnskapsassistent</h1>
+            <p class="subtitle">Høgskolen i Østfold</p>
+        </header>
+        
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="chunkCount">{{ stats.chunks }}</div>
+                <div class="stat-label">Kunnskapsbiter</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">
+                    <span class="status-dot loading" id="statusDot"></span>
+                    <span id="statusText">Laster...</span>
+                </div>
+                <div class="stat-label">Status</div>
+            </div>
+            <div class="stat-card">
+                <a href="{{ url_for('admin') }}" style="color: #8892b0; text-decoration: none; font-size: 0.85rem;">🔐 Admin</a>
+            </div>
+        </div>
+        
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="message-label">Assistent</div>
+                    <div class="message-content">Hei! 👋 Jeg er Makerspace-assistenten. Still meg et spørsmål om 3D-printing, laserkutting, elektronikk eller andre maker-prosjekter.</div>
+                </div>
+            </div>
+            
+            <!-- Mode indicator bubble -->
+            <div class="mode-bubble" id="modeBubble">
+                <span class="mode-text" id="modeText">Nivå 1: Enkel</span>
+                <span class="mode-desc" id="modeDesc">Enkelt språk, ingen faguttrykk, steg-for-steg</span>
+            </div>
+            
+            <!-- Input area with level buttons -->
+            <div class="chat-input-wrapper">
+                <div class="level-section">
+                    <span class="level-label">NIVÅ</span>
+                    <div class="level-buttons">
+                        <button class="level-btn active" data-level="/nybegynner " data-name="Nivå 1: Enkel" data-desc="Enkelt språk, ingen faguttrykk, steg-for-steg">1</button>
+                        <button class="level-btn" data-level="" data-name="Nivå 2: Normal" data-desc="Standard forklaring med vanlige faguttrykk">2</button>
+                        <button class="level-btn" data-level="/ekspert " data-name="Nivå 3: Ekspert" data-desc="Teknisk dybde, avanserte konsepter">3</button>
+                    </div>
+                </div>
+                <div class="input-row">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Skriv ditt spørsmål her..." autocomplete="off">
+                    <button class="btn" id="sendBtn">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .message {
+            margin-bottom: 15px; padding: 14px; border-radius: 12px; max-width: 85%;
+        }
+        .message.user {
+            background: rgba(0,212,255,0.15); border: 1px solid rgba(0,212,255,0.3);
+            margin-left: auto;
+        }
+        .message.assistant {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+        }
+        .message-label { font-size: 0.75rem; color: #8892b0; margin-bottom: 5px; }
+        .message-content { line-height: 1.6; font-size: 0.95rem; }
+        
+        .chat-input-wrapper {
+            background: rgba(0,0,0,0.2); 
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 15px;
+        }
+        
+        .level-section {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+        }
+        
+        .level-label {
+            color: #5a6c8a; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px;
+        }
+        
+        .level-buttons {
+            display: flex; gap: 6px;
+        }
+        
+        .level-btn {
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #b0b8c4; 
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            cursor: pointer; 
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        .level-btn:hover {
+            background: rgba(0,212,255,0.1); 
+            border-color: rgba(0,212,255,0.4);
+            color: #00d4ff;
+        }
+        
+        .level-btn.active {
+            background: rgba(0,212,255,0.25); 
+            border-color: #00d4ff;
+            color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0,212,255,0.3);
+        }
+        
+        .input-row {
+            display: flex; gap: 10px;
+        }
+        
+        .chat-input {
+            flex: 1; background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+            color: #e0e0e0; padding: 12px 15px; font-size: 1rem;
+        }
+        .chat-input:focus { outline: none; border-color: #00d4ff; }
+        
+        .btn {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: #000; border: none; padding: 12px 25px; border-radius: 8px;
+            cursor: pointer; font-weight: 600; font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0,212,255,0.3); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        
+        .mode-bubble {
+            background: rgba(0,212,255,0.08);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 8px 15px;
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .mode-text { color: #00d4ff; font-weight: 600; }
+        .mode-desc { color: #6a7a8a; }
+        
+        .loading-spinner {
+            display: inline-block; width: 16px; height: 16px;
+            border: 2px solid #00d4ff; border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const levelBtns = document.querySelectorAll('.level-btn');
+        const modeText = document.getElementById('modeText');
+        const modeDesc = document.getElementById('modeDesc');
+        
+        let selectedLevel = '/nybegynner ';
+        
+        // Level button handling
+        levelBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                levelBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedLevel = btn.dataset.level;
+                modeText.textContent = btn.dataset.name;
+                modeDesc.textContent = btn.dataset.desc;
+            });
+        });
+        
+        // Check status on load
+        fetch('/status')
+            .then(r => r.json())
+            .then(data => {
+                if (data.loaded) {
+                    statusDot.className = 'status-dot ready';
+                    statusText.textContent = 'Klar';
+                } else {
+                    statusText.textContent = 'Ikke lastet';
+                }
+            })
+            .catch(() => { statusText.textContent = 'Feil'; });
+        
+        function addMessage(content, isUser) {
+            const div = document.createElement('div');
+            div.className = `message ${isUser ? 'user' : 'assistant'}`;
+            div.innerHTML = `
+                <div class="message-label">${isUser ? 'Du' : 'Assistent'}</div>
+                <div class="message-content">${escapeHtml(content)}</div>
+            `;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML.replace(/\n/g, '<br>');
+        }
+        
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            const fullMessage = selectedLevel + message;
+            addMessage(message, true);
+            chatInput.value = '';
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<span class="loading-spinner"></span>';
+            
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: fullMessage })
+                });
+                const data = await response.json();
+                addMessage(data.response, false);
+            } catch (error) {
+                addMessage('Beklager, noe gikk galt. Prøv igjen.', false);
+            }
+            
+            sendBtn.disabled = false;
+            sendBtn.textContent = 'Send';
+        }
+        
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
