@@ -1,0 +1,107 @@
+Qty,Vendor Number,Description,List Unit Price,List Extended,Notes,Link,Alt Vendor 1,Alt Vendor 2,Alt Vendor 3,Alt Vendor 4,
+,,"Contains all purchased parts for 1 Jubilee Assembly.
+Printed parts are not included but listed in the wiki.",,,Cells with GREY TEXT are ALTERNATES,,,,,,
+,,,,,,,,,,,
+,Luke's Laboratory,,,,,,,,,,
+1,Build Plate + Magnetic Sticky Sheet,305x305mm spring steel build plate and magnetic adhesive. sticky sheet.,$40.00,$40.00,"The magnetic sticky sheet can withstand plate temps up to 140C.
+For build plates with embedded magnets, see the Upgrades tab.",https://lukeslabonline.com/products/build-plate-kit-jubilee,"Buildtak Flexplate (12x12in):
+https://www.buildtak.com/product/flexplate-surface/","SeeMeCNC Jubilee Flexplate:
+https://www.seemecnc.com/products/fablam-flex-spring-steel-bed-plate-for-jubilee?_pos=11&_sid=e2a6a3d11&_ss=r","Magnetic Adhesive sub:
+https://subtle.design/",,
+,,,,,,,,,,,
+,713maker.com,,,,,,,,,,
+1,07-BED-04-MM6-713,cast tool plate build plate,$70,$70,"For info on plate alternatives or building your own plate, see the wiki.",https://713maker.com/jubilee/jubilee-heated-bed,https://www.seemecnc.com/products/jubilee-aluminum-bed-plate-kit-non-magnetic?_pos=8&_sid=8513cf26e&_ss=r,,,,
+,,,,,,,,,,,
+,Mandala Rose Works,,,,,,,,,,
+1,041-CRS-02-M61-MRW,Pocketed Aluminum Crossbar,$80,$80,"Also available through Filastruder.
+See the wiki for info on the deprecated carbon fiber crossbar.",https://mandalaroseworks.com/products/jubilee-crossbar,https://hightemp3d.com/products/crossbar-jubilee-toolchanger-3d-printer,https://www.filastruder.com/products/jubilee-crossbar-by-mandala-rose-works?_pos=1&_sid=c122f7c5a&_ss=r,,,
+1,"021-LMP-02-M61-MRW
+021-RMP-02-M61-MRW",1 set of XY Motor Plates,$44,$44,"Also available through Filastruder.
+Metal Motor plates are now the default",https://mandalaroseworks.com/products/jubilee-aluminum-stepper-mounts,https://hightemp3d.com/products/aluminum-stepper-mount-jubilee-toolchanger-3d-printer,https://www.filastruder.com/products/jubilee-aluminum-stepper-mounts-by-mandala-rose-works?_pos=1&_sid=56b86e480&_ss=r,,,
+,,,,,,,,,,,
+,Filastruder,,,,,,,,,,
+1,,Duet 3 Mini Ethernet,$144.99,$144.99,"Duet products can be found from other region-specific vendors here:
+https://www.duet3d.com/GenuineResellers",https://www.filastruder.com/products/duet-3-mini-5?variant=32745318678599,,,,,
+1,,Expansion board,$124.99,$124.99,,https://www.filastruder.com/products/duet-3-expansion-board?_pos=1&_sid=1db21ca9d&_ss=r,,,,,
+1,JubHWKit,Jubilee Fastener Kit,$90,$90,Kit containing all line items (in the right quantities) in the Fasteners sheet.,https://www.filastruder.com/products/jubilee-hardware-kit?variant=32712442904647,,,,,
+1,JubTwistLock,Machined Twist Lock,$9,$9,,https://www.filastruder.com/products/twist-lock-assembly-for-jubilee,https://hightemp3d.com/products/twist-lock-jubilee-toolchanger-3d-printer,https://lukeslabonline.com/products/jubilee-twist-lock,http://www.aliexpress.com/item/1005003036895316.html,https://www.tindie.com/products/doublejumpelectric/jubilee-style-twist-lock-assembly/,https://www.seemecnc.com/products/jubilee-twist-lock-assembly?_pos=1&_sid=df763c308&_ss=r
+3,JubZThrust,Z Axis Thrust Bearing,$2.99,$8.97,,https://www.filastruder.com/collections/jubilee/products/thrust-bearing-for-jubilee-z-motors,McMaster-Carr: 6655K51,https://hightemp3d.com/collections/jubilee-and-toolchanger-stuff/products/jubilee-thrust-bearings-bag-of-three,http://catalog.torquetrans.com/catalog3/d/torquetransmission/?c=products&cid=thrust-bearings-carbon-steel-metric&id=20301,,
+1,WCSGS-JUB,"Set of: 
+2x Spring Guides, cut to 600mm
+1x length of 7x19, 0.024"" wire rope, 1600mm",$35.00,$35.00,"Wire Rope is McMaster-Carr part num: 34235T26.
+Spring Guide is DR Templeman part num: SG-088-020-120.",https://www.filastruder.com/products/wire-cable-and-spring-guide-set-for-jubilee,"https://hightemp3d.com/products/sprint-guide-jubilee-toolchanger-3d-printer
+https://hightemp3d.com/products/wire-rope-jubilee-toolchanger",https://lukeslabonline.com/products/jubilee-spring-guide,"DR Templeman, manufacturer:
+http://stocksprings.drtempleman.com/item/spring-guides/spring-guide/sg-088-020-120",,
+1,SSR-240D25,Solid State Relay for Heated Bed,$29.99,$29.99,,https://www.filastruder.com/products/panasonic-aqa411vl-ssr-railcore-jubilee,https://www.seemecnc.com/products/solid-state-relay-ssr-110-480vac-40a-x-3-32vdc?_pos=1&_sid=429fb8c35&_ss=r,https://hightemp3d.com/products/panasonic-ssr-15-ampers-250-vac-3-32vdc-for-3d-printer?_pos=1&_sid=4dc8ca17a&_ss=r,https://www.mouser.com/ProductDetail/TE-Connectivity-PB/SSR-240D25?qs=E2mePUJZiYyUeC334JoB4A==,https://www.digikey.com/en/products/detail/te-connectivity-potter-brumfield-relays/SSR-240D25/678179,
+1,LDOMotSetJub,Jubilee XY ZZZ U Motor Motion Set,$129.99,$129.99,"Includes:
+2x LDO-42STH60-2004MAC XY motors
+3x LDO-42STH48-1684MAC Z Motors
+1x LDO-28STH32-0674APG14 Toolchanger (U) Motor
+and cables.
+These supercede the StepperOnline motors, but the old ones still work",https://www.filastruder.com/collections/jubilee/products/ldo-stepper-motor-set-for-jubilee,https://hightemp3d.com/products/stepper-set-jubilee-toolchanger-3d-printer,,,,
+1,RELHub,"REL Hub, 6mm Bore",$5.99,$5.99,,https://www.filastruder.com/products/aluminum-hub-6mm-id,https://hightemp3d.com/products/aluminum-hub-6-jubilee-toolchanger-3d-printer,,,,
+1,RELSpring,REL Extension Spring,$0.99,$0.99,,https://www.filastruder.com/products/rel-replacement-extension-spring,https://hightemp3d.com/products/rel-replacement-extension-spring-jubilee-toolchanger-3d-printer,,,,
+6,SS25mm,"M4 Shoulder Screw, 25mm long, 5mm diameter",$1.99,$11.94,,https://www.filastruder.com/products/shoulder-screws-bolts?_pos=15&_sid=e2b13e329&_ss=r&variant=16712544124999,McMaster-Carr: 90278A375,,,,
+4,SS16mm,"M4 Shoulder Screw, 16mm long, 5mm diameter ",$1.99,$7.96,,https://www.filastruder.com/products/shoulder-screws-bolts?_pos=15&_sid=e2b13e329&_ss=r&variant=32208657842247,McMaster-Carr: 90265A132,,,,
+1,JubileeMotionSet,Genuine Gates Motion Set for Jubilee,79.99,79.99,"Includes: 
+5m belt, 8x 20T idlers, 4x 20T toothless idlers, 2x 16T drive pulleys.",https://www.filastruder.com/products/gates-motion-set-for-jubilee-printers,https://www.aliexpress.com/item/1005001516376637.html,,,,
+1,UltrasertM3Short,"M3 ""Ultrasert II"" Tapered Heat Set Insert",$4.99,$4.99,Sold in 30-packs. 24 needed.,https://www.filastruder.com/products/ultrasert-ii-metric-inserts-pack-of-30?_pos=1&_sid=cf5b3d0b0&_ss=r,McMaster-Carr: 94180A331,https://hightemp3d.com/products/m3-thread-inserts-jubilee-toolchanger,http://catalog.swaco.com/item/ultrasert-174-inserts/ultrasert-174-ii-metric-inserts/6075-3br038,,
+1,UltrasertM4Long,"M4 ""Ultrasert II"" Tapered Long Heat Set Insert",$1.99,$1.99,Sold in 5-packs. 4 needed.,https://www.filastruder.com/products/ultrasert-ii-metric-inserts-pack-of-30?_pos=1&_sid=cf5b3d0b0&_ss=r&variant=32384909475911,McMaster-Carr: 94180A353,http://catalog.swaco.com/item/ultrasert-174-inserts/ultrasert-174-ii-metric-inserts/6075-4br079,McMaster-Carr: 94180A353,,
+3,LDO-STD-375-T8x4,"8mm T8x4 Lead Screw, 375mm long",$12.99,$38.97,"If purchasing from an alt vendor, specify 375mm length cut.
+T8x2 also ok, but will have slower Z movement. Leadscrew nut must match.",https://www.filastruder.com/collections/jubilee/products/ldo-leadscrews?variant=32441753468999,http://www.zyltech.com/8mm-t8x2-lead-screw-trapezoidal-acme-w-small-delrin-anti-backlash-nut-kit-custom-length-up-to-1000mm/,https://hightemp3d.com/products/tr8x4-leadscrew-with-antibacklash-nut-for-3d-printers-400-mm,https://www.aliexpress.com/item/1005001516536336.html,,
+3,LDO-POM-T8x4-NUT,T8x4 POM Nut for leadscrew. Brass Nut also OK,$5.99,$17.97,,https://www.filastruder.com/collections/jubilee/products/ldo-leadscrews?variant=32441753665607,,,,,
+3,5x8Coupler,5mm-to-8mm Plum Coupler,$4.99,$14.97,Specify 5mm-to-8mm type,https://www.filastruder.com/products/flexible-plum-shaft-coupler?variant=17989593104455,http://www.zyltech.com/flexible-plum-coupler-shaft-various-combinations-from-5mm-to-12-7mm/,,,,
+1,SPCRM5x3x10,"pack of M5 Spacers, 3mm tall, 8 or 10mm OD",$1.99,$1.99,Sold in 5 packs. 4 needed.,https://www.filastruder.com/products/m5-spacers-3mm-tall-10mm-od,,,,,
+1,,Jubilee Electronics Back Panel,$34.99,$34.99,"Select ""Back"" from the options. See alt vendor for Acrylic Option -->",https://www.filastruder.com/collections/jubilee/products/jubilee-back-panel,https://www.redmountainengraving.com/product-page/jubilee-v2-back-panel,,,,
+1,,"Jubilee ""Com Side"" Side Panel",$34.99,$34.99,"Optional. Select ""COM"" from the options. See alt vendor for Acrylic Option -->",https://www.filastruder.com/collections/jubilee/products/jubilee-back-panel,https://www.redmountainengraving.com/product-page/copy-of-jubilee-v2-ethernet-side-panel,,,,
+1,,"Jubilee ""PSU Side"" Side Panel",$34.99,$34.99,"Optional. Select ""PSU"" from the options. See alt vendor for Acrylic Option -->",https://www.filastruder.com/collections/jubilee/products/jubilee-back-panel,https://www.redmountainengraving.com/product-page/jubilee-v2-120-v-side-panel,,,,
+1,LRS-350-24,"24V, 15A PSU",$34.99,$34.99,"Power Supply, Mean Well pn: LRS-350-24",https://www.filastruder.com/products/meanwell-lrs-350-24-psu,Amazon ASIN: B013ETVO12,,,,
+1,"JubFrameKitBlack,
+JubFramKitPurple, or
+JubFrameKitBlue",Jubilee Extrusion Frame Kit,$99.99,$99.99,"Includes: 
+7x 20x20 TSlot Extrusion, custom cut to 74 ±0.1 mm
+7x 20x20 TSlot Extrusion, custom cut to 409 ±0.1 mm
+7x 20x20 TSlot Extrusion, custom cut to 430 ±0.1 mm
+4x 20x20 TSlot Extrusion, custom cut to 604 ±0.1mm
+
+Upgrade from buying components from Misumi individually",https://www.filastruder.com/collections/jubilee/products/jubilee-frame-kit-by-ldo-motors,https://hightemp3d.com/products/misumi-extrusion-kit-jubilee-toolchanger-3d-printer,,,,
+1,JUB-BASE-HARNESS,Jubilee Wiring Harness Kit + 2 Stepper Motor Pigtails,$45.99,$45.99,"A kit of all items in the Wiring sheet.
+Contains all Wiring Harnesses for a Duet 3 + 3HC setup.",https://www.filastruder.com/products/jubilee-wiring-harness?variant=39563976441927,,,,,
+1,,120v Power Cable (US style plug),$4.99,$4.99,,https://www.filastruder.com/products/power-cable?pr_prod_strat=collection_fallback&pr_rec_pid=4839928430663&pr_ref_pid=6618159710279&pr_seq=uniform,,,,,
+,,,,,,,,,,,
+,Amazon,,,,,,,,,,
+8,B07GLQMMLJ,"20T Idler pulleys, 2GT, 5mm bore",3.99,7.98,Alternative to Filastruder Motion Set. Sold in 5-packs. 8 needed (two packs).,https://www.amazon.com/gp/product/B07GLQMMLJ/ref=ppx_yo_dt_b_asin_title_o04_s01?creativeASIN=B07GLQMMLJ&linkCode=w61&imprToken=1d9pH62v6qcWN7IV.F8DlA&slotNum=4&ie=UTF8&psc=1&tag=tv-auto-20,,,,,
+4,B071KK6Z8X,"9-pack of 20T toothless idler pulleys, 5mm bore",12.58,12.58,Alternative to Filastruder Motion Set. Sold in 9-packs. 4 needed (1 pack),https://www.amazon.com/gp/product/B071KK6Z8X/ref=ppx_yo_dt_b_asin_title_o04_s00?creativeASIN=B071KK6Z8X&linkCode=w61&imprToken=1d9pH62v6qcWN7IV.F8DlA&slotNum=3&ie=UTF8&psc=1&tag=tv-auto-20,,,,,
+1,B07C184P7L,IEC320 C14 120V Power Socket,14.99,14.99,,https://www.amazon.com/gp/product/B07C184P7L/ref=ppx_yo_dt_b_asin_title_o06_s00?ie=UTF8&psc=1,"https://www.aliexpress.com/item/32982777027.html?spm=a2g0o.productlist.0.0.37dd2f35OgyO8U&algo_pvid=5e764666-8ae2-4bc8-a06d-b3030e04ddbb&algo_expid=5e764666-8ae2-4bc8-a06d-b3030e04ddbb-0&btsid=0ab6fb8815819777287303501e8146&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_","Mouser: 446-084.01001.00-RSI
+Requires: 2x Fuses (10A 5mm x 20mm)",Digikey: CCM2178-ND‎,,
+,,,,,,,,,,,
+,Keenovo,,,,,,,,,,
+1,n/a,"Silicone Heated Pad, 300x300mm, 750W, 120V or 220V
+with 150C thermal cutoff",71.99,71.99,for bed heating. Choose the voltage for your region. (free shipping!),https://keenovo.store/collections/standard-keenovo-silicone-heaters/products/keenovo-square-silicone-heater-3d-printer-build-plate-heatbed-heating-pad?variant=8324021518391,Amazon ASIN: B00V81ZI70,"Aliexpress: https://www.aliexpress.com/item/32308797940.html?spm=a2g0o.productlist.0.0.3ea54fb61Aj5VF&algo_pvid=cd78e395-2560-4e6d-ac63-9796099c9cb3&algo_expid=cd78e395-2560-4e6d-ac63-9796099c9cb3-3&btsid=9eda9fb9-66cd-4501-93d1-4952c44634dc&ws_ab_test=searchweb0_0,searchweb201602_10,searchweb201603_53",https://www.seemecnc.com/products/silicone-heater-for-300mm-x-300mm-beds-110vac-700w?_pos=8&_sid=75f0d1fc8&_ss=r,,
+,,,,,,,,,,,
+,Misumi,Alternate: 2020 Extrusion Option (Grey),,,,,,,,,
+7,HFS5-2020-74,"20x20 TSlot Extrusion, custom cut to 74mm",$3.03,$21.21,Follow the link to a part number cut to the exact length with tight tolerances.,https://us.misumi-ec.com/vona2/detail/110302683830/?HissuCode=HFS5-2020-74&PNSearch=HFS5-2020-74&searchFlow=results2type&KWSearch=HFS5-2020-74,,,,,
+7,HFS5-2020-409,"20x20 TSlot Extrusion, custom cut to 409mm",$2.57,$17.99,Follow the link to a part number cut to the exact length with tight tolerances.,https://us.misumi-ec.com/vona2/detail/110302683830/?HissuCode=HFS5-2020-409&PNSearch=HFS5-2020-409&searchFlow=results2type&KWSearch=HFS5-2020-409,,,,,
+7,HFS5-2020-430,"20x20 TSlot Extrusion, custom cut to 430mm",$2.70,$18.90,Follow the link to a part number cut to the exact length with tight tolerances.,https://us.misumi-ec.com/vona2/detail/110302683830/?HissuCode=HFS5-2020-430&PNSearch=HFS5-2020-430&searchFlow=results2type&KWSearch=HFS5-2020-430,,,,,
+4,HFS5-2020-604,"20x20 TSlot Extrusion, custom cut to 604mm",$3.83,$15.32,Follow the link to a part number cut to the exact length with tight tolerances.,https://us.misumi-ec.com/vona2/detail/110302683830/?HissuCode=HFS5-2020-604&PNSearch=HFS5-2020-604&searchFlow=results2type&KWSearch=HFS5-2020-604,,,,,
+,,,,,,,,,,,
+,Aliexpress,,,,,,,,,,
+4,n/a,400mm MGN12 Rail with MGN12C carriage,$17.40,$69.60,Budget rails. Visit Filastruder (Alt Vendor 1) for quality LDO Rails ($40),https://www.aliexpress.com/item/32906662047.html?spm=a2g0s.9042311.0.0.64624c4dDXgo61,https://www.filastruder.com/collections/railcore/products/ldo-linear-rails?variant=31793542168647,https://www.zyltech.com/zyltech-mgn12-linear-rail-with-type-c-single-or-double-carriage-block/,https://hightemp3d.com/products/misumi-linear-rail-kit-jubilee-toolchanger,https://www.aliexpress.com/item/1005002062237086.html,
+2,n/a,450mm MGN12 Rail with MGN12H carriage,$18.62,$37.24,Budget rails. Visit Filastruder (Alt Vendor 1) for quality LDO Rails ($40),https://www.aliexpress.com/item/32906662047.html?spm=a2g0s.9042311.0.0.64624c4dDXgo61,https://www.filastruder.com/collections/railcore/products/ldo-linear-rails?variant=31796304412743,Amazon ASIN: B077MFSF5F,,,
+,,,,,,,,,,,
+,Stepper Online,Alternate: Stepper Motor Option,,,,,,,,,
+1,14HS13-0804S-PG5,Planetary Stepper,$29.81,$29.81,replaced by LDO motor; still works as a backup.,https://www.omc-stepperonline.com/nema-14-stepper-motor-bipolar-l33mm-w-gear-raio-51-planetary-gearbox-14hs13-0804s-pg5.html?search=14HS13-0804S-PG5,,,,,
+5,17HM19-2004S or 17HM19-2004S1,"Stepper Motors for X, Y, Z1, Z2, Z3 motion",$13.76,$68.80,"replaced by LDO motor; still works as a backup, but cables must be 
+made longer. Either 17HM19-2004S or 17HM19-2004S1 will work.",https://www.omc-stepperonline.com/nema-17-bipolar-0-9deg-46ncm-65-1oz-in-2a-2-8v-42x42x48mm-4-wires-full-d-cut-shaft.html,Amazon ASIN: B00W9A2L3S,,,,
+,,,,,,,,,,,
+,Digikey,,,,,,,,,,
+1,BC2891-ND,"NTC Ring Lug Thermistor, 10K, for the heated bed",$3.01,$3.01,Optional. Replaceable alternative to using the Keenovo built-in thermistor,https://www.digikey.com/product-detail/en/vishay-bc-components/NTCALUG01A103F/BC2891-ND/4896928,,,,,
+6,36-4000-ND,Solder Terminal Lug (used as bed Spring Anchors),$0.20,$1.20,Order a couple spares!,https://www.digikey.com/product-detail/en/keystone-electronics/4000/36-4000-ND/316071,,,,,
+2,36-7328-ND,Solder Terminal Lug (used as REL Spring Anchors),$0.17,$0.34,,https://www.digikey.com/product-detail/en/keystone-electronics/7328/36-7328-ND/316697,https://hightemp3d.com/products/keystone-7328-solder-lugs-for-rel-pulleys-bag-of-5,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,Total:,"$1,410.97",GREYED OUT line items are not included in the total.,,,,,,
+,,,,,Budget another ~$100 for cumulative shipping costs.,,,,,,
+,,,,,"Note: total is for motion system cost only.
+For two default extruders, check out the 2x Extruder sheet. For other tool 
+designs, see the tools page, the community mods page, and discord.",,,,,,

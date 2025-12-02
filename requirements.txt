@@ -1,4 +1,23 @@
-torch
-ollama
-flask
-PyPDF2
+# Makerspace RAG - Dependencies
+# Install with: pip install -r requirements.txt
+
+# Web Framework
+flask>=2.3.0
+flask-login>=0.6.0
+werkzeug>=2.3.0
+
+# LLM Integration
+ollama>=0.1.0
+requests>=2.28.0
+
+# Search & ML
+scikit-learn>=1.2.0
+numpy>=1.24.0
+
+# Document Processing - PDF (in order of preference)
+pymupdf4llm>=0.0.5      # Best for RAG - extracts markdown, handles tables
+pdfplumber>=0.10.0      # Fallback - good table extraction
+PyPDF2>=3.0.0           # Last resort - basic extraction
+
+# Optional: For semantic embeddings (simple_rag.py)
+# torch>=2.0.0

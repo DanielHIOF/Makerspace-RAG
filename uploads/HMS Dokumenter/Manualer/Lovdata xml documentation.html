@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://api.lovdata.no/xmldocs -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Lovdata xml documentation</title>
+<style>
+	code {
+	  background-color: #eee;
+	}
+	
+</style>
+</head>
+<body><h1>Lovdatas XML-format</h1><h2>Introduksjon</h2><p>Her dokumenteres gjeldende XML/HTML5-representasjon av dokumentene som finnes i Lovdatas ulike rettskilder.</p><p>Formatet omfatter dokumenter av mange ulike typer innenfor rettslig informasjon:</p><ul><li>Regelverk (lover, forskrifter etc.)</li><li>Forarbeider (NOUer, Stortingsproposisjoner etc.)</li><li>Rundskriv og uttalelser</li><li>Avgjørelser (rettsavgjørelser, nemnder etc.)</li><li>Litteratur (Artikler, fagbøker etc.)</li><li>Internasjonalt (EØS-avtalen, rettsakter, traktater etc.)</li><li>Annet (Organisasjoner, tariffavtaler etc.)</li></ul><p>Inntil videre er <em>kun regelverk</em> tilgjengelig i XML-format via dette APIet. Ta kontakt med Lovdata ved behov for maskinlesbare data fra andre rettskilder.</p><p>Flere av rettskildene er tilgjengelig med historikk, noen tilbake til 1200-tallet. Dette fører til en relativt kompleks datamodell/dokumentstruktur.</p><p>Fokuset i denne dokumentasjonen er hvordan formatet representerer norsk regelverk, men alle Lovdata sine dokumenter kan representeres innenfor formatet.</p><p>Resten av eksemplene i denne veiledningen tar utgangspunkt i <em>Lov om universiteter og høyskoler (universitets- og høyskoleloven)</em>, som er dokumentet som er tilgjengelig for demoformål. Det er rimelig representativt for en alminnelig norsk lov. Vanlige elementer som ikke er til stede i denne loven får egne eksempler</p><h2>Tekniske spesifikasjoner</h2><p>Formatet skal kun inneholde elementnavn fra HTML5-standarden. Prinsippet er at xml-dokumentene skal kunne åpnes i en nettleser for å gi menneskelesbart dokument uten ekstraarbeid, samtidig som det gir en begrensning på hvor mange forskjellige tags og elementer som kan brukes. Dette gir også store gevinster i form av UU-vennlig regelverk ut av boksen.</p><h3>Spesialtegn</h3><p>Dokumentene har UTF-8 som tegnsett. Entitetene <code>&amp;amp;amp;</code>, <code>&amp;amp;lt;</code>, <code>&amp;amp;gt;</code> og <code>&amp;amp;quot;</code> er i bruk. Øvrige spesialtegn gjengis som vanlige tegn. F.eks. blir non-breaking space <code></code>, ikke <code>&amp;amp;nbsp;</code>, <code>&amp;amp;xA0;</code> eller <code>&amp;amp;#160;</code>.</p><h2>Generell oppbygning</h2><p>XML-dokumentet består av to deler, <code>head</code> og <code>body</code>.</p><p><code>head</code> inneholder <code>title</code> og <code>base</code> som angir dokumentets tittel, mens <code>base</code> angir den baseURLen for lenker i dokumentet.</p><p><code>body</code> starter med elementet <code>header</code>, som inneholder all tilgjengelig metainformasjon om dokumentet.</p><p><code>main</code> er hovedelementet for selve dokumentet</p><h3>Regelverksoppbygning</h3><p>For å få til komplette, konsistente elementadresser så lik som mulig de som brukes i det juridiske domenet, nøstes regelverkselementer inn i hverandre iht følgende hierarki. Det vil si at elementer høyere i listen nøster inn under seg alle elementer under. Merk at et gitt dokument ikke nødvendigvis inneholder alle disse elementene.</p><ul><li><p><code>section</code> Kapitler, deler, avsnitt(i jurdisk sammenheng, et annet ord for kapittel) etc. For enkelhets skyld omtales disse bare som <em>kapitler</em> i denne veiledningen, uavhengig av hva tittelen er. En <code>section</code> er alltid etterfulgt av et <code>h2-6</code>-element som gir en tittel. I tilfeller der kapittelstrukturen strekker seg lengre nedover enn fem nivåer, brukes <code>div role=heading</code> med tilhørende <code>aria-level</code></p></li><li><p><code>legalArticle</code> Paragrafer, evt artikkel i internasjonalt regelverk.</p></li><li><p><code>legalNumberedP</code> Nummer, evt nummererte ledd. Merk at pga inkurier kan nummereringen i nummererte ledd være ufullstendig.</p></li><li><p><code>marginIdArticle</code> Punkt med en eksplisitt nummerering, ofte i flere nivåer (feks. 1.2.3)</p></li><li><p><code>legalP</code> Ledd.</p></li><li><p><code>defaultList</code> Hvis det er en <code>&lt;ol&gt;</code> vil dette være en sorterbar liste med enten bokstaver, tall eller romertall.</p></li><li><p><code>leddfortsettelse</code> Et element som fortsetter et ledd, feks etter lister eller andre oppramsinger.</p></li></ul><h3>Elementnavn</h3><h4>&lt;header&gt;</h4><p>Header er en <code>&lt;dl&gt;</code> bestående av 1 til n <code>&lt;dt&gt;/&lt;dd&gt;</code>-par, som kobles sammen i rekkefølge og med klassenavn.</p><h4>&lt;section&gt;</h4><p>Section representerer en generisk del av et dokument, som ikke har en spesifikk juridisk betydning. Disse vil som regel ha egennavn som kapittel, del, eller et romertall.</p><h4>&lt;h1&gt;</h4><p>Denne angir tittelen til et dokument.</p><h4>&lt;h2-6&gt;</h4><p>Disse angir overskriftsnivået for en section eller article. Den er absolutt, og skal sammenfalle med nøstenivået i
+sections/articles. For nivåer under 6 brukes &lt;div&gt; med <code>role=heading</code> og <code>aria-level=\d</code>. Formålet med dette er å gjør det enklere å lage universielt utformede løsninger.</p><p><code>&lt;h2-6&gt;</code> for paragrafer vil også ha <code>class=legalArticleHeader</code>.</p><p>Merk at paragrafer ligge på forskjellige nivåer inne i et dokument, avhengig av hvor dypt de ligger i paragrafstrukturen.</p><h4>&lt;article&gt;</h4><p>Article representerer selvstendig refererbare enheter, henholdsvis paragrafer, ledd, og punkter. Disse kan nøstes vilkårlig dypt i hverandre.</p><h5>Klassenavn for hodet</h5><p>Hodet er satt opp som en <em>description list</em> (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl) med <code>&lt;dt&gt;/&lt;dd&gt;</code>-par. Par som hører sammen deler klassenavn. Ikke alle dokumenter har alle typer felt.</p><ul><li><code>class=a11yError</code>: Brudd på krav til universell utforming/tilgjengelighet i dokumentet</li><li><code>class=a11yStatus</code>: Dokumentets status for universell utforming/tilgjengelighet</li><li><code>class=advisedBy</code>: Departement som tilrådet</li><li><code>class=advised</code>: Datoen dokumentet ble tilrådet</li><li><code>class=agreementName</code>: Navn på avtale</li><li><code>class=agreementNumber</code>: Avtalens nummer</li><li><code>class=agreementprotocol</code>: Protokoll til avtalen</li><li><code>class=alcoholLevel</code>: Promille for straffedømte</li><li><code>class=alternativeName</code>: Alternative navn for dette dokumentet</li><li><code>class=appliesTo</code>: Angir hvilket geografisk område regelverket gjelder for</li><li><code>class=author</code>: Dokumentets forfatter(e)</li><li><code>class=authority</code>: Myndigheten som har behandlet saken/skrevet dokumentet</li><li><code>class=basedOn</code>: Dokument som hjemler dette</li><li><code>class=bodyMembers</code>: Medlemmer av utvalget som har behandlet den gitte saken</li><li><code>class=cabinetdate</code>: Dato for statsrådsbehandling</li><li><code>class=caseID</code>: Unikt løpenummer for dokumentet</li><li><code>class=caseLaw</code>: Rettspraksis som er relevant for saken</li><li><code>class=caseNumber</code>: Saksnummer eller saksnumre til dokumentet</li><li><code>class=celexNumberLovdata</code>: Identifikator gitt av Lovdata i et Celex-lignende format</li><li><code>class=celexNumber</code>: Identifikator for europeiske juridiske tekster i EUR-Lex</li><li><code>class=changedByTreaties</code>: Dokumenter som har endret dette dokumentet</li><li><code>class=changedBy</code>: Dokumenter som har endret dette dokumentet</li><li><code>class=changesToDocuments</code>: Dokumenter som endres av dette dokumentet</li><li><code>class=changesToTreaties</code>: Dokumenter som endres av dette dokumentet</li><li><code>class=changestodocuments</code>: Dokumenter og dokumentdeler som foreslås endret i dette dokumentet</li><li><code>class=comittee</code>: Komité som har saksbehandlingsansvar</li><li><code>class=commissionMembers</code>: Medlemmer av kommisjonen som har behandlet den gitte saken</li><li><code>class=conclusion</code>: Sakens konklusjon</li><li><code>class=correctedBy</code>: Dokumenter som har rettet dette dokumentet</li><li><code>class=councilMembers</code>: Medlemmer av rådet som har behandlet den gitte saken</li><li><code>class=court</code>: Rettslig instans</li><li><code>class=dateDeposited</code>: Datoen avtalen ble formelt deponert</li><li><code>class=dateInForceEnd</code>: Angir tidspunktet dette dokumentet er gyldig til</li><li><code>class=dateInForceNorway</code>: Ikrafttredelse for Norge spesifikt</li><li><code>class=dateInForce</code>: Angir tidspunktet dette dokumentet trådte i kraft</li><li><code>class=dateLastUpdated</code>: Når dokumentet sist ble oppdatert av Lovdata eller forfatter</li><li><code>class=dateOfPublication</code>: Dato for offisiell kunngjøring i Norsk Lovtidend</li><li><code>class=datePassed</code>: Datoen dokumentet ble vedtatt</li><li><code>class=dateTreatySignedNorway</code>: Datoen Norge signerte avtalen</li><li><code>class=dateTreatySigned</code>: Datoen avtalen ble signert</li><li><code>class=dateVerdictPublished</code>: Når dommen ble avsagt</li><li><code>class=dateratified</code>: Datoen dokumentet ble ratifisert</li><li><code>class=datostorting</code>:</li><li><code>class=decision</code>: Hva vedtaket ble</li><li><code>class=defendant</code>: Siktet i en sak</li><li><code>class=depositary</code>: Organisasjon som har ansvar for å oppbevare originalteksten til dokumentet</li><li><code>class=deweyclassification</code>: Dokumentets dewey-klassifikasjonskode</li><li><code>class=doclang</code>: Dokumentets språk eller målform</li><li><code>class=documentStatus</code>: Dokumentets rettslige status</li><li><code>class=documentType</code>: Type dokument</li><li><code>class=documenttype</code>: Dokumenttype</li><li><code>class=dokid</code>: Dokumentets unike identifikasjon i Lovdatas systemer. Første del foran <code>/</code> angir rettskilden dokumentet er en del av</li><li><code>class=drugamount</code>: Mengde narkotika som tiltalte ble kjent skyldig for</li><li><code>class=eeaReferences</code>: Henvisninger til EØS-lovgivning</li><li><code>class=eeaSupplement</code>: Publisert i EØS-tillegget til den europeiske unions tidende</li><li><code>class=eli</code>: ELI-referansen for et dokument</li><li><code>class=emdkeyword</code>: Stikkord-kategorier etter artikkel i EMK med protokoller</li><li><code>class=euRef</code>: Referanse på EU-/EF-format</li><li><code>class=firstreading</code>: Førstegangsbehandling i Stortinget</li><li><code>class=flaggsaker</code>: Publisert i Lovdata flaggsaker</li><li><code>class=formaltitle</code>: Dokumentets formelle tittel</li><li><code>class=inforcefrom</code>: Når avtalen gjelder fra</li><li><code>class=inforceuntil</code>: Når avtalen gjelder til/utløpsdato</li><li><code>class=isbn</code>: International Standard Book Number</li><li><code>class=journalNumber</code>: Journalnummer for Norsk Lovtidend</li><li><code>class=keyparagraphs</code>: Spesielt viktige avsnitt</li><li><code>class=keywords</code>: Stikkord for dokumentet</li><li><code>class=lastChangeInForce</code>: Når siste endring trådte i kraft</li><li><code>class=lastChangedBy</code>: Dato for siste endring</li><li><code>class=lastChangedBy</code>: Dokumentet som sist endret dette dokumentet</li><li><code>class=lastdownloaded</code>: Når dokumentet sist ble lastet ned fra ekstern kilde</li><li><code>class=lastupdated</code>: Rettelser i teksten</li><li><code>class=legacyID</code>: Dokumentets datokode, dvs tidspunkt for kunngjøring og regelverkskode</li><li><code>class=legalArea</code>: Overordnet tema loven berører</li><li><code>class=madeapplicableby</code>: Regelverk som allmenngjør avtalen/deler av avtalen</li><li><code>class=membersOfTheCourt</code>: Medlemmer av retten</li><li><code>class=ministry</code>: Departementet ansvarlig for dokumentet</li><li><code>class=miscInformation</code>: Annen informasjon om dokumentat</li><li><code>class=nemndMembers</code>: Medlemmer av nemnda som har behandlet den gitte saken</li><li><code>class=notYetIncorporated</code>: Dokumenter som ikke er blitt ajourført inn i dette</li><li><code>class=noteExchange</code>: Utveksling av noter mellom parter</li><li><code>class=note</code>: Merknader til dokumentet</li><li><code>class=numberOfPages</code>: Antall sider i originaldokument</li><li><code>class=officialJournal</code>: Publisert i Den europeiske unions tidende</li><li><code>class=ombudsman</code>: Sivilombud</li><li><code>class=originalURL</code>: URL til original tekst</li><li><code>class=originalfilename</code>: Navn på filen dokumentet er konstruert fra</li><li><code>class=parliamentProcess</code>: Dokumentets saksgang i Stortinget</li><li><code>class=parties</code>: Parter i rettsavgjørelsen</li><li><code>class=partiesemployees</code>: Parter for arbeidstakersiden</li><li><code>class=partiesemployers</code>: Parter for arbeidsgiversiden</li><li><code>class=patentBoardMembers</code>: Medlemmer av Patentstyret som har behandlet den gitte saken</li><li><code>class=placeOfTreatySigning</code>: Stedet avtalen ble undertegnet</li><li><code>class=plaintiff</code>: Den som brakte fram klagen i saken</li><li><code>class=principalagreement</code>: Hovedavtalen tilknyttet overenskomsten</li><li><code>class=proceedings</code>: Saksgangen til dokumentet</li><li><code>class=publicationYear</code>: År dokumentet ble utgitt</li><li><code>class=publishedIn</code>: Hvor dokumentet først ble publisert</li><li><code>class=publishedLovdata</code>: Dato for første publisering hos Lovdata</li><li><code>class=publishedby</code>: Enhet som har utgitt dokumentet</li><li><code>class=punishmentOption</code>: Straffebud for dommen</li><li><code>class=punishment</code>: Utmålt straff for den dømte</li><li><code>class=quotedlegislation</code>: Regelverk som blir omtalt i dokumentet</li><li><code>class=rapporteur</code>: Saksordfører</li><li><code>class=referenceDate</code>: Gjeldende tidspunkt for hendelsene/referansene i dokumentet, f.eks. gjerningstidspunkt</li><li><code>class=referencesInMetaFields</code>: Referanser til andre dokumenter i hodet</li><li><code>class=referencesinbody</code>: Referanser i dokumentets hoveddel</li><li><code>class=refid</code>: Verksreferanse til dette dokumentet</li><li><code>class=reparation</code>: Kode som angir summen noen ble tilkjent i erstatning</li><li><code>class=repeals</code>: Dokumenter som blir opphevet av dette</li><li><code>class=retstidende</code>: Også publisert i dette nummeret av RT</li><li><code>class=rettensgang</code>: Publisert i Rettens gang</li><li><code>class=sanction</code>: Dato for sanksjonering</li><li><code>class=secondreading</code>: Andregangsbehandling i Stortinget</li><li><code>class=sectionreferences</code>: Paragrafhenvisninger i dokumentet</li><li><code>class=signature authority</code>: Myndighet til å signere</li><li><code>class=sourceID</code>: Identifikator for dokumentet gitt av utgiver, forfatter el.</li><li><code>class=sourcedocument</code>: Dokument dette dokumentet er basert på</li><li><code>class=stockExchangeRepresentatives</code>: Representanter fra børsen</li><li><code>class=stortingspresident</code>: Stortingspresident</li><li><code>class=subunit</code>: Underavdeling e.l. med ansvar for dokumentet</li><li><code>class=summary</code>: Sammendrag av dokumentet</li><li><code>class=supervisoryAuthorityMembers</code>: Medlemmer av tilsynet som har behandlet den gitte saken</li><li><code>class=systemKode</code>: Systemkode</li><li><code>class=titleOriginal</code>: Dokumentets originale tittel</li><li><code>class=titleShort</code>: Korttittel for dette dokumentet</li><li><code>class=title</code>: Dokumentets fulle tittel</li><li><code>class=unregistration</code>: Dato og nummer for FN-registrering</li><li><code>class=updateNote</code>: Merknad til endringer av dokumentet</li><li><code>class=verdicttype</code>: Kategorien til avgjørelsen - avdeling/ankeutvalg –sivil/straff – begrunnet/ubegrunnet.</li><li><code>class=version</code>: Dokumentversjon</li><li><code>class=votum</code>: Slik sakens kyndige har stemt</li><li><code>class=xmlGenerated</code>: Tidspunkt når XML-filen ble generert</li></ul><h5>Klassenavn</h5><ul><li><code>article class=centeredP</code>: Sentrert avsnitt</li><li><code>article class=change</code>: En blokk som angir en spesifikk endring i dokumentet som ble angitt</li><li><code>article class=changesToParent</code>: Et element som lister opp endringer i paragrafen den ligger under.</li><li><code>article class=defaultP</code>: Et vanlig avsnitt, som ikke har noe ved seg. I regelverkstekster kalles de ofte <em>ledetekst</em>, og beskriver en endring som skal utføres i regelverket</li><li><code>article class=document-change</code>: En blokk som ramser opp endringer til det angitte dokumentet</li><li><code>article class=footnoteDefaultP</code>: Avsnitt i en fotnote.</li><li><code>article class=footnoteLegalP</code>: Ledd i en fotnote.</li><li><code>article class=footnote</code>: Fotnoter. Hvis attributtet <em>data-name</em> finnes, bør det være en <em>footnotereference</em> med tilsvarende ID tidligere i dokumentet. Legges inne i en <em>footer</em>. Kan ha lister, avsnitt og ledd under seg.</li><li><code>article class=futureLegalArticle</code>: En potensiell paragraf som kan bli en del av regelverket på et senere tidspunkt.</li><li><code>article class=legalArticle</code>: En paragraf i rettslig forstand, den angir enkeltbestemmelser i regelverket.</li><li><code>article class=legalP</code>: Et ledd, den vanligste byggesteinen i regelverket. Paragrafer består som regel av en til flere ledd, som kan være delt opp igjen i punkt (ofte referert til som "bokstav" hvis de har bokstaver som ID). Gjengis som regel med innrykk i første linje, for å skille det fra vanlige avsnitt.</li><li><code>article class=listArticle</code>: Angir et helt punkt, som kan inneholde ett eller flere ledd, avsnitt og underlister.</li><li><code>article class=listDefaultP</code>: Avsnitt inne i lister, ellers samme konsept som <em>defaultP</em>.</li><li><code>article class=listLegalP</code>: Ledd inne i lister, ellers samme konsept som <em>legalP</em>.</li><li><code>article class=marginIdArticle</code>: Elementer med en egen ID som er så lang at resten av teksten må rykkes til høyre. Kan inneholde ledd, lister og avsnitt.</li><li><code>article class=marginIdDefaultP</code>: Avsnitt under <em>marginIdArticle</em>, ellers samme konsept som <em>defaultP</em></li><li><code>article class=marginIdLegalP</code>: Ledd under <em>marginIdArticle</em>, ellers samme konsept som <em>legalP</em></li><li><code>article class=numberedLegalP</code>: Et <em>nummer</em>, eller et <em>nummerert ledd</em>. Dette er ikke helt konsistent brukt fra regelgiver - Lovdata bruker vanligvis begrepet <em>nummer</em> for å forhindre forveksling med vanlige ledd. Dette er en spesifikk og smal juridisk konstruksjon, og angir en dokumentdel over ledd, men under paragrafer, dvs en paragraf kan være delt inn i flere nummer, som igjen kan være delt inn i flere ledd, f.eks § 4-2 nr 3 første ledd.</li><li><code>article class=suggested-change</code>: En blokk som angir en spesifikk foreslått endring i dokumentet som ble angitt</li><li><code>article class=suggested-document-change</code>: En blokk som ramser opp foreslåtte endringer til det angitte dokumentet</li><li><code>article class=verdictNumberedP</code>: Nummererte avsnitt. Brukes i rettsavgjørelser for å gjøre det lettere å referere til spesifikke deler, f.eks HR-2004-755-A avsnitt 21. Dette elementet nøster andre avsnitt og lister under seg.</li><li><code>aside class=pagenumber</code>: Sidetall. Brukes aldri i regelverk, men dokumenter som nå eller tidligere primært eksisterte på papir har fått satt inn sidetall slik at man kan referere til steder i dokumenter.</li><li><code>div class=indent</code>: En gruppering rundt en eller flere elementer, som indikerer at teksten skal rykkes inn fra venstre sammenlignet med vanlig brødtekst.</li><li><code>div class=latexBlock</code>: Matematisk uttrykk i Latex-notasjon, som blokk</li><li><code>dl class=data-document-key-info</code>: Dokumentets nøkkelinformasjon</li><li><code>footer class=footnotes</code>: Fotnotene tilhørende elementet vi er inne i. Kan i prinsippet opptre innenfor alle elementer, men er vanligst på slutten av kapitler, paragrafer, hele dokumenter, tabeller eller liste elementer.</li><li><code>header class=documentHeader</code>: Dokumenthode</li><li><code>li class=consolidationElement</code>: En wrapper rundt andre elementer, brukes når man skal endre ting inne i lister for å få korrekte strukturer. Feks. hvis man skal endre et ledd inne i et punkt, vil dette brukes til å bygge liste rundt det.</li><li><code>main class=documentBody</code>: Dokumentkropp</li><li><code>p class=leddfortsettelse</code>: Leddfortsettelse angir tekst som hører til under et ledd eller avsnitt, men som skal starte på ny linje. Se feks https://lovdata.no/lov/2005-05-20-28/§5, " når handlingene:"</li><li><code>section class=futuresection</code>: En potensiell seksjon som kan bli en del av regelverket på et senere tidspunkt</li><li><code>section class=section</code>: En generisk gruppering av informasjon, som regel <em>kapittel</em>, <em>del</em>, <em>vedlegg</em> etc. Har alltid som første barn en overskrift, enten en <code>&lt;h\d&gt;</code> eller en <code>&lt;div role=heading&gt;</code>.</li><li><code>span  class=miscHeadline</code>: Ledetekst for en liste eller margavsnitt. Se feks https://lovdata.no/lov/1993-06-11-101/KAPITTEL_luftl2-1 (felles obligatoriske datafelt) eller https://lovdata.no/lov/1981-12-18-90/KAPITTEL_eumv-3 (søknadsgebyr).</li><li><code>span class=data-marginOriginalId</code>: Viser ID til marginIdArticle.</li><li><code>span class=data-originalId</code>: Viser den orignale IDen til et listepunkt, med tegnsetting slik det var skrevet av forfatter. Brukes der fidelitet til orginale tegn er kritisk, eller man av andre grunner ikke kan bruke automatisk listetegning. Kan i de fleste tilfeller fjernes, men ligger i dokumentet av kompatibilitetshensyn.</li><li><code>span class=data-pronounced-line</code>: Høyrejustert tekst</li><li><code>span class=errorMessage</code>: Feilmelding ved syntaksfeil</li><li><code>span class=footnoteLabel</code>: Markør for en fotnote</li><li><code>span class=futureLegalArticleHeader</code>: Overskriften til en potensiell paragraf, som ikke er en del av dokumenthierarkiet</li><li><code>span class=futuretitle</code>: En potensiell tittel som kan bli en del av regelverket på et senere tidspunkt</li><li><code>span class=latexInline</code>: Matematisk uttrykk i Latex-notasjon, i løpende tekst</li><li><code>span class=legalArticleHeader</code>: Hodet til en paragraf. Inneholder alltid <em>legalArticleValue</em>, som er paragrafens navn, og kan også inneholde fotnoter og evt en <em>legalArticleTitle</em>, som er overskriften til paragrafen.</li><li><code>span class=legalArticleTitle</code>: Den eventuelle tittelen/overskriften til en paragraf. Ikke alle paragrafer har dette.</li><li><code>span class=legalArticleValue</code>: Den faktiske IDen til en paragraf. Kan ikke garanteres å være unik innad i et dokument, da enkelte lover inneholder flere traktater, som alle inneholder f.eks. <em>Artikkel 1</em>.</li><li><code>span class=letterspacing</code>: Sperret tekst</li><li><code>span class=premise</code>: I rettsavgjørelser, indikerer hvilke elementer som utgjør sakens premiss(er).</li><li><code>span class=underline</code>: Understreket tekst</li><li><code>span class=verdictNumberedPId</code>: Den faktiske IDen til en <code>verdictNumberedP</code>.</li><li><code>span class=verdict</code>: I rettsavgjørelser, indikerer hvilke elementer som utgjør sakens slutning.</li><li><code>sup class=footnotereference</code>: En fotnotereferanse. Gir en kobling til en <em>footnote</em> et annet sted i dokumentet.</li><li><code>ul class=changesToOtherDocuments</code>: Lister opp dokumenter som endres som en følge av dette dokumentet.</li><li><code>ul class=changestodocuments</code>: Foreslåtte dokumentendringer</li><li><code>ul class=quotedlegislation</code>: Sitert regelverk</li><li><code>ul/ol class=defaultList</code>: En vanlig liste.</li></ul><h5>Andre attributter</h5><ul><li><code>aria-level</code>: Aria-nivå</li><li><code>class</code>: Klassenavn for elementer</li><li><code>colspan</code>: Kolonner tabellcellen strekker seg over</li><li><code>data-add-new-part</code>: Dokumentdel som legges til</li><li><code>data-border-style-all</code>: Angir typen ramme rundt en tabell</li><li><code>data-change-part</code>: Dokumentdel som endres</li><li><code>data-dissent</code>: Dissens</li><li><code>data-document</code>: Dokument som endres</li><li><code>data-footnotereferencevalue</code>: ID for en fotnotereferance</li><li><code>data-key-paragraph</code>: Nøkkelparagraf</li><li><code>data-legalArea</code>: Angir rettsområdeverdi</li><li><code>data-li-identifier</code>: ID for li-elementer</li><li><code>data-link-type</code>: Lenketype</li><li><code>data-list-id-style</code>: Angir eventuell stiling av en listeID</li><li><code>data-lovdata-URL</code>: Angir elementets URL på lovdata.no</li><li><code>data-move-part</code>: Dokumentdel som endres</li><li><code>data-name</code>: En kortform av en overskrift eller tittel, ikke garantert å være unik</li><li><code>data-numerator</code>: Et siffer som angir elementets ID</li><li><code>data-pagenumbervalue</code>: Sidetall</li><li><code>data-partID</code>: Et eldre delID-format, kompatibelt med Lovdata PRO</li><li>data-premise: Premiss</li><li>data-repeal-part: Dokument(del) som oppheves</li><li>data-section-type: Seksjons-typer</li><li>data-specialReference: Egennavn for en dokumentdel</li><li>data-specialnote: Særmerknad</li><li>data-text-align: Angir hvordan tekst skal justeres</li><li>data-text-indent: Tekstinnrykk</li><li>data-text-size: Tekststørrelse</li><li>data-unique-footnote-counter: Unik teller for fotnoter for å angi tilhørighet referanse&lt;-&gt;fotnote</li><li>data-verdict: Slutning</li><li>data-work-reference: Angir at en section omhandler en del i et regelverksdokument</li><li>futurelaw: Et forslag til en lov som kan bli vedtatt eller ikke</li><li>lang: Språk</li><li>margin-bottom: Legger til ekstra marg under et element</li><li>margin-top: Legger til ekstra marg over et element</li><li>rowspan: Rader tabellcellen strekker seg over</li></ul><h5>Unik ID og adresse</h5><p>For å gi hvert enkelt element en unik ID, brukes <code>data-absoluteaddress</code>. Denne kan feks se ut
+som <code>/kapittel/1/paragraf/1/ledd/1/</code>. Denne gir et ordenstall til hvert enkelt element. Det vil si at feks "Kapittel 10"
+i en lov gjerne kan få <code>absoluteadress=/kapittel/12</code>, hvis det skulle være kapitler utenfor den vanlige nummerrekken (
+feks 8A eller 2-1).</p><p>Merk at <code>kapittel</code>, <code>ledd</code> og <code>punkt</code> alle kan opptre flere ganger i en slik attributt: det er kun <code>paragraf</code> som
+garantert bare opptrer en gang, siden disse aldri kan nøstes.</p><p>Merk at ledetekster og annet som ikke antas å være interessant å referere til ikke får slike adresser.</p><h4>&lt;ul&gt; og &lt;ol&gt;</h4><p>Disse representerer ulike oppramsninger av informasjon. Hvis listene har en logisk rekkefølge fra forfatter sin side, brukes <code>&lt;ol&gt;</code>.</p><h4>&lt;li&gt;</h4><p><code>&lt;li&gt;</code> representerer et helt listepunkt. Denne gis alltid et <code>data-name=</code>-attributt, som viser hva dette punktet ble referert til som i orginalmanuskriptet. De kan også til tider ha et <code>value</code>-attributt, hvis det er nødvendig for å vise ID riktig (se feks https://lovdata.no/lov/1814-05-17-nn/§75 punkt k der ID og value ikke er løpende). Denne vil alltid ha en eller flere <code>&lt;article&gt;</code> som barn.</p><h4>&lt;sup&gt;</h4><ul><li><code>class=footnoteReference</code> brukes når sup-elementet angir en fotnotereferanse.</li></ul><h4>&lt;p&gt;</h4><p><code>&lt;p&gt;&lt;/p&gt;</code> brukes av og til inne i andre elementer for å fortsette ledd eller annen tekst - disse har aldri en selvstendig
+betydning og leses som en fortsettelse av parent-elementet. Et eksempel på bruk kan være oppramsninger under et ledd, eller et ledd som inneholder to lister, med tekst imellom de to listene. Se feks https://lovdata.no/lov/2005-05-20-28/§5</p><h4>&lt;footer&gt;</h4><p>Brukes til å skille ut fotnoter. Hver fotnote skal refereres til med en tidligere <code>&lt;sup&gt;</code>, og representeres selv som
+en <code>&lt;article&gt;</code>.</p><h4>Matematiske uttrykk</h4><p>I <code>div.latexBlock</code> og <code>span.latexInline</code> gjengis matematiske uttrykk i MathJax-kompatibel LaTeX-notasjon. Blokk-uttrykk i <code>div.latexBlock</code> omsluttes av <code>$$...$$</code>, mens formler i løpende tekst i <code>span.latexInline</code> omsluttes av <code>\(...\)</code>:</p><pre><code class="language-html">
+&lt;div class="latexBlock"&gt;$$a=\sqrt{x^2+1}$$&lt;/div&gt;&lt;span class="latexInline"&gt;\(b=\sqrt{x^2+1}\)&lt;/span&gt;
+</code></pre><p>For presentasjon i nettlesere anbefaler vi å benytte <a href="https://www.mathjax.org/">MathJax</a>. Denne løsningen ivaretar i større grad enn alternativene hensyn til universell utforming. Vi viser til <a href="https://docs.mathjax.org/en/latest/">MathJax-dokumentasjonen</a>, men et grunnleggende oppsett kan være:</p><pre><code class="language-html">
+&lt;script&gt;MathJax = {tex: {ignoreHtmlClass: '.*', processHtmlClass: 'latexInline|latexBlock'}};&lt;/script&gt;
+&lt;script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"&gt;&lt;/script&gt;
+</code></pre><h3>Eksempler</h3><p>Straffelovens § 5 illustrerer hvordan vi bygger opp strukturen i en paragraf med standard HTML-elementer: (komplett element nederst)</p><pre><code>    &lt;article class="legalArticle" data-name="§5" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/" id="kapittel-1-kapittel-1-paragraf-5"&gt;
+</code></pre><ul><li><p><code>class</code> er legalArticle, altså en paragraf</p></li><li><p><code>data-name</code> er en kortmåte å referere til elementet på - på grunn av inkorporerte rettsakter og annet kan denne ikke antas å være unik i et gitt dokument</p></li><li><p><code>data-absoluteaddress</code> viser at §5 er femte paragraf i første kapittel under første kapittel (for straffeloven sin del Første Del, Første kapittel). Dette er en ren teller, og skal være unik i et gitt dokument. Merk at pga uregelmessige kapittelnavn vil ikke denne adressen alltid tilsvare navnet på et gitt kapittel - feks kan <em>Kapittel 2A</em> antas å bli <code>/kapittel/3/</code></p></li><li><p><code>id</code> tilsvarer <code>data-absoluteaddress</code>, bare med <code>-</code> i stedet for <code>/</code>.</p><pre><code>  &lt;h3 class="legalArticleHeader"&gt;
+  &lt;span class="legalArticleValue"&gt;§ 5&lt;/span&gt;
+  .
+  &lt;sup class="footnotereference" data-footnotereferencevalue="1" data-legalArea="31.01.       11"&gt;1&lt;/sup&gt;
+  &lt;span class="legalArticleTitle"&gt;Straffelovgivningens anvendelse på handlinger i utlandet&lt;/span&gt;
+  &lt;/h3&gt;
+</code></pre></li><li><p><code>h3</code> angir hvor i dokumentets overskriftshierarki denne paragrafen befinner seg - det vil variere både fra dokument til dokument og innad i et dokument (for eksempel plan- og bygningsloven) hvilket nivå en paragraf befinner seg på. Nivået er alltid 1 høyere enn nærmeste <code>&lt;h\\d&gt;</code> under en <code>&lt;section&gt;</code>.</p></li><li><p><code>class=legalArticleHeader</code> er overordnet informasjon om en paragraf, primært navn, tittel og eventuelle fotnoter.</p></li><li><p><code>&lt;span class=legalArticleValue&gt;</code> Den faktiske paragrafreferansen, som regel en form for <em>§</em> eller <em>Artikkel</em></p></li><li><p><code>&lt;span class=legalArticleTitle&gt;</code> tittelen til en paragraf. Finnes ikke i alle paragrafer, spesielt ikke forskrifter og eldre lover.</p></li><li><p><code>footnotereference</code> er en fotnote inne i overskriften.</p><pre><code>  &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/"&gt;
+</code></pre></li><li><p><code>class=legalP</code> indikerer et vanlig ledd.</p></li><li><p><code>data-absoluteaddress</code> viser at dette er det første leddet i femte paragraf i første kapittel under første kapittel.</p><pre><code>  Utenfor virkeområdet etter
+        &lt;a href="lov/2005-05-20-28/§4"&gt;§ 4&lt;/a&gt;
+        gjelder straffelovgivningen for handlinger foretatt
+        &lt;ol class="defaultList" type="a"&gt;
+</code></pre></li><li><p><code>defaultList</code> er en standardliste.</p></li><li><p><code>type</code> indikerer hva slags liste det er og hva slags identifikator hvert punkt skal få. (Alternativene er A, a, i, og I)</p></li><li><p><code>value</code> angir den innbyrdes rekkefølgen på de forskjellige punktene. (viktig av UU-hensyn)</p><pre><code>  &lt;li data-name="a)" value="1"&gt;
+</code></pre></li><li><p><code>&lt;li&gt;</code>-elementer brukes for å gruppere punkter/bokstaver/nummer</p></li><li><p><code>&lt;data-name&gt;</code> refererer her til punktets orginalnavn fra regelgivers side, ofte hele og halve paranteser, punktum, etc.</p><pre><code>  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-1"&gt;
+</code></pre></li><li><p><code>class=listArticle</code> refererer til helheten av et nummer, bokstav eller punkt. <code>listArticle</code> er delt opp i ett eller flere <code>listDefaultP</code> og <code>listLegalP</code>.</p></li><li><p><code>data-absoluteaddress</code> viser her en teller for hvor punktet ligger i dokumenthierarkiet</p><pre><code>  &lt;article class="listLegalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/1/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-1-ledd-1"&gt;
+</code></pre></li><li><p><code>class=listLegalP</code> angir ledd under et nummer, bokstav, eller punkt, og er foreløpig det minste juridiske elementet Lovdata deler opp dokumenter i.</p><pre><code>  &lt;li data-name="a)" value="1"&gt;
+            &lt;article class="listArticle"      data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-1"&gt;
+              &lt;article class="listLegalP"     data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/1/ledd/1/"     id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-1-ledd-1"&gt;
+                a) av en norsk statsborger,
+                &lt;sup class="footnotereference" data-footnotereferencevalue="2"&gt;2&lt;/sup&gt;
+              &lt;/article&gt;
+            &lt;/article&gt;
+          &lt;/li&gt;
+  &lt;/ol&gt;
+  &lt;p class="leddfortsettelse"&gt;når handlingene:&lt;/p&gt;
+</code></pre></li><li><p><code>leddfortsettelse</code> angir tekst som hører til under et ledd eller avsnitt, men som skal starte på ny linje.</p><pre><code>  &lt;ol class="defaultList" type="1"&gt;
+          &lt;li data-name="1." value="1"&gt;
+            &lt;article class="item" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/4/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-4"&gt;1. er straffbare også etter loven i landet der de er foretatt,&lt;/article&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/article&gt;
+      &lt;footer class="footnotes"&gt;
+</code></pre></li></ul><h4></h4><pre><code class="language-&lt;article">            &lt;h4 class="legalArticleHeader"&gt;
+              &lt;span class="legalArticleValue" data-legalArea="31.01.11"&gt;§ 5&lt;/span&gt;
+              .
+              &lt;span class="legalArticleTitle"&gt;Straffelovgivningens anvendelse på handlinger i utlandet&lt;/span&gt;
+            &lt;/h4&gt;
+            &lt;article class="legalP" data-text-indent="4%" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1"&gt;
+              Utenfor virkeområdet etter
+              &lt;a href="lov/2005-05-20-28/§4"&gt;§ 4&lt;/a&gt;
+              gjelder straffelovgivningen for handlinger foretatt
+              &lt;ol class="defaultList" data-list-style="defaultList" type="a"&gt;
+                &lt;li data-name="a." value="1"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-1"&gt;
+                    &lt;span class="data-originalId"&gt;a.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/1/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-1-ledd-1"&gt;av en norsk statsborger,&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="b." value="2"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/2/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-2"&gt;
+                    &lt;span class="data-originalId"&gt;b.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/2/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-2-ledd-1"&gt;av en person med bosted i Norge, eller&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="c." value="3"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/3/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-3"&gt;
+                    &lt;span class="data-originalId"&gt;c.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/3/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-3-ledd-1"&gt;på vegne av et foretak registrert i Norge,&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+              &lt;/ol&gt;
+              &lt;p class="leddfortsettelse"&gt;når handlingene:&lt;/p&gt;
+              &lt;ol class="defaultList" data-list-style="defaultList" type="1"&gt;
+                &lt;li data-name="1." value="1"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/4/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-4"&gt;
+                    &lt;span class="data-originalId"&gt;1.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/4/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-4-ledd-1"&gt;er straffbare også etter loven i landet der de er foretatt,&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="2." value="2"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/5/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-5"&gt;
+                    &lt;span class="data-originalId"&gt;2.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/5/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-5-ledd-1"&gt;anses som krigsforbrytelse, folkemord eller forbrytelse mot menneskeheten,&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="3." value="3"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/6/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-6"&gt;
+                    &lt;span class="data-originalId"&gt;3.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/6/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-6-ledd-1"&gt;anses som brudd på krigens folkerett,&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="4." value="4"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/7/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-7"&gt;
+                    &lt;span class="data-originalId"&gt;4.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/7/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-7-ledd-1"&gt;anses som barneekteskap eller tvangsekteskap,&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="5." value="5"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/8/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-8"&gt;
+                    &lt;span class="data-originalId"&gt;5.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/8/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-8-ledd-1"&gt;anses som kjønnslemlestelse,&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="6." value="6"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/9/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-9"&gt;
+                    &lt;span class="data-originalId"&gt;6.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/9/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-9-ledd-1"&gt;
+                      er rettet mot den norske stat eller norsk statsmyndighet, eller rammes av
+                      &lt;a href="lov/2005-05-20-28/§120a"&gt;§§ 120 a&lt;/a&gt;
+                      eller
+                      &lt;a href="lov/2005-05-20-28/§127"&gt;127&lt;/a&gt;
+                      jf.
+                      &lt;a href="lov/2005-05-20-28/§120a"&gt;120 a&lt;/a&gt;
+                      ,
+                    &lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="7." value="7"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/10/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-10"&gt;
+                    &lt;span class="data-originalId"&gt;7.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/10/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-10-ledd-1"&gt;er foretatt utenfor området for noen stats høyhetsrett og kan straffes med fengsel,&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="8." value="8"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/11/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-11"&gt;
+                    &lt;span class="data-originalId"&gt;8.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/11/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-11-ledd-1"&gt;anses som omsorgsunndragelse,&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="9." value="9"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/12/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-12"&gt;
+                    &lt;span class="data-originalId"&gt;9.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/12/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-12-ledd-1"&gt;
+                      rammes av
+                      &lt;a href="lov/2005-05-20-28/§257"&gt;§§ 257&lt;/a&gt;
+                      ,
+                      &lt;a href="lov/2005-05-20-28/§270"&gt;270&lt;/a&gt;
+                      ,
+                      &lt;a href="lov/2005-05-20-28/§291"&gt;291&lt;/a&gt;
+                      –
+                      &lt;a href="lov/2005-05-20-28/§296"&gt;296&lt;/a&gt;
+                      ,
+                      &lt;a href="lov/2005-05-20-28/§299"&gt;299&lt;/a&gt;
+                      –
+                      &lt;a href="lov/2005-05-20-28/§306"&gt;306&lt;/a&gt;
+                      eller
+                      &lt;a href="lov/2005-05-20-28/§309"&gt;§§ 309&lt;/a&gt;
+                      –
+                      &lt;a href="lov/2005-05-20-28/§316"&gt;316&lt;/a&gt;
+                      ,
+                    &lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="10." value="10"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/13/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-13"&gt;
+                    &lt;span class="data-originalId"&gt;10.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/13/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-13-ledd-1"&gt;
+                      anses som terror- eller terrorrelatert handling etter
+                      &lt;a href="lov/2005-05-20-28/kap18"&gt;straffeloven kapittel 18&lt;/a&gt;
+                      , eller rammes av
+                      &lt;a href="lov/2005-05-20-28/§145"&gt;§§ 145&lt;/a&gt;
+                      eller
+                      &lt;a href="lov/2005-05-20-28/§146"&gt;146&lt;/a&gt;
+                      ,
+                    &lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="11." value="11"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/14/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-14"&gt;
+                    &lt;span class="data-originalId"&gt;11.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/14/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-14-ledd-1"&gt;
+                      anses som oppfordring til en straffbar handling etter
+                      &lt;a href="lov/2005-05-20-28/§183"&gt;straffeloven § 183&lt;/a&gt;
+                      eller innebærer fremsettelse av en hatefull ytring etter
+                      &lt;a href="lov/2005-05-20-28/§185"&gt;straffeloven § 185&lt;/a&gt;
+                      ,
+                    &lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="12." value="12"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/15/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-15"&gt;
+                    &lt;span class="data-originalId"&gt;12.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/15/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-15-ledd-1"&gt;
+                      anses som korrupsjon eller påvirkningshandel etter
+                      &lt;a href="lov/2005-05-20-28/§387"&gt;§§ 387&lt;/a&gt;
+                      til
+                      &lt;a href="lov/2005-05-20-28/§389"&gt;389&lt;/a&gt;
+                      , eller
+                    &lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="13." value="13"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/16/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-16"&gt;
+                    &lt;span class="data-originalId"&gt;13.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/1/punkt/16/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-1-punkt-16-ledd-1"&gt;
+                      rammes av
+                      &lt;a href="lov/2021-04-16-18/§4"&gt;sanksjonsloven § 4&lt;/a&gt;
+                      .
+                    &lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+              &lt;/ol&gt;
+            &lt;/article&gt;
+            &lt;article class="legalP" data-text-indent="4%" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/2/" id="kapittel-1-kapittel-1-paragraf-5-ledd-2"&gt;
+              Første ledd gjelder tilsvarende for handlinger foretatt
+              &lt;ol class="defaultList" data-list-style="defaultList" type="a"&gt;
+                &lt;li data-name="a." value="1"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/2/punkt/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-2-punkt-1"&gt;
+                    &lt;span class="data-originalId"&gt;a.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/2/punkt/1/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-2-punkt-1-ledd-1"&gt;av en person som etter handlingstidspunktet er blitt norsk statsborger eller har fått bosted i Norge,&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="b." value="2"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/2/punkt/2/" id="kapittel-1-kapittel-1-paragraf-5-ledd-2-punkt-2"&gt;
+                    &lt;span class="data-originalId"&gt;b.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/2/punkt/2/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-2-punkt-2-ledd-1"&gt;av en person som er eller etter handlingen er blitt statsborger i eller bosatt i et annet nordisk land, og som oppholder seg i Norge, eller&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+                &lt;li data-name="c." value="3"&gt;
+                  &lt;article class="listArticle" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/2/punkt/3/" id="kapittel-1-kapittel-1-paragraf-5-ledd-2-punkt-3"&gt;
+                    &lt;span class="data-originalId"&gt;c.&lt;/span&gt;
+                    &lt;article class="legalP" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/2/punkt/3/ledd/1/" id="kapittel-1-kapittel-1-paragraf-5-ledd-2-punkt-3-ledd-1"&gt;på vegne av et utenlandsk foretak som etter handlingstidspunktet har overført sin samlede virksomhet til et foretak registrert i Norge.&lt;/article&gt;
+                  &lt;/article&gt;
+                &lt;/li&gt;
+              &lt;/ol&gt;
+            &lt;/article&gt;
+            &lt;article class="legalP" data-text-indent="4%" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/3/" id="kapittel-1-kapittel-1-paragraf-5-ledd-3"&gt;
+              Første ledd nr. 1, 2, 3, 6, 7, 8, 10 med unntak av
+              &lt;a href="lov/2005-05-20-28/§145"&gt;§ 145&lt;/a&gt;
+              , 11 og 12 gjelder tilsvarende for handlinger foretatt av andre personer enn dem som omfattes av første og annet ledd, når personen oppholder seg i Norge, og handlingen har en lengstestraff på fengsel i mer enn 1 år.
+            &lt;/article&gt;
+            &lt;article class="legalP" data-text-indent="4%" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/4/" id="kapittel-1-kapittel-1-paragraf-5-ledd-4"&gt;For handlinger som nevnt i første ledd nr. 2 gjelder annet og tredje ledd bare dersom handlingen etter folkeretten anses som folkemord, forbrytelse mot menneskeheten eller krigsforbrytelse.&lt;/article&gt;
+            &lt;article class="legalP" data-text-indent="4%" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/5/" id="kapittel-1-kapittel-1-paragraf-5-ledd-5"&gt;Straffelovgivningen gjelder også for handlinger som er foretatt i utlandet av andre personer enn dem som omfattes av første til fjerde ledd, dersom handlingen har en lengstestraff på fengsel i 6 år eller mer og er rettet mot noen som er norsk statsborger eller er bosatt i Norge, eller har en lengstestraff på fengsel i 3 år eller mer og er foretatt på vegne av et foretak som nevnt i første ledd bokstav c eller annet ledd bokstav c.&lt;/article&gt;
+            &lt;article class="legalP" data-text-indent="4%" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/6/" id="kapittel-1-kapittel-1-paragraf-5-ledd-6"&gt;Ved strafforfølgning etter denne paragraf kan straffen ikke overstige høyeste lovbestemte straff for tilsvarende handling i det landet der den er foretatt.&lt;/article&gt;
+            &lt;article class="legalP" data-text-indent="4%" data-absoluteaddress="/kapittel/1/kapittel/1/paragraf/5/ledd/7/" id="kapittel-1-kapittel-1-paragraf-5-ledd-7"&gt;Påtale etter denne paragraf reises bare når allmenne hensyn tilsier det.&lt;/article&gt;
+            &lt;article class="changesToParent"&gt;
+              Endret ved lover
+              &lt;a href="lov/2005-12-21-131"&gt;21 des 2005 nr. 131&lt;/a&gt;
+              ,
+              &lt;a href="lov/2008-03-07-4"&gt;7 mars 2008 nr. 4&lt;/a&gt;
+              ,
+              &lt;a href="lov/2009-06-19-74"&gt;19 juni 2009 nr. 74&lt;/a&gt;
+              ,
+              &lt;a href="lov/2015-06-19-65"&gt;19 juni 2015 nr. 65&lt;/a&gt;
+              ,
+              &lt;a href="lov/2016-06-17-52"&gt;17 juni 2016 nr. 52&lt;/a&gt;
+              (ikr. 1 juli 2016 iflg.
+              &lt;a href="forskrift/2016-06-17-670"&gt;res. 17 juni 2016 nr. 670&lt;/a&gt;
+              ),
+              &lt;a href="lov/2020-06-19-81"&gt;19 juni 2020 nr. 81&lt;/a&gt;
+              (ikr. 1 juli 2020 iflg.
+              &lt;a href="forskrift/2020-06-19-1252"&gt;res. 19 juni 2020 nr. 1252&lt;/a&gt;
+              ),
+              &lt;a href="lov/2021-04-16-18"&gt;16 april 2021 nr. 18&lt;/a&gt;
+              (ikr. 16 april 2021 iflg.
+              &lt;a href="forskrift/2021-04-16-1182"&gt;res. 16 april 2021 nr. 1182&lt;/a&gt;
+              ),
+              &lt;a href="lov/2023-12-20-113"&gt;20 des 2023 nr. 113&lt;/a&gt;
+              (i kraft 1 jan 2024 iflg.
+              &lt;a href="forskrift/2023-12-20-2130"&gt;res. 20 des 2023 nr. 2130&lt;/a&gt;
+              ).
+            &lt;/article&gt;
+          &lt;/article&gt;```
+</code></pre>
+</body></html>

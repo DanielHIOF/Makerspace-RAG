@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Makerspace RAG - Adminpanel</title>
+    <title>Makerspace - Admin</title>
     <style>
         * {
             box-sizing: border-box;
@@ -11,9 +11,15 @@
             padding: 0;
         }
         
+        :root {
+            --brand: #E5A124;
+            --brand-dark: #c98b1d;
+            --brand-light: #f5b835;
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: #0d0d12;
             min-height: 100vh;
             color: #e0e0e0;
             padding: 20px;
@@ -30,14 +36,14 @@
         }
         
         h1 {
-            color: #00d4ff;
-            font-size: 2.5rem;
+            color: var(--brand);
+            font-size: 2rem;
             margin-bottom: 10px;
         }
         
         .subtitle {
             color: #8892b0;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
         .stats-bar {
@@ -45,10 +51,11 @@
             gap: 20px;
             justify-content: center;
             margin-bottom: 40px;
+            flex-wrap: wrap;
         }
         
         .stat-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: #16161d;
             padding: 20px 30px;
             border-radius: 12px;
             text-align: center;
@@ -58,7 +65,7 @@
         .stat-value {
             font-size: 2rem;
             font-weight: bold;
-            color: #00d4ff;
+            color: var(--brand);
         }
         
         .stat-label {
@@ -81,31 +88,31 @@
         }
         
         .card {
-            background: rgba(255, 255, 255, 0.05);
+            background: #16161d;
             border-radius: 16px;
             padding: 25px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .card h2 {
-            color: #00d4ff;
+            color: var(--brand);
             margin-bottom: 20px;
             font-size: 1.3rem;
         }
         
         .drop-zone {
-            border: 2px dashed rgba(0, 212, 255, 0.5);
+            border: 2px dashed var(--brand);
             border-radius: 12px;
             padding: 40px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: rgba(0, 212, 255, 0.05);
+            background: rgba(229, 161, 36, 0.05);
         }
         
         .drop-zone:hover, .drop-zone.dragover {
-            border-color: #00d4ff;
-            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--brand-light);
+            background: rgba(229, 161, 36, 0.1);
         }
         
         .drop-zone p {
@@ -138,12 +145,12 @@
         
         textarea:focus {
             outline: none;
-            border-color: #00d4ff;
+            border-color: var(--brand);
         }
         
         .btn {
-            background: linear-gradient(135deg, #00d4ff, #0099cc);
-            color: #000;
+            background: var(--brand);
+            color: #1a1a2e;
             border: none;
             padding: 12px 25px;
             border-radius: 8px;
@@ -155,7 +162,8 @@
         
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(229, 161, 36, 0.3);
+            background: var(--brand-light);
         }
         
         .btn:disabled {
@@ -196,14 +204,14 @@
             margin-bottom: 10px;
             font-size: 0.9rem;
             line-height: 1.6;
-            border-left: 3px solid #00d4ff;
+            border-left: 3px solid var(--brand);
             cursor: pointer;
             transition: all 0.2s ease;
         }
         
         .chunk:hover {
             background: rgba(0, 0, 0, 0.4);
-            border-left-color: #00ffcc;
+            border-left-color: var(--brand-light);
         }
         
         .chunk-content {
@@ -218,7 +226,7 @@
         }
         
         .chunk-toggle {
-            color: #00d4ff;
+            color: var(--brand);
             font-size: 0.8rem;
             margin-top: 8px;
             display: block;
@@ -234,7 +242,7 @@
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 2px solid #00d4ff;
+            border: 2px solid var(--brand);
             border-radius: 50%;
             border-top-color: transparent;
             animation: spin 1s linear infinite;
@@ -282,7 +290,7 @@
         }
         
         .file-item.processing .file-status {
-            color: #00d4ff;
+            color: var(--brand);
         }
         
         .file-item.success .file-status {
@@ -297,8 +305,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>🛠️ Makerspace RAG Adminpanel</h1>
-            <p class="subtitle">Legg til data i kunnskapsbasen</p>
+            <h1>MAKERSPACE Admin</h1>
+            <p class="subtitle">Administrer kunnskapsbasen</p>
             <div style="margin-top: 15px;">
                 <a href="{{ url_for('index') }}" style="color: #8892b0; text-decoration: none; margin-right: 20px;">← Tilbake til chat</a>
                 <a href="{{ url_for('logout') }}" style="color: #ff6464; text-decoration: none;">🚪 Logg ut</a>
@@ -592,7 +600,7 @@
                 
                 if (data.success) {
                     reloadStatus.textContent = `Lastet ${data.chunks} biter`;
-                    reloadStatus.style.color = '#00c864';
+                    reloadStatus.style.color = '#E5A124';
                 } else {
                     reloadStatus.textContent = 'Innlasting feilet';
                     reloadStatus.style.color = '#ff6464';
