@@ -117,6 +117,215 @@ vault_content = []
 tfidf_vectorizer = None
 tfidf_matrix = None
 
+# Structured knowledge from JSON files
+knowledge_utstyr = {}
+knowledge_regler = {}
+knowledge_rom = {}
+knowledge_ressurser = {}
+
+
+def load_json_knowledge():
+    """Load structured knowledge from JSON files."""
+    global knowledge_utstyr, knowledge_regler, knowledge_rom, knowledge_ressurser
+    
+    knowledge_dir = 'knowledge'
+    
+    try:
+        with open(os.path.join(knowledge_dir, 'utstyr.json'), 'r', encoding='utf-8') as f:
+            knowledge_utstyr = json.load(f)
+        print(f"  Loaded utstyr.json")
+    except Exception as e:
+        print(f"  Warning: Could not load utstyr.json: {e}")
+        knowledge_utstyr = {}
+    
+    try:
+        with open(os.path.join(knowledge_dir, 'regler.json'), 'r', encoding='utf-8') as f:
+            knowledge_regler = json.load(f)
+        print(f"  Loaded regler.json")
+    except Exception as e:
+        print(f"  Warning: Could not load regler.json: {e}")
+        knowledge_regler = {}
+    
+    try:
+        with open(os.path.join(knowledge_dir, 'rom.json'), 'r', encoding='utf-8') as f:
+            knowledge_rom = json.load(f)
+        print(f"  Loaded rom.json")
+    except Exception as e:
+        print(f"  Warning: Could not load rom.json: {e}")
+        knowledge_rom = {}
+    
+    try:
+        with open(os.path.join(knowledge_dir, 'ressurser.json'), 'r', encoding='utf-8') as f:
+            knowledge_ressurser = json.load(f)
+        print(f"  Loaded ressurser.json")
+    except Exception as e:
+        print(f"  Warning: Could not load ressurser.json: {e}")
+        knowledge_ressurser = {}
+
+
+def get_equipment_context(tool_type):
+    """Get structured equipment info for a detected tool type."""
+    if not knowledge_utstyr or 'categories' not in knowledge_utstyr:
+        return ""
+    
+    # Map tool detection to JSON category
+    tool_to_category = {
+        '3d_printer': '3d_printing',
+        'laserkutter': 'laser_cutting',
+        'cnc': 'cnc',
+        'lodding': 'electronics',
+        'elektronikk': 'electronics',
+        'vinylkutter': None,  # Not in JSON yet
+        'tekstil': None,
+        'arduino': 'electronics',
+        'raspberry': 'electronics'
+    }
+    
+    category = tool_to_category.get(tool_type)
+    if not category or category not in knowledge_utstyr['categories']:
+        return ""
+    
+    cat_data = knowledge_utstyr['categories'][category]
+    equipment_list = cat_data.get('equipment', [])
+    
+    if not equipment_list:
+        return ""
+    
+    # Build context string
+    lines = [f"UTSTYR ({cat_data.get('name_no', category)}):"]
+    for eq in equipment_list:
+        lines.append(f"- {eq.get('name', 'Ukjent')}")
+        if eq.get('location'):
+            lines.append(f"  Lokasjon: {eq['location']}")
+        if eq.get('difficulty'):
+            lines.append(f"  Nivå: {eq['difficulty']}")
+        if eq.get('requires_training'):
+            lines.append(f"  Krever opplæring: Ja")
+        if eq.get('materials'):
+            lines.append(f"  Materialer: {', '.join(eq['materials'])}")
+    
+    return "\n".join(lines)
+
+
+def get_all_equipment_by_access():
+    """Get all equipment organized by access level - for 'what can I use' questions."""
+    if not knowledge_utstyr or 'categories' not in knowledge_utstyr:
+        return ""
+    
+    # Get access level definitions
+    access_levels = knowledge_utstyr.get('access_levels', {})
+    
+    # Collect equipment by access level
+    by_access = {}
+    for cat_key, cat_data in knowledge_utstyr['categories'].items():
+        for eq in cat_data.get('equipment', []):
+            access = eq.get('access_level', 'unknown')
+            if access not in by_access:
+                by_access[access] = []
+            by_access[access].append({
+                'name': eq.get('name', 'Ukjent'),
+                'location': eq.get('location', ''),
+                'difficulty': eq.get('difficulty', ''),
+                'certifier': eq.get('certifier', ''),
+                'notes': eq.get('notes', '')
+            })
+    
+    # Build context string in order of access level
+    lines = ["TILGANGSNIVÅER FOR UTSTYR VED MAKERSPACE HiØF:", ""]
+    
+    access_order = ['course_makerspace', 'course_fablab', 'certification_required', 'request_required', 'staff_only']
+    access_names = {
+        'course_makerspace': '1. MakerSpace-kurs (D1-044) - Etter fullført kurs kan du bruke:',
+        'course_fablab': '2. FabLab HMS-kurs (D1-043) - Krever HMS-kurs:',
+        'certification_required': '3. Sertifisering påkrevd - Kontakt labingeniør:',
+        'request_required': '4. Må hentes fra labansvarlig:',
+        'staff_only': '5. Kun personale:'
+    }
+    
+    for access in access_order:
+        if access in by_access:
+            lines.append(access_names.get(access, access))
+            for eq in by_access[access]:
+                line = f"  - {eq['name']}"
+                if eq['location']:
+                    line += f" ({eq['location']})"
+                lines.append(line)
+            lines.append("")
+    
+    lines.append("VIKTIG: Uten opplæring kan du IKKE bruke noe utstyr.")
+    lines.append("Start med: MakerSpace introduksjonskurs for å få tilgang til 3D-printere, lodding, osv.")
+    lines.append("Mer info: https://www.hiof.no/iio/itk/om/labber/makerspace/arrangementer/")
+    
+    return "\n".join(lines)
+
+
+def get_safety_rules_context(tool_type=None, include_general=True):
+    """Get HMS/safety rules for a tool type or general rules."""
+    if not knowledge_regler:
+        return ""
+    
+    lines = []
+    
+    # General rules
+    if include_general and 'general_rules' in knowledge_regler:
+        gen_rules = knowledge_regler['general_rules'].get('rules', [])
+        critical_rules = [r for r in gen_rules if r.get('priority') == 'critical']
+        if critical_rules:
+            lines.append("VIKTIGE SIKKERHETSREGLER:")
+            for r in critical_rules[:3]:  # Top 3 critical
+                lines.append(f"⚠️ {r.get('rule_no', '')}")
+    
+    # Equipment-specific rules
+    if tool_type and 'equipment_specific' in knowledge_regler:
+        tool_to_category = {
+            '3d_printer': '3d_printing',
+            'laserkutter': 'laser_cutting',
+            'cnc': 'cnc',
+            'lodding': 'soldering',
+            'elektronikk': 'soldering'
+        }
+        
+        category = tool_to_category.get(tool_type)
+        if category and category in knowledge_regler['equipment_specific']:
+            cat_rules = knowledge_regler['equipment_specific'][category]
+            rules = cat_rules.get('rules', [])
+            
+            if rules:
+                lines.append(f"\nREGLER FOR {cat_rules.get('name_no', category).upper()}:")
+                for r in rules[:4]:  # Top 4 rules
+                    priority_icon = "🔴" if r.get('priority') == 'critical' else "🟡"
+                    lines.append(f"{priority_icon} {r.get('rule_no', '')}")
+            
+            # Forbidden materials for laser
+            if category == 'laser_cutting':
+                forbidden = cat_rules.get('forbidden_materials', [])
+                if forbidden:
+                    lines.append("\n⛔ FORBUDTE MATERIALER:")
+                    for f in forbidden[:4]:
+                        lines.append(f"- {f.get('material')}: {f.get('reason_no', '')}")
+    
+    return "\n".join(lines)
+
+
+def get_room_context(room_id=None):
+    """Get room information."""
+    if not knowledge_rom or 'rooms' not in knowledge_rom:
+        return ""
+    
+    lines = ["LOKALER:"]
+    for room_key, room in knowledge_rom['rooms'].items():
+        lines.append(f"- {room.get('id', '')}: {room.get('name_no', '')} - {room.get('description_no', '')}")
+    
+    # Add contact info
+    if 'contacts' in knowledge_rom:
+        contacts = knowledge_rom['contacts']
+        if 'lab_responsible' in contacts:
+            lines.append(f"\nLabansvarlig: Morgan Waage (kontor D1-060B)")
+        if 'student_assistants' in contacts:
+            lines.append("Studentassistenter tilgjengelig i åpningstider")
+    
+    return "\n".join(lines)
+
 
 def load_vault():
     """Load vault content and build TF-IDF index."""
@@ -337,17 +546,17 @@ def detect_level(query):
     query_lower = query.lower()
     
     levels = {
-        '/nybegynner': ('nybegynner', "Forklar som om jeg ikke vet noe. Bruk enkle ord, ingen faguttrykk, steg-for-steg med eksempler."),
-        '/beginner': ('beginner', "Explain like I know nothing. Use simple words, no jargon, step-by-step with examples."),
-        '/ekspert': ('ekspert', "Anta dyp ekspertise. Diskuter på profesjonelt nivå med teori og teknisk presisjon."),
-        '/expert': ('expert', "Assume deep expertise. Discuss at professional level with theory and precision."),
+        '/nybegynner': ('nybegynner', "NYBEGYNNER - Forklar som til en som aldri har gjort dette før. Bruk enkle ord, unngå faguttrykk, gi steg-for-steg instruksjoner med eksempler. Vær tålmodig og grundig."),
+        '/beginner': ('beginner', "BEGINNER - Explain as if to someone who has never done this before. Use simple words, avoid jargon, give step-by-step instructions with examples."),
+        '/ekspert': ('ekspert', "EKSPERT - Anta at brukeren har dyp teknisk kunnskap. Bruk presise faguttrykk, diskuter på profesjonelt nivå, inkluder tekniske detaljer og teori. Vær konsis."),
+        '/expert': ('expert', "EXPERT - Assume deep technical knowledge. Use precise terminology, discuss at professional level, include technical details and theory. Be concise."),
     }
     
     for cmd, (level, instruction) in levels.items():
         if cmd in query_lower:
             return level, instruction
     
-    return 'normal', "Use clear, practical explanations suitable for someone with basic familiarity."
+    return 'normal', "NORMAL - Bruk klare, praktiske forklaringer. Balanse mellom enkelhet og presisjon. Forklar faguttrykk kort hvis du bruker dem."
 
 
 def detect_language(query):
@@ -359,7 +568,7 @@ def detect_language(query):
     elif '/english' in query_lower or '/en' in query_lower:
         return 'english', "You MUST respond in English. Use English throughout your entire response."
     
-    return 'auto', "Respond in the same language as the question."
+    return 'auto', "Svar på SAMME språk som brukeren skriver. Norsk spørsmål = norsk svar. English question = English answer."
 
 
 def classify_query(query):
@@ -448,8 +657,70 @@ def detect_tool(query):
     return None
 
 
-def ask_llm(query, context):
-    """Send query + context to llama3."""
+def is_inventory_query(query):
+    """Detect if query is asking for a list/inventory of equipment.
+    These should use JSON data primarily, not vault search."""
+    query_lower = query.lower()
+    
+    inventory_patterns = [
+        'liste over', 'list of', 'hvilke', 'which',
+        'hva har dere', 'what do you have', 'har dere',
+        'vis meg alle', 'show me all', 'alle',
+        'hva slags', 'what kind', 'typer',
+        'oversikt', 'overview', 'inventory',
+        'tilgjengelig', 'available', 'finnes'
+    ]
+    
+    return any(p in query_lower for p in inventory_patterns)
+
+
+# =============================================================================
+# Conversation Compression
+# =============================================================================
+INCREMENTAL_COMPRESS_EVERY = 6  # Compress every 6 new messages (3 exchanges)
+RECENT_MESSAGES_KEEP = 10       # Always keep last 10 messages in full
+
+def summarize_messages(messages, existing_summary=""):
+    """Compress messages into a summary, incorporating existing summary."""
+    if not messages:
+        return existing_summary
+    
+    # Build conversation text for summarization
+    conversation_text = ""
+    for msg in messages:
+        role = "Bruker" if msg.get('role') == 'user' else "Assistent"
+        content = msg.get('content', '')[:200]  # Truncate long messages
+        conversation_text += f"{role}: {content}\n"
+    
+    # Include existing summary in prompt if available
+    existing_context = ""
+    if existing_summary:
+        existing_context = f"\nTIDLIGERE KONTEKST:\n{existing_summary}\n"
+    
+    prompt = f"""Lag en KORT oppsummering (2-3 setninger) av samtalen.
+Behold: hovedtema, viktige beslutninger, spesifikke detaljer (utstyr, innstillinger, problemer).
+{existing_context}
+NYE MELDINGER:
+{conversation_text}
+
+OPPSUMMERING:"""
+
+    try:
+        response = ollama.chat(
+            model='llama3.2:1b',  # Fast small model for compression
+            messages=[{'role': 'user', 'content': prompt}],
+            options={'temperature': 0.3, 'num_predict': 100}
+        )
+        return response['message']['content'].strip()
+    except Exception as e:
+        print(f"  [WARN] Compression failed: {e}")
+        return existing_summary
+
+
+def ask_llm(query, context, is_inventory=False, conversation_history=None, existing_summary=""):
+    """Send query + context to llama3 with conversation history support.
+    Returns tuple: (response_text, updated_summary)
+    """
     level, level_instruction = detect_level(query)
     language, language_instruction = detect_language(query)
     
@@ -460,34 +731,101 @@ def ask_llm(query, context):
     query_category = classify_query(clean_query)
     detected_tool = detect_tool(clean_query)
     
-    # Simple category hints
-    category_hints = {
-        'FEILSOKING': 'Brukeren har et PROBLEM. Hjelp med feilsøking.',
-        'OPPLARING': 'Brukeren vil LÆRE. Forklar steg-for-steg.',
-        'VERKTOY_HMS': 'Spørsmål om UTSTYR/SIKKERHET. Vær presis.',
-        'GENERELL': 'Generelt spørsmål. Vær hjelpsom.'
-    }
-    
-    hint = category_hints.get(query_category, '')
     tool_hint = f" (Verktøy: {detected_tool})" if detected_tool else ""
     
     # Keep context short
     context_text = context[:2000] if context else ""
     
-    prompt = f"""Du er makerspace-assistenten ved HiØF. {hint}{tool_hint}
+    # Base role description
+    base_role = """Du er en veileder og ekspert på Digital Fabrikasjon og HMS (Helse, Miljø og Sikkerhet) ved Makerspace, Høgskolen i Østfold.
 
-{level_instruction}
+Din rolle er å:
+- Veilede studenter trygt gjennom bruk av utstyr (3D-printing, laserkutting, CNC, elektronikk, lodding)
+- ALLTID prioritere sikkerhet - minn om HMS-regler når relevant
+- Gi praktiske, handlingsrettede råd
+- Tilpasse forklaringer til brukerens ferdighetsnivå"""
 
-KONTEKST:
+    # Build system prompt based on query type
+    if is_inventory:
+        system_prompt = f"""{base_role}
+
+TILGJENGELIG UTSTYR:
 {context_text}
 
-SPØRSMÅL: {clean_query}
+FERDIGHETSNIVÅ: {level_instruction}
 
-Svar kort og praktisk på norsk."""
+SPRÅK: {language_instruction}
+
+REGLER FOR SVAR:
+- List kun utstyret som er relevant
+- Maks 2-3 linjer per utstyr (navn, lokasjon, nivå)
+- Nevn eventuelle HMS-krav eller opplæringskrav
+- Avslutt med: "Vil du vite mer om noe av dette?"
+- VIKTIG: Husk samtalehistorikken"""
+    else:
+        system_prompt = f"""{base_role}{tool_hint}
+
+RELEVANT INFORMASJON:
+{context_text}
+
+FERDIGHETSNIVÅ: {level_instruction}
+
+SPRÅK: {language_instruction}
+
+REGLER FOR SVAR:
+- Svar KORT (2-4 setninger) men informativt
+- Gi ETT konkret tips eller neste steg
+- Hvis relevant: minn om HMS/sikkerhet (verneutstyr, farlige materialer, osv.)
+- Still et oppfølgingsspørsmål for å holde samtalen i gang
+- VIKTIG: Husk hva dere har snakket om tidligere i samtalen"""
+    
+    # Build messages array for Ollama
+    messages = [{'role': 'system', 'content': system_prompt}]
+    
+    # Handle conversation history with incremental compression
+    updated_summary = existing_summary
+    
+    if conversation_history:
+        total_messages = len(conversation_history)
+        
+        # Add existing summary as context
+        if existing_summary:
+            messages.append({
+                'role': 'system', 
+                'content': f"TIDLIGERE I SAMTALEN:\n{existing_summary}"
+            })
+        
+        # Only keep last RECENT_MESSAGES_KEEP messages in full
+        recent_messages = conversation_history[-RECENT_MESSAGES_KEEP:] if total_messages > RECENT_MESSAGES_KEEP else conversation_history
+        
+        # Check if we need to compress (every INCREMENTAL_COMPRESS_EVERY messages)
+        messages_since_last_compress = total_messages % INCREMENTAL_COMPRESS_EVERY
+        if total_messages >= INCREMENTAL_COMPRESS_EVERY and messages_since_last_compress == 0:
+            # Get the messages to compress (the ones just before recent)
+            compress_start = max(0, total_messages - RECENT_MESSAGES_KEEP - INCREMENTAL_COMPRESS_EVERY)
+            compress_end = total_messages - RECENT_MESSAGES_KEEP
+            if compress_end > compress_start:
+                to_compress = conversation_history[compress_start:compress_end]
+                print(f"  [COMPRESS] Inkrementell komprimering av {len(to_compress)} meldinger")
+                updated_summary = summarize_messages(to_compress, existing_summary)
+        
+        # Add recent messages in full
+        for msg in recent_messages:
+            role = msg.get('role', 'user')
+            content = msg.get('content', '')
+            if role in ('user', 'assistant') and content:
+                messages.append({'role': role, 'content': content})
+    
+    # Add current query as the last user message
+    messages.append({'role': 'user', 'content': clean_query})
     
     try:
-        response = ollama.chat(model='llama3', messages=[{'role': 'user', 'content': prompt}])
-        return response['message']['content']
+        response = ollama.chat(
+            model='llama3',
+            messages=messages,
+            options={'temperature': 0.7, 'num_predict': 500}
+        )
+        return response['message']['content'], updated_summary
     except Exception as e:
         error_msg = str(e)
         print(f"  [ERROR] OLLAMA ERROR: {error_msg}")
@@ -914,56 +1252,132 @@ def index():
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    """Handle chat messages."""
+    """Handle chat messages with conversation history support."""
     timestamp = datetime.now().strftime("%H:%M:%S")
     
     data = request.get_json()
     message = data.get('message', '').strip()
+    conversation_history = data.get('history', [])  # Get conversation history
+    existing_summary = data.get('summary', '')  # Get existing summary from frontend
     
     if not message:
         return jsonify({'response': 'Please enter a message.'})
+    
+    # =========================================================================
+    # EASTER EGG: Green apples test for link functionality
+    # =========================================================================
+    if 'green apples' in message.lower() or 'grønne epler' in message.lower():
+        print(f"\n[{timestamp}] [EASTER EGG] Green apples detected!")
+        test_response = """Ja, grønne epler er kjempegode! 🍏
+
+De er sprø, friske og fulle av smak. Granny Smith er en klassiker.
+
+Vil du lese mer om frukt og helse? Sjekk ut denne artikkelen: [Les mer på VG](https://www.vg.no)
+
+Du kan også besøke siden direkte: https://www.vg.no"""
+        return jsonify({
+            'response': test_response,
+            'summary': existing_summary
+        })
     
     print(f"\n{'='*60}")
     print(f"[{timestamp}] [CHAT] NY MELDING MOTTATT")
     print(f"{'='*60}")
     print(f"  Sporsmal: {message[:100]}{'...' if len(message) > 100 else ''}")
+    print(f"  Historikk: {len(conversation_history)} meldinger")
+    if existing_summary:
+        print(f"  Summary: {existing_summary[:50]}...")
     
-    # Classify the query
-    query_category = classify_query(message)
-    detected_tool = detect_tool(message)
+    # Build combined context from history for better tool detection
+    # If current message is short/vague, use history for context
+    combined_context = message
+    if len(message.split()) < 5 and conversation_history:
+        # Include last few messages for context detection
+        recent_messages = [msg.get('content', '') for msg in conversation_history[-4:]]
+        combined_context = ' '.join(recent_messages) + ' ' + message
+        print(f"  [CONTEXT] Kombinerer med historikk for bedre verktøydeteksjon")
+    
+    # Classify the query (use combined context for better detection)
+    query_category = classify_query(combined_context)
+    detected_tool = detect_tool(combined_context)
+    inventory_query = is_inventory_query(message)  # Keep this on current message only
+    
     print(f"  Kategori: {query_category}")
     if detected_tool:
         print(f"  Verktoy: {detected_tool}")
+    if inventory_query:
+        print(f"  Type: INVENTAR-SPØRSMÅL (bruker kun JSON)")
     
-    # Search for relevant context (filtered by detected tool)
-    print(f"\n[{timestamp}] [SEARCH] Soker i kunnskapsbasen...")
-    if detected_tool:
-        print(f"  [FILTER] Filtrerer pa verktoy: {detected_tool}")
-    search_start = time.time()
-    relevant_chunks = search_vault(message, tool_filter=detected_tool)
-    search_time = time.time() - search_start
-    print(f"  [OK] Fant {len(relevant_chunks)} relevante biter ({search_time:.2f}s)")
+    # Build context from multiple sources
+    context_parts = []
     
-    if relevant_chunks:
-        for i, chunk in enumerate(relevant_chunks[:3]):
-            preview = chunk[:80].replace('\n', ' ')
-            print(f"    {i+1}. {preview}...")
+    # 1. For inventory queries without specific tool: show ALL equipment by access level
+    if inventory_query and not detected_tool:
+        all_equipment_ctx = get_all_equipment_by_access()
+        if all_equipment_ctx:
+            context_parts.append(all_equipment_ctx)
+            print(f"  [JSON] Lagt til komplett utstyrsoversikt etter tilgangsnivå")
     
-    context = "\n\n".join(relevant_chunks) if relevant_chunks else "No relevant information found in knowledge base."
+    # 2. Structured JSON context based on detected tool
+    elif detected_tool:
+        equipment_ctx = get_equipment_context(detected_tool)
+        if equipment_ctx:
+            context_parts.append(equipment_ctx)
+            print(f"  [JSON] Lagt til utstyrskontekst for {detected_tool}")
+    
+    # 3. Safety rules - SKIP for inventory queries
+    if not inventory_query and (query_category == 'VERKTOY_HMS' or detected_tool):
+        safety_ctx = get_safety_rules_context(tool_type=detected_tool, include_general=(query_category == 'VERKTOY_HMS'))
+        if safety_ctx:
+            context_parts.append(safety_ctx)
+            print(f"  [JSON] Lagt til sikkerhetsregler")
+    
+    # 3. Room info for location questions
+    if 'rom' in message.lower() or 'hvor' in message.lower() or 'lokasjon' in message.lower():
+        room_ctx = get_room_context()
+        if room_ctx:
+            context_parts.append(room_ctx)
+            print(f"  [JSON] Lagt til rominfo")
+    
+    # 4. TF-IDF search - SKIP for inventory queries (JSON is enough)
+    if not inventory_query:
+        print(f"\n[{timestamp}] [SEARCH] Soker i kunnskapsbasen...")
+        if detected_tool:
+            print(f"  [FILTER] Filtrerer pa verktoy: {detected_tool}")
+        search_start = time.time()
+        relevant_chunks = search_vault(message, tool_filter=detected_tool)
+        search_time = time.time() - search_start
+        print(f"  [OK] Fant {len(relevant_chunks)} relevante biter ({search_time:.2f}s)")
+        
+        if relevant_chunks:
+            for i, chunk in enumerate(relevant_chunks[:3]):
+                preview = chunk[:80].replace('\n', ' ')
+                print(f"    {i+1}. {preview}...")
+            context_parts.append("DOKUMENTASJON:\n" + "\n\n".join(relevant_chunks))
+    
+    context = "\n\n".join(context_parts) if context_parts else "Ingen relevant informasjon funnet."
     
     # Get response from LLM
     print(f"\n[{timestamp}] [LLM] Sender til Ollama (llama3)...")
-    print(f"  [WAIT] Venter pa svar (dette kan ta 10-30 sek)...")
+    print(f"  [WAIT] Venter pa svar...")
     llm_start = time.time()
     
     try:
-        response = ask_llm(message, context)
+        response, updated_summary = ask_llm(
+            message, context, 
+            is_inventory=inventory_query, 
+            conversation_history=conversation_history,
+            existing_summary=existing_summary
+        )
         llm_time = time.time() - llm_start
         print(f"  [OK] Svar mottatt! ({llm_time:.1f}s)")
         print(f"\n[{timestamp}] [SENT] SVAR SENDT TIL BRUKER")
         print(f"  Lengde: {len(response)} tegn")
         print(f"{'='*60}\n")
-        return jsonify({'response': response})
+        return jsonify({
+            'response': response,
+            'summary': updated_summary  # Return updated summary to frontend
+        })
     except Exception as e:
         llm_time = time.time() - llm_start
         error_msg = str(e)
@@ -1241,6 +1655,272 @@ def reload():
 
 
 # =============================================================================
+# Fast PDF Import - Quick extraction with optional AI enhancement
+# =============================================================================
+def extract_pdf_fast(file_path):
+    """Fast PDF text extraction using PyPDF2 only. Returns text quickly."""
+    text = ''
+    try:
+        print(f"  [PDF-FAST] Using PyPDF2 for quick extraction...")
+        with open(file_path, 'rb') as pdf_file:
+            pdf_reader = PyPDF2.PdfReader(pdf_file)
+            total_pages = len(pdf_reader.pages)
+            for i, page in enumerate(pdf_reader.pages):
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text + "\n\n"
+        print(f"  [PDF-FAST] Extracted {len(text)} chars from {total_pages} pages")
+        return text, total_pages
+    except Exception as e:
+        print(f"  [PDF-FAST] Error: {e}")
+        raise
+
+
+@app.route('/extract-pdf', methods=['POST'])
+@login_required
+def extract_pdf():
+    """Fast PDF extraction - returns raw text immediately for preview."""
+    if 'file' not in request.files:
+        return jsonify({'success': False, 'error': 'Ingen fil lastet opp'}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'success': False, 'error': 'Ingen fil valgt'}), 400
+    
+    if not file.filename.lower().endswith('.pdf'):
+        return jsonify({'success': False, 'error': 'Kun PDF-filer støttes'}), 400
+    
+    try:
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(file_path)
+        
+        print(f"[FAST EXTRACT] Processing {filename}...")
+        start_time = time.time()
+        
+        pdf_text, page_count = extract_pdf_fast(file_path)
+        
+        os.remove(file_path)
+        
+        elapsed = time.time() - start_time
+        print(f"[FAST EXTRACT] Done in {elapsed:.2f}s")
+        
+        if not pdf_text or len(pdf_text.strip()) < 50:
+            return jsonify({'success': False, 'error': 'Kunne ikke trekke ut tekst fra PDF'}), 400
+        
+        return jsonify({
+            'success': True,
+            'filename': filename,
+            'text': pdf_text,
+            'char_count': len(pdf_text),
+            'page_count': page_count,
+            'extract_time': round(elapsed, 2)
+        })
+        
+    except Exception as e:
+        print(f"[FAST EXTRACT] Error: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/enhance-pdf', methods=['POST'])
+@login_required
+def enhance_pdf():
+    """Use LLM to structure/summarize extracted PDF text."""
+    data = request.get_json()
+    
+    if not data or 'text' not in data:
+        return jsonify({'success': False, 'error': 'Ingen tekst å behandle'}), 400
+    
+    pdf_text = data.get('text', '').strip()
+    
+    if len(pdf_text) < 50:
+        return jsonify({'success': False, 'error': 'For lite tekst å behandle'}), 400
+    
+    # Truncate if too long
+    max_chars = 12000
+    truncated = False
+    if len(pdf_text) > max_chars:
+        pdf_text = pdf_text[:max_chars]
+        truncated = True
+        print(f"[ENHANCE] Truncated to {max_chars} chars")
+    
+    print(f"[ENHANCE] Sending {len(pdf_text)} chars to LLM...")
+    
+    prompt = f"""Du er en ekspert på å lage strukturert dokumentasjon for et Makerspace.
+
+Les følgende dokumentasjon og lag strukturerte kunnskapsoppføringer.
+
+REGLER:
+1. Behold VIKTIG teknisk informasjon (innstillinger, prosedyrer, sikkerhet)
+2. Fjern unødvendig fyll og gjentakelser
+3. Skriv konsist og praktisk
+4. Bruk norsk språk (tekniske termer kan være på engelsk)
+5. Skill mellom ulike emner med tomme linjer
+
+DOKUMENTASJON:
+{pdf_text}
+
+STRUKTURERT OUTPUT:"""
+
+    try:
+        start_time = time.time()
+        response = ollama.chat(
+            model='llama3',
+            messages=[{'role': 'user', 'content': prompt}],
+            options={'temperature': 0.3, 'num_predict': 2000}
+        )
+        summary = response['message']['content']
+        elapsed = time.time() - start_time
+        print(f"[ENHANCE] LLM done in {elapsed:.1f}s, generated {len(summary)} chars")
+        
+        return jsonify({
+            'success': True,
+            'enhanced_text': summary,
+            'original_chars': len(pdf_text),
+            'enhanced_chars': len(summary),
+            'truncated': truncated,
+            'enhance_time': round(elapsed, 1)
+        })
+    except Exception as e:
+        print(f"[ENHANCE] LLM Error: {e}")
+        return jsonify({'success': False, 'error': f'LLM feil: {str(e)}'}), 500
+
+
+# Legacy endpoint - kept for backwards compatibility
+@app.route('/summarize-pdf', methods=['POST'])
+@login_required
+def summarize_pdf():
+    """Legacy: Upload PDF, extract text, and use LLM to create structured vault entries."""
+    if 'file' not in request.files:
+        return jsonify({'success': False, 'error': 'Ingen fil lastet opp'}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'success': False, 'error': 'Ingen fil valgt'}), 400
+    
+    if not file.filename.lower().endswith('.pdf'):
+        return jsonify({'success': False, 'error': 'Kun PDF-filer støttes'}), 400
+    
+    try:
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(file_path)
+        
+        print(f"[SMART IMPORT] Extracting text from {filename}...")
+        pdf_text, _ = extract_pdf_fast(file_path)  # Use fast extraction
+        
+        os.remove(file_path)
+        
+        if not pdf_text or len(pdf_text.strip()) < 100:
+            return jsonify({'success': False, 'error': 'Kunne ikke trekke ut nok tekst fra PDF'}), 400
+        
+        max_chars = 15000
+        if len(pdf_text) > max_chars:
+            pdf_text = pdf_text[:max_chars] + "\n\n[... dokumentet fortsetter ...]"
+            print(f"[SMART IMPORT] Truncated to {max_chars} chars")
+        
+        print(f"[SMART IMPORT] Extracted {len(pdf_text)} chars, sending to LLM...")
+        
+        prompt = f"""Du er en ekspert på å lage strukturert dokumentasjon for et Makerspace.
+
+Les følgende dokumentasjon og lag strukturerte kunnskapsoppføringer i vårt vault-format.
+
+VAULT-FORMAT REGLER:
+1. Bruk "--- TITTEL ---" for hver seksjon
+2. Start med nivå: NYBEGYNNER, INTERMEDIATE, ADVANCED, eller EKSPERT
+3. Skriv konsist og praktisk - fokuser på HVA brukeren må vite
+4. Inkluder feilsøking hvis relevant
+5. Bruk norsk språk (tekniske termer kan være på engelsk)
+6. Hver oppføring bør være 3-10 linjer
+
+EKSEMPEL FORMAT:
+--- NYBEGYNNER: Oppstartsprosedyre [Utstyrsnavn] ---
+1. Slå på hovedstrøm
+2. Vent til systemet starter
+3. [flere steg...]
+
+--- INTERMEDIATE: Vanlige innstillinger ---
+Speed: 50-100 for [materiale]
+Power: 80% for [tykkelse]
+
+--- FEILSØKING: [Problem] ---
+Symptom: Beskrivelse av problemet
+Årsak: Hvorfor det skjer
+Løsning: Hvordan fikse det
+
+DOKUMENTASJON Å BEHANDLE:
+{pdf_text}
+
+GENERER VAULT-OPPFØRINGER:"""
+
+        # Call LLM
+        try:
+            response = ollama.chat(
+                model='llama3',  # Use llama3 for better instruction following
+                messages=[{'role': 'user', 'content': prompt}],
+                options={'temperature': 0.3}  # Lower temp for more consistent output
+            )
+            summary = response['message']['content']
+            print(f"[SMART IMPORT] LLM generated {len(summary)} chars")
+        except Exception as e:
+            # Fallback to normistral if llama3 not available
+            print(f"[SMART IMPORT] llama3 failed, trying normistral: {e}")
+            try:
+                response = ollama.chat(
+                    model='hf.co/norallm/normistral-7b-warm-instruct',
+                    messages=[{'role': 'user', 'content': prompt}]
+                )
+                summary = response['message']['content']
+            except Exception as e2:
+                return jsonify({'success': False, 'error': f'LLM feil: {str(e2)}'}), 500
+        
+        return jsonify({
+            'success': True,
+            'filename': filename,
+            'original_chars': len(pdf_text),
+            'summary': summary
+        })
+        
+    except Exception as e:
+        print(f"[SMART IMPORT] Error: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/approve-summary', methods=['POST'])
+@login_required  
+def approve_summary():
+    """Add approved LLM-generated summary to vault."""
+    data = request.get_json()
+    
+    if not data or 'content' not in data:
+        return jsonify({'success': False, 'error': 'Ingen innhold å legge til'}), 400
+    
+    content = data.get('content', '').strip()
+    
+    if not content:
+        return jsonify({'success': False, 'error': 'Tomt innhold'}), 400
+    
+    try:
+        # Append directly to vault (already formatted)
+        with open(VAULT_FILE, 'a', encoding='utf-8') as f:
+            f.write('\n\n')  # Separator
+            f.write(content)
+            f.write('\n')
+        
+        # Count approximate "chunks" added (sections)
+        sections = content.count('---')
+        
+        return jsonify({
+            'success': True,
+            'message': f'Lagt til ~{sections//2} seksjoner i kunnskapsbasen',
+            'stats': get_vault_stats()
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+# =============================================================================
 # Main
 # =============================================================================
 if __name__ == '__main__':
@@ -1256,6 +1936,7 @@ if __name__ == '__main__':
     print("=" * 60 + "\n")
     
     # Load embeddings on startup
+    load_json_knowledge()
     load_vault()
     
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -1,0 +1,210 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-03",
+  "description": "HMS-regler og sikkerhetsbestemmelser for Makerspace HiØF",
+  
+  "general_rules": {
+    "name_no": "Generelle regler",
+    "name_en": "General Rules",
+    "rules": [
+      {
+        "id": "rule-001",
+        "priority": "critical",
+        "rule_no": "Aldri bruk maskiner uten godkjent opplæring",
+        "rule_en": "Never use machines without approved training",
+        "applies_to": "all"
+      },
+      {
+        "id": "rule-002",
+        "priority": "critical",
+        "rule_no": "Aldri forlat maskiner som er i drift uten tilsyn",
+        "rule_en": "Never leave running machines unattended",
+        "applies_to": ["laser_cutting", "cnc", "3d_printing"]
+      },
+      {
+        "id": "rule-003",
+        "priority": "high",
+        "rule_no": "Rydd opp etter deg - søppel i merkede dunker, gjenbrukbart materiale på merket plass",
+        "rule_en": "Clean up after yourself - trash in marked bins, reusable material in designated areas",
+        "applies_to": "all"
+      },
+      {
+        "id": "rule-004",
+        "priority": "high",
+        "rule_no": "Bruk påkrevd verneutstyr for hver maskin",
+        "rule_en": "Use required protective equipment for each machine",
+        "applies_to": "all"
+      },
+      {
+        "id": "rule-005",
+        "priority": "critical",
+        "rule_no": "Kjenn plasseringen av nødstopp og brannslukker",
+        "rule_en": "Know the location of emergency stop and fire extinguisher",
+        "applies_to": "all"
+      }
+    ]
+  },
+  "equipment_specific": {
+    "laser_cutting": {
+      "name_no": "Laserkutter-regler",
+      "name_en": "Laser Cutter Rules",
+      "ppe_required": ["safety_glasses"],
+      "rules": [
+        {
+          "priority": "critical",
+          "rule_no": "Følg med på hele jobben - laseren kan starte brann",
+          "rule_en": "Monitor the entire job - laser can start fires"
+        },
+        {
+          "priority": "critical",
+          "rule_no": "Vær klar til å trykke nødstopp hvis noe går galt",
+          "rule_en": "Be ready to press emergency stop if something goes wrong"
+        },
+        {
+          "priority": "critical",
+          "rule_no": "ALDRI kutt PVC, vinyl, ABS, polykarbonat eller fiberglass - avgir giftige gasser",
+          "rule_en": "NEVER cut PVC, vinyl, ABS, polycarbonate or fiberglass - releases toxic fumes"
+        },
+        {
+          "priority": "high",
+          "rule_no": "Påse at filteret er på før du starter",
+          "rule_en": "Ensure filter is on before starting"
+        },
+        {
+          "priority": "high",
+          "rule_no": "Still inn fokushøyde korrekt basert på materialtykkelse",
+          "rule_en": "Set focus height correctly based on material thickness"
+        },
+        {
+          "priority": "medium",
+          "rule_no": "Rengjør maskinen med støvsuger etter bruk",
+          "rule_en": "Clean machine with vacuum after use"
+        }
+      ],
+      "forbidden_materials": [
+        {"material": "PVC / Vinyl", "reason_no": "Slipper ut klorgass", "reason_en": "Releases chlorine gas"},
+        {"material": "ABS", "reason_no": "Slipper ut cyanidgass", "reason_en": "Releases cyanide gas"},
+        {"material": "Polykarbonat", "reason_no": "Brenner lett, vanskelig å slukke", "reason_en": "Burns easily, hard to extinguish"},
+        {"material": "Fiberglass / Karbonfiber", "reason_no": "Avgir farlige gasser", "reason_en": "Releases hazardous fumes"},
+        {"material": "Speil / blanke materialer", "reason_no": "Reflekterer laseren, kan ødelegge maskinen", "reason_en": "Reflects laser, can damage machine"}
+      ]
+    },
+    "3d_printing": {
+      "name_no": "3D-printing regler",
+      "name_en": "3D Printing Rules",
+      "ppe_required": [],
+      "rules": [
+        {
+          "priority": "high",
+          "rule_no": "Følg med på de første 2 lagene - sjekk at første lag fester seg",
+          "rule_en": "Monitor the first 2 layers - check that first layer adheres"
+        },
+        {
+          "priority": "high",
+          "rule_no": "Sjekk jevnlig at printen går som forventet",
+          "rule_en": "Check regularly that the print is progressing as expected"
+        },
+        {
+          "priority": "medium",
+          "rule_no": "Forsikre deg om at byggeplaten er ren før printing",
+          "rule_en": "Ensure build plate is clean before printing"
+        },
+        {
+          "priority": "medium",
+          "rule_no": "Bruk riktig filamenttype i forhold til slicer-innstillinger",
+          "rule_en": "Use correct filament type matching slicer settings"
+        },
+        {
+          "priority": "low",
+          "rule_no": "Fjern print og rydd opp etter deg",
+          "rule_en": "Remove print and clean up after yourself"
+        }
+      ]
+    },
+    
+    "soldering": {
+      "name_no": "Lodding regler",
+      "name_en": "Soldering Rules",
+      "ppe_required": ["safety_glasses"],
+      "rules": [
+        {
+          "priority": "critical",
+          "rule_no": "Bruk avtrekk/ventilasjon - lodderøyk er helseskadelig",
+          "rule_en": "Use fume extraction - solder fumes are hazardous"
+        },
+        {
+          "priority": "high",
+          "rule_no": "La loddekolben avkjøles i holderen, ikke på bordet",
+          "rule_en": "Let soldering iron cool in holder, not on table"
+        },
+        {
+          "priority": "high",
+          "rule_no": "Vask hendene etter lodding - bly er giftig",
+          "rule_en": "Wash hands after soldering - lead is toxic"
+        },
+        {
+          "priority": "medium",
+          "rule_no": "Rengjør loddetuppen regelmessig med svamp",
+          "rule_en": "Clean soldering tip regularly with sponge"
+        }
+      ]
+    },
+    "cnc": {
+      "name_no": "CNC-regler",
+      "name_en": "CNC Rules",
+      "ppe_required": ["safety_glasses", "hearing_protection"],
+      "rules": [
+        {
+          "priority": "critical",
+          "rule_no": "Sikre at arbeidsstykket er godt festet før start",
+          "rule_en": "Ensure workpiece is securely clamped before starting"
+        },
+        {
+          "priority": "critical",
+          "rule_no": "Stå aldri i linje med roterende deler",
+          "rule_en": "Never stand in line with rotating parts"
+        },
+        {
+          "priority": "high",
+          "rule_no": "Sjekk verktøybane i simulering før kjøring",
+          "rule_en": "Check toolpath in simulation before running"
+        }
+      ]
+    },
+    
+    "woodworking": {
+      "name_no": "Trearbeid-regler",
+      "name_en": "Woodworking Rules",
+      "ppe_required": ["safety_glasses", "hearing_protection", "dust_mask"],
+      "rules": [
+        {
+          "priority": "critical",
+          "rule_no": "Bruk alltid beskyttelsesbriller ved saging og boring",
+          "rule_en": "Always use safety glasses when sawing and drilling"
+        },
+        {
+          "priority": "critical",
+          "rule_no": "Hold hender unna sagblad og bor",
+          "rule_en": "Keep hands away from saw blades and drill bits"
+        },
+        {
+          "priority": "high",
+          "rule_no": "Bruk klemmer, ikke hold arbeidsstykket med hendene",
+          "rule_en": "Use clamps, don't hold workpiece with hands"
+        },
+        {
+          "priority": "high",
+          "rule_no": "Fjern løse klær og smykker før bruk av maskiner",
+          "rule_en": "Remove loose clothing and jewelry before using machines"
+        }
+      ]
+    }
+  },
+  
+  "emergency": {
+    "fire_extinguisher_locations": ["D1-043 inngang", "D1-044 ved dør"],
+    "first_aid_kit": "D1-043 ved inngang",
+    "emergency_contact": "Vaktsentral: intern tlf",
+    "evacuation_point": "Hovedinngang bygg D"
+  }
+}

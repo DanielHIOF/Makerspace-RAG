@@ -1,0 +1,176 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-03",
+  "description": "Eksterne opplæringsressurser for Makerspace",
+  
+  "resources": {
+    "3d_printing": {
+      "name_no": "3D-printing ressurser",
+      "name_en": "3D Printing Resources",
+      "guides": [
+        {
+          "title": "HiØF MakerSpace - Kurs i 3D-printing",
+          "url": "https://www.hiof.no/iio/itk/om/labber/makerspace/arrangementer/3dprinting2.html",
+          "language": "no",
+          "level": "beginner",
+          "description_no": "Opplæringskurs for å få tilgang til 3D-printerne på HiØF. Praktisk innføring i Prusa-printere og PrusaSlicer.",
+          "description_en": "Training course to get access to 3D printers at HiØF. Practical introduction to Prusa printers and PrusaSlicer.",
+          "required": true
+        },
+        {
+          "title": "Prusa Knowledge Base",
+          "url": "https://help.prusa3d.com/",
+          "language": "en",
+          "level": "all",
+          "description_no": "Offisiell Prusa dokumentasjon - alt fra første print til feilsøking",
+          "description_en": "Official Prusa documentation - from first print to troubleshooting"
+        },
+        {
+          "title": "First Print with PrusaSlicer",
+          "url": "https://help.prusa3d.com/article/first-print-with-prusaslicer_1753",
+          "language": "en",
+          "level": "beginner",
+          "description_no": "Steg-for-steg guide til din første print med PrusaSlicer",
+          "description_en": "Step-by-step guide to your first print with PrusaSlicer"
+        },
+        {
+          "title": "PrusaSlicer Getting Started Guide",
+          "url": "https://www.obico.io/blog/prusa-slicer-getting-started/",
+          "language": "en",
+          "level": "beginner",
+          "description_no": "Komplett begynnerguide til PrusaSlicer",
+          "description_en": "Complete beginner guide to PrusaSlicer"
+        },
+        {
+          "title": "Tom's Hardware - How to Use PrusaSlicer",
+          "url": "https://www.tomshardware.com/how-to/use-prusaslicer",
+          "language": "en",
+          "level": "beginner",
+          "description_no": "Detaljert tutorial for PrusaSlicer med bilder",
+          "description_en": "Detailed PrusaSlicer tutorial with images"
+        }
+      ],
+      "troubleshooting": [
+        {
+          "title": "Prusa Troubleshooting Guide",
+          "url": "https://help.prusa3d.com/en/category/troubleshooting_194",
+          "language": "en",
+          "description_no": "Feilsøking for vanlige 3D-print problemer",
+          "description_en": "Troubleshooting for common 3D printing issues"
+        }
+      ],
+      "software": [
+        {
+          "name": "PrusaSlicer",
+          "url": "https://www.prusa3d.com/page/prusaslicer_424/",
+          "description_no": "Gratis slicing-program (anbefalt)",
+          "description_en": "Free slicing software (recommended)"
+        },
+        {
+          "name": "Printables.com",
+          "url": "https://www.printables.com/",
+          "description_no": "Gratis 3D-modeller å printe",
+          "description_en": "Free 3D models to print"
+        }
+      ]
+    },
+    "laser_cutting": {
+      "name_no": "Laserkutting ressurser",
+      "name_en": "Laser Cutting Resources",
+      "guides": [
+        {
+          "title": "Epilog Laser Manuals",
+          "url": "https://www.epiloglaser.com/support/laser-manuals/",
+          "language": "en",
+          "level": "all",
+          "description_no": "Offisielle manualer for Epilog laserkuttere",
+          "description_en": "Official manuals for Epilog laser cutters"
+        },
+        {
+          "title": "Laser Cutting Beginner Guide (CEED Wiki)",
+          "url": "https://en.wiki.makerepo.com/wiki/Digital_technologies/Laser_cutting/Laser_cutting-_Beginner",
+          "language": "en",
+          "level": "beginner",
+          "description_no": "Komplett begynnerguide for laserkutting",
+          "description_en": "Complete beginner guide for laser cutting"
+        },
+        {
+          "title": "Laser Safety Guide",
+          "url": "https://en.wiki.makerepo.com/wiki/Digital_technologies/Laser_cutting/Laser_cutting-_Beginner/Laser_Safety",
+          "language": "en",
+          "level": "beginner",
+          "description_no": "Viktig sikkerhetsinformasjon for laserkutting",
+          "description_en": "Important safety information for laser cutting"
+        }
+      ],
+      "software": [
+        {
+          "name": "Inkscape",
+          "url": "https://inkscape.org/",
+          "description_no": "Gratis vektorprogram for laser design",
+          "description_en": "Free vector program for laser design"
+        },
+        {
+          "name": "Adobe Illustrator",
+          "url": "https://www.adobe.com/products/illustrator.html",
+          "description_no": "Profesjonelt vektorprogram (betalt)",
+          "description_en": "Professional vector program (paid)"
+        }
+      ]
+    },
+    
+    "electronics": {
+      "name_no": "Elektronikk ressurser",
+      "name_en": "Electronics Resources",
+      "guides": [
+        {
+          "title": "Arduino Getting Started",
+          "url": "https://www.arduino.cc/en/Guide",
+          "language": "en",
+          "level": "beginner",
+          "description_no": "Offisiell Arduino begynnerguide",
+          "description_en": "Official Arduino getting started guide"
+        },
+        {
+          "title": "Soldering Basics (SparkFun)",
+          "url": "https://learn.sparkfun.com/tutorials/how-to-solder-through-hole-soldering",
+          "language": "en",
+          "level": "beginner",
+          "description_no": "Grunnleggende loddeteknikker",
+          "description_en": "Basic soldering techniques"
+        }
+      ]
+    },
+    
+    "cad_modeling": {
+      "name_no": "CAD og 3D-modellering",
+      "name_en": "CAD and 3D Modeling",
+      "software": [
+        {
+          "name": "Fusion 360",
+          "url": "https://www.autodesk.com/products/fusion-360/personal",
+          "description_no": "Gratis for personlig bruk - kraftig CAD-program",
+          "description_en": "Free for personal use - powerful CAD program"
+        },
+        {
+          "name": "FreeCAD",
+          "url": "https://www.freecad.org/",
+          "description_no": "Gratis open-source CAD-program",
+          "description_en": "Free open-source CAD program"
+        },
+        {
+          "name": "OpenSCAD",
+          "url": "https://openscad.org/",
+          "description_no": "Programmerbar 3D-modellering",
+          "description_en": "Programmable 3D modeling"
+        },
+        {
+          "name": "Tinkercad",
+          "url": "https://www.tinkercad.com/",
+          "description_no": "Enkel nettleserbasert 3D-modellering for nybegynnere",
+          "description_en": "Simple browser-based 3D modeling for beginners"
+        }
+      ]
+    }
+  }
+}

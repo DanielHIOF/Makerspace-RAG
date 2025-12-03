@@ -1,0 +1,69 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-03",
+  "description": "Romoversikt for Makerspace HiØF",
+  
+  "rooms": {
+    "makerspace": {
+      "id": "D1-044",
+      "name_no": "MakerSpace",
+      "name_en": "MakerSpace",
+      "building": "D",
+      "floor": 1,
+      "description_no": "Hovedrom for prototyping og elektronikk",
+      "description_en": "Main room for prototyping and electronics",
+      "equipment_categories": ["3d_printing", "electronics"],
+      "features": [
+        "3D-printere",
+        "Loddestasjoner",
+        "Elektronikkarbeidsplasser",
+        "Verktøy for prototyping"
+      ],
+      "access": {
+        "requires_training": true,
+        "booking_required": false,
+        "open_hours": "Se booking-system for tilgjengelighet"
+      }
+    },
+    
+    "fablab": {
+      "id": "D1-043",
+      "name_no": "FabLab",
+      "name_en": "FabLab",
+      "building": "D",
+      "floor": 1,
+      "description_no": "Verksted for laserkutting, CNC og trearbeid",
+      "description_en": "Workshop for laser cutting, CNC and woodworking",
+      "equipment_categories": ["laser_cutting", "cnc", "woodworking"],
+      "features": [
+        "Laserkuttere (Epilog, Glowforge)",
+        "CNC-maskiner",
+        "Bordsag og bormaskin",
+        "Håndverktøy"
+      ],
+      "access": {
+        "requires_training": true,
+        "booking_required": true,
+        "open_hours": "Se booking-system for tilgjengelighet"
+      },
+      "safety_equipment": {
+        "fire_extinguisher": true,
+        "first_aid_kit": true,
+        "emergency_stop_locations": ["Ved hver maskin", "Ved dør"]
+      }
+    }
+  },
+  
+  "contacts": {
+    "lab_responsible": {
+      "title_no": "Lab-ansvarlig",
+      "title_en": "Lab Manager"
+    },
+    "student_assistants": {
+      "title_no": "Studentassistenter",
+      "title_en": "Student Assistants",
+      "note_no": "Tilgjengelig i åpningstider for hjelp og veiledning",
+      "note_en": "Available during opening hours for help and guidance"
+    }
+  }
+}

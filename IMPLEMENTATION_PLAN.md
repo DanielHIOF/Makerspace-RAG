@@ -4,35 +4,140 @@
 
 **Project:** Makerspace RAG System for Høgskolen i Østfold  
 **Purpose:** AI-powered Q&A assistant for makerspace topics (3D printing, laser cutting, electronics, etc.)  
-**Developer:** Daniel Nilsen Johansen  
-**Status:** ✅ COMPLETE - Ready for deployment
+**Developer:** Patrick  
+**Status:** ✅ ACTIVE DEVELOPMENT
 
 ---
 
-## Current Architecture
+## Recent Changes
+
+### ✅ 2025-12-03: Fast PDF Import with Accept/Decline
+**Problem:** PDF-ekstrahering tar for lang tid (30-60 sek) pga PyMuPDF4LLM markdown-konvertering
+**Løsning:** Rask PyPDF2-ekstrahering → Forhåndsvisning → Valgfri AI-strukturering → Godkjenn/Avvis
+
+Ny arkitektur:
+```
+PDF → PyPDF2 (rask) → Forhåndsvisning → [Valgfritt: AI strukturering] → Godkjenn/Avvis
+                           ↓                      ↓
+                    Redigér manuelt          LLM forbedrer
+```
+
+Backend endringer (`app.py`):
+- `extract_pdf_fast()` - Ny funksjon som kun bruker PyPDF2 for rask ekstrahering
+- `/extract-pdf` - Nytt endpoint for umiddelbar tekstekstrahering
+- `/enhance-pdf` - Nytt endpoint for valgfri AI-strukturering
+- Legacy `/summarize-pdf` oppdatert til å bruke rask ekstrahering
+
+Frontend endringer (`templates/admin.html`):
+- Ny "PDF Import (Rask Ekstrahering)" seksjon erstatter "Smart PDF Import"
+- To-stegs arbeidsflyt:
+  1. Rå tekst forhåndsvisning med redigeringsmulighet
+  2. Valgfri AI-strukturering med egen forhåndsvisning
+- Knapper: "Strukturer med AI", "Godkjenn rå tekst", "Tilbake til rå", "Avbryt"
+- Viser ekstraksjonstid, sidetall, tegntall
+
+Forbedringer:
+- Ekstraksjonstid: ~2-5 sek (ned fra 30-60 sek)
+- Brukeren ser resultatet umiddelbart
+- Valgfri AI-forbedring (ikke påkrevd)
+- Mulighet til å redigere før godkjenning
+- Kan avvise og prøve på nytt
+
+### ✅ 2025-12-03: Clickable Links in Chat Responses
+**Problem:** RAG skal integreres på en webside og må kunne vise klikkbare lenker
+**Løsning:** Frontend link-parsing + backend test-case
+
+Frontend endringer (`templates/index.html`):
+- `formatMessage()` oppdatert til å håndtere:
+  - Markdown links: `[tekst](url)` → klikkbar lenke med tekst
+  - Rå URLs: `https://example.com` → klikkbar lenke
+- Ny CSS-klasse `.chat-link` for lenke-styling
+
+Backend endringer (`app.py`):
+- Easter egg test: "green apples" eller "grønne epler" trigger test-respons med lenke til vg.no
+- Bypass LLM for å teste link-funksjonalitet isolert
+
+Test:
+```
+Bruker: "Green apples are good"
+Bot: Ja, grønne epler er kjempegode! 🍏
+     [Les mer på VG](https://www.vg.no)
+     https://www.vg.no
+```
+
+Neste steg:
+- Integrere lenker fra knowledge base (ressurser.json)
+- La LLM inkludere relevante lenker i svar
+
+### ✅ 2025-12-03: Incremental Conversation Compression
+**Problem:** Komprimering av 44 meldinger på én gang gir lang ventetid
+**Løsning:** Inkrementell komprimering hver 6. melding
+
+Konfigurasjon:
+- `INCREMENTAL_COMPRESS_EVERY = 6` - Komprimer hver 6. melding (3 utvekslinger)
+- `RECENT_MESSAGES_KEEP = 10` - Behold alltid siste 10 meldinger i full tekst
+
+Flyt:
+```
+Melding 1-6:   [full] [full] [full] [full] [full] [full]
+Melding 7:    Komprimer 1-6 → summary, behold 7-10 full
+Melding 13:   Komprimer 7-12 → oppdater summary, behold 11-16 full
+...osv
+```
+
+Filer endret:
+- `app.py`: 
+  - `summarize_messages()` - Inkrementell oppsummering med eksisterende kontekst
+  - `ask_llm()` returnerer nå tuple: (response, updated_summary)
+  - `/chat` endpoint mottar og returnerer summary
+- `templates/index.html`:
+  - `conversationSummary` variabel
+  - Sender summary med hver request
+  - Oppdaterer summary fra response
+
+Modeller:
+- Hovedsvar: `llama3`
+- Komprimering: `llama3.2:1b` (rask, 1.3GB)
+
+### ✅ 2025-12-03: Extended Conversation Memory
+**Problem:** Samtalehistorikk begrenset til 12 meldinger (6 utvekslinger)
+**Løsning:** Økt til 40 meldinger (20 utvekslinger)
+
+Endringer:
+- `templates/index.html`: `conversationHistory` limit 12 → 40
+- `app.py`: `history_limit` slice [-12:] → [-40:]
+
+Nå kan chatbotten huske ~20 meldingsutvekslinger i en samtale.
+
+---
+
+## Current Architecture (v2)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    MAKERSPACE RAG SYSTEM                        │
+│                    MAKERSPACE RAG SYSTEM v2                     │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────────────┐ │
-│  │   User      │───▶│  Flask App  │───▶│  TF-IDF Search      │ │
-│  │  (Browser)  │    │  (app.py)   │    │  (scikit-learn)     │ │
-│  └─────────────┘    └──────┬──────┘    └──────────┬──────────┘ │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │            STRUCTURED KNOWLEDGE (JSON)                   │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌────────┐ ┌───────────┐    │   │
+│  │  │ utstyr   │ │ regler   │ │  rom   │ │ ressurser │    │   │
+│  │  │  .json   │ │  .json   │ │ .json  │ │   .json   │    │   │
+│  │  └──────────┘ └──────────┘ └────────┘ └───────────┘    │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                           │                                     │
+│                           ▼                                     │
+│  ┌─────────────┐    ┌─────────────┐    ┌───────────────────┐   │
+│  │   Query     │───▶│  Classifier │───▶│  Context Builder  │   │
+│  │  (Bruker)   │    │  + Tool Det │    │  JSON + TF-IDF    │   │
+│  └─────────────┘    └──────┬──────┘    └─────────┬─────────┘   │
 │                            │                      │             │
 │                            ▼                      ▼             │
 │                     ┌─────────────┐        ┌─────────────┐     │
 │                     │   Ollama    │        │  vault.txt  │     │
-│                     │  (llama3)   │        │ (4666 lines)│     │
+│                     │  (llama3)   │◀───────│  (cleaned)  │     │
 │                     └─────────────┘        └─────────────┘     │
 │                                                                 │
-├─────────────────────────────────────────────────────────────────┤
-│  UNIFIED LAUNCHER (launcher.py / START.bat)                     │
-│  - Auto-starts Ollama if not running                            │
-│  - Verifies/pulls required models                               │
-│  - Starts Flask server                                          │
-│  - Opens browser automatically                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -42,125 +147,321 @@
 
 ```
 C:\Food-E\Makerspace-RAG\
-├── START.bat              # ⭐ Double-click to launch (Windows)
-├── launcher.py            # ⭐ Unified launcher script
+├── START.bat              # Double-click to launch (Windows)
+├── launcher.py            # Unified launcher script
 ├── app.py                 # Main Flask web application
-├── simple_rag.py          # CLI version with semantic embeddings
-├── upload.py              # Tkinter GUI for document uploads
-├── vault.txt              # Knowledge base (4666+ chunks)
-├── requirements.txt       # Dependencies (COMPLETE)
-├── README.md              # Basic documentation
+├── vault.txt              # Document chunks
+├── requirements.txt       # Dependencies
 ├── IMPLEMENTATION_PLAN.md # This file
+│
+├── knowledge/             # Structured knowledge base
+│   ├── utstyr.json        # Equipment inventory
+│   ├── regler.json        # HMS/Safety rules  
+│   ├── rom.json           # Room information
+│   └── ressurser.json     # External learning resources
+│
+├── data/                  # 🆕 NEW: Persistent data storage
+│   └── conversations.db   # SQLite database for chat history
+│
 ├── templates/
 │   ├── index.html         # Chat interface
 │   ├── admin.html         # Admin panel
 │   └── login.html         # Login page
-└── uploads/               # Temporary upload folder
+│
+├── static/
+│   └── makerspace-logo.png
+│
+└── uploads/               # Document uploads
 ```
-
----
-
-## Quick Start
-
-### Option 1: Double-click (Windows)
-```
-Double-click START.bat
-```
-
-### Option 2: Command Line
-```bash
-cd C:\Food-E\Makerspace-RAG
-python launcher.py
-```
-
-### What happens:
-1. ✅ Checks Python dependencies
-2. ✅ Checks if Ollama is running (starts it if not)
-3. ✅ Verifies llama3 model is installed (pulls if needed)
-4. ✅ Loads knowledge base
-5. ✅ Starts Flask web server
-6. ✅ Opens browser to http://localhost:5000/
-
----
-
-## Features
-
-### Chat Interface (/)
-- Ask questions about 3D printing, laser cutting, electronics, etc.
-- Three explanation levels: Beginner (1), Normal (2), Expert (3)
-- TF-IDF search retrieves relevant knowledge chunks
-- Ollama llama3 generates contextual responses
-
-### Admin Panel (/admin)
-- **Login:** admin / makerspace2024
-- Upload documents (PDF, TXT, MD, JSON)
-- Paste text directly
-- Automatic chunking with smart deduplication
-- View recent chunks
-- Reload search index
-
-### Health Check (/health)
-- Check Ollama status and models
-- Check knowledge base status
-- Check search index status
 
 ---
 
 ## Implementation Status
 
-### ✅ Phase 1: Dependencies & Configuration - COMPLETE
-- [x] Updated requirements.txt with all dependencies
-- [x] Environment variable support for credentials
-- [x] Proper dependency checking in launcher
+### ✅ Phase 1-9: COMPLETE
+- Core RAG functionality
+- Web interface with JSON knowledge
+- Admin panel
+- Query classification, tool detection, query expansion
+- Smart PDF import
+- Tilgangsnivåer for utstyr
 
-### ✅ Phase 2: Ollama Setup - COMPLETE  
-- [x] Auto-detection of Ollama running state
-- [x] Auto-start Ollama if not running
-- [x] Model verification and auto-pull
+### 🔄 Phase 10: Conversation Memory - IN PROGRESS
 
-### ✅ Phase 3: Unified Launcher - COMPLETE
-- [x] launcher.py - Single entry point
-- [x] START.bat - Windows double-click launcher
-- [x] Auto browser opening
-- [x] Graceful error handling
+#### Problem Statement
+Nåværende system har samtalehistorikk kun i browser-minnet:
+- Forsvinner ved refresh/lukking
+- Ingen persistens mellom sesjoner
+- Begrenset til 12 meldinger
+- Ingen mulighet for å se/gjenoppta tidligere samtaler
 
-### ✅ Phase 4: Health Monitoring - COMPLETE
-- [x] /health endpoint with full system status
-- [x] /status endpoint for quick checks
-- [x] Console logging for debugging
+#### Solution: Session-Based Persistent Memory
 
-### ✅ Phase 5: Admin Panel - COMPLETE
-- [x] File upload with PDF support
-- [x] Direct text input
-- [x] Smart chunking algorithm
-- [x] Duplicate detection (exact + similarity)
-- [x] Search index reload
+**Arkitektur:**
+```
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│   Browser       │────▶│   Flask API     │────▶│   SQLite DB     │
+│   (session_id)  │◀────│   /chat         │◀────│   conversations │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+```
 
-### ✅ Phase 6: PDF Extraction Improvements - COMPLETE
-- [x] PyMuPDF4LLM integration (best for RAG - extracts markdown)
-- [x] pdfplumber fallback (good table extraction)
-- [x] PyPDF2 last resort (basic extraction)
-- [x] Improved chunking with header awareness
-- [x] Chunk overlap for context continuity
-- [x] Filters out header-only chunks
+#### Implementation Checklist
 
-### ✅ Phase 7: UI & System Prompt Improvements - COMPLETE
-- [x] Clean, modern chat interface design
-- [x] Removed stats clutter from main page
-- [x] Language selection (Auto/Norwegian/English)
-- [x] Simplified level selection (Beginner/Normal/Expert)
-- [x] Improved system prompt structure
-- [x] Quick suggestion buttons
-- [x] Smooth animations and loading states
+##### Backend (app.py)
+- [ ] **10.1 Database Setup**
+  - [ ] Create `data/` directory
+  - [ ] Initialize SQLite database with schema:
+    ```sql
+    CREATE TABLE conversations (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        session_id TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        title TEXT
+    );
+    
+    CREATE TABLE messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        conversation_id INTEGER NOT NULL,
+        role TEXT NOT NULL,  -- 'user' or 'assistant'
+        content TEXT NOT NULL,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (conversation_id) REFERENCES conversations(id)
+    );
+    
+    CREATE INDEX idx_session ON conversations(session_id);
+    CREATE INDEX idx_conv_id ON messages(conversation_id);
+    ```
 
-### ✅ Phase 8: Branding & Theme - COMPLETE
-- [x] Makerspace orange/yellow brand colors (#E5A124)
-- [x] Lightbulb logo SVG in header
-- [x] Dark/Light mode toggle with persistence
-- [x] Cleaner button design (numbers for levels, text for languages)
-- [x] Brand bar accent at bottom
-- [x] Admin panel updated to match branding
-- [x] Professional, consistent look across all pages
+- [ ] **10.2 Database Helper Functions**
+  - [ ] `init_db()` - Create tables if not exist
+  - [ ] `create_conversation(session_id)` - Start new conversation
+  - [ ] `add_message(conv_id, role, content)` - Save message
+  - [ ] `get_conversation_history(conv_id, limit=20)` - Retrieve messages
+  - [ ] `get_recent_conversations(session_id, limit=10)` - List conversations
+  - [ ] `get_conversation_by_id(conv_id)` - Get specific conversation
+  - [ ] `auto_generate_title(conv_id)` - Generate title from first message
+
+- [ ] **10.3 API Endpoints**
+  - [ ] `POST /chat` - Modify to save messages and return conv_id
+  - [ ] `GET /conversations` - List user's recent conversations
+  - [ ] `GET /conversations/<id>` - Get full conversation
+  - [ ] `POST /conversations/new` - Start fresh conversation
+  - [ ] `DELETE /conversations/<id>` - Delete conversation (optional)
+
+- [ ] **10.4 Session Management**
+  - [ ] Generate UUID session_id for anonymous users
+  - [ ] Store session_id in cookie (httponly, 30 days expiry)
+  - [ ] Pass session_id with all chat requests
+
+##### Frontend (index.html)
+- [ ] **10.5 Session Handling**
+  - [ ] Check for existing session_id in cookie on load
+  - [ ] Generate new session_id if none exists
+  - [ ] Send session_id with all API requests
+
+- [ ] **10.6 Conversation UI**
+  - [ ] Add sidebar/drawer for conversation history
+  - [ ] "Ny samtale" button creates new conversation
+  - [ ] Click on previous conversation to load it
+  - [ ] Show conversation title (auto-generated from first message)
+  - [ ] Visual indicator for active conversation
+
+- [ ] **10.7 Message Persistence**
+  - [ ] On page load: fetch current conversation or start new
+  - [ ] Display previous messages from database
+  - [ ] Auto-scroll to bottom on load
+  - [ ] Save messages immediately on send/receive
+
+##### Configuration
+- [ ] **10.8 Memory Settings**
+  - [ ] `CONVERSATION_HISTORY_LIMIT = 20` - Messages sent to LLM
+  - [ ] `CONVERSATIONS_PER_USER = 50` - Max stored per session
+  - [ ] `MESSAGE_RETENTION_DAYS = 30` - Auto-cleanup old conversations
+  - [ ] Add cleanup cron job / background task
+
+#### Database Schema Details
+
+```python
+# In app.py - new section after imports
+
+import sqlite3
+import uuid
+from pathlib import Path
+
+DATABASE_PATH = Path('data/conversations.db')
+
+def get_db():
+    """Get database connection."""
+    DATABASE_PATH.parent.mkdir(exist_ok=True)
+    conn = sqlite3.connect(DATABASE_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def init_db():
+    """Initialize database tables."""
+    conn = get_db()
+    conn.executescript('''
+        CREATE TABLE IF NOT EXISTS conversations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            session_id TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            title TEXT
+        );
+        
+        CREATE TABLE IF NOT EXISTS messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            conversation_id INTEGER NOT NULL,
+            role TEXT NOT NULL CHECK(role IN ('user', 'assistant')),
+            content TEXT NOT NULL,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
+        );
+        
+        CREATE INDEX IF NOT EXISTS idx_session ON conversations(session_id);
+        CREATE INDEX IF NOT EXISTS idx_conv_id ON messages(conversation_id);
+        CREATE INDEX IF NOT EXISTS idx_updated ON conversations(updated_at DESC);
+    ''')
+    conn.commit()
+    conn.close()
+    print("  Database initialized")
+```
+
+#### API Response Format
+
+```python
+# POST /chat response
+{
+    "response": "AI svar her...",
+    "conversation_id": 42,
+    "message_count": 5
+}
+
+# GET /conversations response
+{
+    "conversations": [
+        {
+            "id": 42,
+            "title": "3D-printing med PLA",
+            "created_at": "2025-12-03T10:30:00",
+            "updated_at": "2025-12-03T10:45:00",
+            "message_count": 8
+        },
+        ...
+    ]
+}
+
+# GET /conversations/<id> response
+{
+    "id": 42,
+    "title": "3D-printing med PLA",
+    "messages": [
+        {"role": "user", "content": "Hvordan...", "timestamp": "..."},
+        {"role": "assistant", "content": "Du kan...", "timestamp": "..."}
+    ]
+}
+```
+
+#### Frontend Storage Strategy
+
+```javascript
+// Session management
+function getOrCreateSession() {
+    let sessionId = localStorage.getItem('makerspace_session');
+    if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        localStorage.setItem('makerspace_session', sessionId);
+    }
+    return sessionId;
+}
+
+// Current conversation tracking
+let currentConversationId = null;
+let sessionId = getOrCreateSession();
+
+// Load conversation on startup
+async function loadCurrentConversation() {
+    const savedConvId = localStorage.getItem('current_conversation');
+    if (savedConvId) {
+        await loadConversation(savedConvId);
+    }
+}
+```
+
+#### UI Mockup - Conversation Sidebar
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ [Logo] MAKERSPACE                    [🔄 Ny] [☀️] [⚙️]     │
+├──────────────┬──────────────────────────────────────────────┤
+│ SAMTALER     │                                              │
+│              │     Hva skal vi lage i dag?                  │
+│ ▶ 3D-print.. │                                              │
+│   Laser mat..│     [3D-Printing] [Laser] [Elektronikk]      │
+│   Arduino pr │                                              │
+│   Filament.. │                                              │
+│              │                                              │
+│              │                                              │
+│              │                                              │
+├──────────────┴──────────────────────────────────────────────┤
+│ [Nivå: 1 2 3] [    Skriv spørsmål...    ] [Send] [NO/EN]   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Priority Order
+1. **Backend first** - Database + API (10.1-10.4)
+2. **Basic persistence** - Save/load messages (10.5, 10.7)
+3. **UI enhancement** - Conversation list (10.6)
+4. **Cleanup** - Auto-delete old conversations (10.8)
+
+#### Estimated Effort
+- Backend: 2-3 timer
+- Frontend basic: 1-2 timer
+- Frontend UI: 2-3 timer
+- Testing: 1 time
+- **Total: ~8 timer**
+
+---
+
+## Previous Phases (Completed)
+
+### ✅ Phase 9: Knowledge Restructuring
+- Created structured JSON knowledge base
+- Rebuilt vault.txt with educational content
+- Integrated JSON with context builder
+- Smart query routing (inventory vs other)
+
+### ✅ Phase 8: Smart PDF Import
+- AI-assisted PDF summarization
+- Admin review and approval workflow
+
+### ✅ Phase 7: Equipment Access Levels
+- Added access_level field to utstyr.json
+- 5 tilgangsnivåer: course_makerspace, course_fablab, certification_required, request_required, staff_only
+
+---
+
+## LLM Configuration
+
+```python
+model='llama3'
+options={'temperature': 0.7, 'num_predict': 500}
+```
+
+---
+
+## Context Building Strategy
+
+When a user asks a question:
+
+1. **Classify query** → FEILSOKING | OPPLARING | VERKTOY_HMS | GENERELL
+2. **Detect tool** → 3d_printer | laserkutter | cnc | lodding | etc.
+3. **Load conversation history** → Last 20 messages from database (NEW!)
+4. **Build context**:
+   - If tool detected → Include equipment JSON entry
+   - If HMS question → Include relevant rules
+   - Add TF-IDF search results from vault.txt
+5. **Send to LLM** with conversation history + context
 
 ---
 
@@ -170,109 +471,17 @@ python launcher.py
 |----------|--------|------|-------------|
 | `/` | GET | No | Chat interface |
 | `/chat` | POST | No | Send message, get response |
+| `/conversations` | GET | No | List recent conversations (NEW) |
+| `/conversations/<id>` | GET | No | Get conversation details (NEW) |
+| `/conversations/new` | POST | No | Start new conversation (NEW) |
 | `/status` | GET | No | Quick status check |
 | `/health` | GET | No | Detailed health check |
-| `/login` | GET/POST | No | Admin login page |
-| `/logout` | GET | Yes | Logout admin |
+| `/equipment` | GET | No | List all equipment |
 | `/admin` | GET | Yes | Admin panel |
 | `/upload` | POST | Yes | Upload files |
-| `/add-text` | POST | Yes | Add text directly |
 | `/reload` | POST | Yes | Reload search index |
-| `/recent` | GET | Yes | Get recent chunks |
-| `/stats` | GET | Yes | Get vault statistics |
-
----
-
-## Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| "Ollama not found" | Install Ollama from https://ollama.ai |
-| "Model not found" | Launcher auto-pulls models, or run: `ollama pull llama3` |
-| "Connection refused" | Check Ollama is running: `ollama list` |
-| Missing dependencies | Run: `pip install -r requirements.txt` |
-| Port 5000 in use | Edit FLASK_PORT in launcher.py |
-| Slow responses | First response is slowest; subsequent are faster |
-| PDF only grabs headers | Install pymupdf4llm: `pip install pymupdf4llm` |
-| Poor PDF table extraction | Install pdfplumber: `pip install pdfplumber` |
-
----
-
-## Configuration
-
-Edit `launcher.py` to change:
-```python
-OLLAMA_PORT = 11434      # Ollama API port
-FLASK_PORT = 5000        # Web server port
-REQUIRED_MODELS = ['llama3']  # Required Ollama models
-```
-
-Edit environment variables (optional):
-```
-SECRET_KEY=your-secret-key
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=your-password
-```
-
----
-
-## Future Enhancements (Out of Scope)
-
-- [ ] Hybrid search (TF-IDF + semantic embeddings)
-- [ ] Chat history persistence  
-- [ ] Multi-user support
-- [ ] Docker containerization
-- [ ] GPU acceleration
-- [ ] Norwegian language model fine-tuning
-
----
-
-## Phase 9: Query Classification & Context Awareness - IN PROGRESS
-
-### Implemented
-- [x] Query classification into 3 categories:
-  - **FEILSOKING** - Troubleshooting (noe fungerer ikke)
-  - **OPPLARING** - Training/how-to (hvordan gjør jeg X)
-  - **VERKTOY_HMS** - Equipment info & safety rules
-- [x] Tool detection (3D printer, laser, electronics, etc.)
-- [x] Category-specific system prompt instructions
-- [x] Context labeling based on category
-- [x] Logging of detected category and tool in console
-- [x] **Tool-filtered search** - Only return chunks relevant to detected tool
-- [x] **Query expansion (NO→EN)** - Expand Norwegian queries with English synonyms for better TF-IDF matching
-- [x] **Granular tool detection** - Separate detection for lodding, arduino, raspberry vs general elektronikk
-
-### Tool Detection (priority order - specific first)
-1. **lodding**: lodd, solder, tinn, flux, kolbe
-2. **arduino**: arduino, uno, mega, nano, sketch
-3. **raspberry**: raspberry, gpio, raspbian
-4. **3d_printer**: prusa, filament, pla, nozzle, extruder, slicer
-5. **laserkutter**: laser, gravering, epilog, kutte, fokus
-6. **vinylkutter**: vinyl, cricut, sticker, folie
-7. **tekstil**: sy, symaskin, stoff, broderi
-8. **cnc**: cnc, fres, mill, router
-9. **elektronikk**: krets, circuit, breadboard, pcb (catch-all)
-
-### Query Expansion (Norwegian → English)
-Expands Norwegian terms with English synonyms before TF-IDF search:
-- `lodding` → `solder soldering how to solder beginner guide`
-- `hvordan` → `how to guide tutorial`
-- `fungerer ikke` → `not working problem error troubleshoot`
-- `byggeplate` → `bed build plate adhesion`
-- `løsner` → `warping adhesion detach lifting`
-
-### Search Parameters
-- **top_k**: 5 chunks max
-- **max_chunk_chars**: 1200 per chunk
-- **max_total_chars**: 4000 total context
-- **tool_filter**: Only include chunks matching detected tool keywords
-
-### Future Work
-- [ ] Tag vault chunks with categories during upload
-- [ ] Semantic search fallback for complex queries
-- [ ] Multi-language vault support
 
 ---
 
 *Document Created: 2025-06-02*  
-*Last Updated: 2025-12-02 - Tool-filtered search, query expansion, granular tool detection*
+*Last Updated: 2025-12-03 - Phase 10: Conversation Memory*

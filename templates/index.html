@@ -127,6 +127,7 @@
             </div>
         </div>
         <div class="header-actions">
+            <button class="icon-btn" id="newChatBtn" title="Ny samtale">🔄</button>
             <button class="icon-btn" id="themeToggle" title="Bytt tema">
                 <span class="theme-icon light">☀️</span>
                 <span class="theme-icon dark">🌙</span>
@@ -169,7 +170,7 @@
     
     <!-- Input Area -->
     <footer class="input-area">
-        <div class="level-desc-bar" id="levelDescBar">Normal forklaring med vanlige faguttrykk</div>
+        <div class="level-desc-bar" id="levelDescBar">Normal: Balansert forklaring med korte definisjoner av faguttrykk</div>
         
         <div class="input-wrapper">
             <div class="side-panel left">
@@ -336,6 +337,22 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-family: 'Consolas', monospace;
+        }
+        
+        .message a.chat-link {
+            color: var(--brand);
+            text-decoration: underline;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .message a.chat-link:hover {
+            color: var(--brand-light);
+        }
+        
+        .message.user a.chat-link {
+            color: #ffffff;
+            text-decoration: underline;
         }
         
         .typing {
@@ -538,11 +555,13 @@
         
         let selectedLevel = '';
         let selectedLang = '';
+        let conversationHistory = [];  // Track conversation history
+        let conversationSummary = '';  // Track compressed summary of older messages
         
         const levelDescriptions = {
-            '/nybegynner ': 'Enkelt språk, ingen faguttrykk, steg-for-steg forklaring',
-            '': 'Normal forklaring med vanlige faguttrykk',
-            '/ekspert ': 'Teknisk dybde, avanserte konsepter, presis terminologi'
+            '/nybegynner ': 'Nybegynner: Enkelt språk, steg-for-steg, ingen faguttrykk',
+            '': 'Normal: Balansert forklaring med korte definisjoner av faguttrykk',
+            '/ekspert ': 'Ekspert: Teknisk presisjon, fagterminologi, avanserte detaljer'
         };
         
         const levelDescBar = document.getElementById('levelDescBar');
@@ -571,18 +590,35 @@
             sendMessage();
         }
         
-        function addMessage(content, isUser) {
+        function addMessage(content, isUser, addToHistory = true) {
             welcome.style.display = 'none';
             const div = document.createElement('div');
             div.className = `message ${isUser ? 'user' : 'assistant'}`;
             div.innerHTML = formatMessage(content);
             messages.appendChild(div);
             chatArea.scrollTop = chatArea.scrollHeight;
+            
+            // Add to conversation history for backend context
+            if (addToHistory) {
+                conversationHistory.push({
+                    role: isUser ? 'user' : 'assistant',
+                    content: content
+                });
+                // Keep last 60 messages (30 exchanges) for good context memory
+                if (conversationHistory.length > 60) {
+                    conversationHistory = conversationHistory.slice(-60);
+                }
+            }
+            
             return div;
         }
         
         function formatMessage(text) {
             return text
+                // First handle markdown links: [text](url)
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>')
+                // Then handle raw URLs (not already in href)
+                .replace(/(?<!href="|">)(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>')
                 .replace(/\n/g, '<br>')
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
@@ -608,7 +644,7 @@
             if (!text) return;
             
             const fullMessage = selectedLang + selectedLevel + text;
-            addMessage(text, true);
+            addMessage(text, true);  // Add user message to display and history
             input.value = '';
             sendBtn.disabled = true;
             showLoading();
@@ -617,14 +653,24 @@
                 const res = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: fullMessage })
+                    body: JSON.stringify({ 
+                        message: fullMessage,
+                        history: conversationHistory.slice(0, -1),  // Send history WITHOUT the message we just added
+                        summary: conversationSummary  // Send existing summary
+                    })
                 });
                 const data = await res.json();
                 hideLoading();
-                addMessage(data.response, false);
+                
+                // Update summary if backend sent an updated one
+                if (data.summary) {
+                    conversationSummary = data.summary;
+                }
+                
+                addMessage(data.response, false);  // Add assistant response to display and history
             } catch (e) {
                 hideLoading();
-                addMessage('Beklager, noe gikk galt. Prøv igjen.', false);
+                addMessage('Beklager, noe gikk galt. Prøv igjen.', false, false);  // Don't add error to history
             }
             
             sendBtn.disabled = false;
@@ -634,6 +680,15 @@
         sendBtn.addEventListener('click', sendMessage);
         input.addEventListener('keypress', e => {
             if (e.key === 'Enter') sendMessage();
+        });
+        
+        // New chat button - clears conversation
+        document.getElementById('newChatBtn').addEventListener('click', () => {
+            conversationHistory = [];
+            conversationSummary = '';  // Reset summary too
+            messages.innerHTML = '';
+            welcome.style.display = 'block';
+            input.focus();
         });
         
         input.focus();

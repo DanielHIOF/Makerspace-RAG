@@ -330,7 +330,7 @@
         
         <div class="grid">
             <div class="card">
-                <h2>📁 Last opp filer</h2>
+                <h2>📁 Last opp filer (chunking)</h2>
                 <div class="drop-zone" id="dropZone">
                     <div class="icon">📄</div>
                     <p>Dra og slipp filer her eller klikk for å velge</p>
@@ -347,6 +347,49 @@
                 <button class="btn" id="addTextBtn">Legg til i kunnskapsbasen</button>
                 <div id="textMessage" class="message"></div>
             </div>
+        </div>
+        
+        <!-- Fast PDF Import Section -->
+        <div class="card" style="margin-bottom: 40px;">
+            <h2>📄 PDF Import (Rask Ekstrahering)</h2>
+            <p style="color: #8892b0; margin-bottom: 20px;">Last opp PDF → Se innholdet med en gang → Valgfritt: La AI strukturere det → Godkjenn eller avvis</p>
+            
+            <div class="drop-zone" id="fastDropZone" style="margin-bottom: 20px;">
+                <div class="icon">⚡</div>
+                <p>Dra og slipp PDF her for rask ekstrahering</p>
+                <span class="formats">Kun PDF-filer. Tekst vises umiddelbart.</span>
+                <input type="file" id="fastFileInput" accept=".pdf">
+            </div>
+            
+            <!-- Step 1: Raw extraction preview -->
+            <div id="extractPreview" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                    <span style="color: var(--brand);">📝 Ekstrahert tekst:</span>
+                    <span id="extractInfo" style="color: #5a6c8a; font-size: 0.85rem;"></span>
+                </div>
+                <textarea id="extractContent" style="height: 300px; font-family: monospace; font-size: 0.85rem;"></textarea>
+                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                    <button class="btn" id="enhanceBtn">🤖 Strukturer med AI (valgfritt)</button>
+                    <button class="btn" id="acceptRawBtn" style="background: #2e7d32;">✅ Godkjenn rå tekst</button>
+                    <button class="btn" id="cancelExtractBtn" style="background: #444;">❌ Avbryt</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: AI enhanced preview -->
+            <div id="enhancedPreview" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                    <span style="color: var(--brand);">🤖 AI-strukturert tekst (rediger ved behov):</span>
+                    <span id="enhanceInfo" style="color: #5a6c8a; font-size: 0.85rem;"></span>
+                </div>
+                <textarea id="enhancedContent" style="height: 350px; font-family: monospace; font-size: 0.85rem;"></textarea>
+                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                    <button class="btn" id="acceptEnhancedBtn" style="background: #2e7d32;">✅ Godkjenn</button>
+                    <button class="btn" id="backToRawBtn" style="background: #555;">⬅️ Tilbake til rå tekst</button>
+                    <button class="btn" id="cancelEnhancedBtn" style="background: #444;">❌ Avbryt</button>
+                </div>
+            </div>
+            
+            <div id="fastMessage" class="message"></div>
         </div>
         
         <div class="card recent-chunks">
@@ -613,6 +656,222 @@
             reloadBtn.disabled = false;
             reloadBtn.textContent = '🔄 Last inn embeddings';
         });
+        
+        // ===========================================
+        // Fast PDF Import (Quick extraction + optional AI)
+        // ===========================================
+        const fastDropZone = document.getElementById('fastDropZone');
+        const fastFileInput = document.getElementById('fastFileInput');
+        const extractPreview = document.getElementById('extractPreview');
+        const extractContent = document.getElementById('extractContent');
+        const extractInfo = document.getElementById('extractInfo');
+        const enhancedPreview = document.getElementById('enhancedPreview');
+        const enhancedContent = document.getElementById('enhancedContent');
+        const enhanceInfo = document.getElementById('enhanceInfo');
+        const fastMessage = document.getElementById('fastMessage');
+        
+        const enhanceBtn = document.getElementById('enhanceBtn');
+        const acceptRawBtn = document.getElementById('acceptRawBtn');
+        const cancelExtractBtn = document.getElementById('cancelExtractBtn');
+        const acceptEnhancedBtn = document.getElementById('acceptEnhancedBtn');
+        const backToRawBtn = document.getElementById('backToRawBtn');
+        const cancelEnhancedBtn = document.getElementById('cancelEnhancedBtn');
+        
+        let currentFilename = '';
+        
+        // Click to upload
+        fastDropZone.addEventListener('click', () => fastFileInput.click());
+        
+        // Drag and drop
+        fastDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fastDropZone.classList.add('dragover');
+        });
+        
+        fastDropZone.addEventListener('dragleave', () => {
+            fastDropZone.classList.remove('dragover');
+        });
+        
+        fastDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fastDropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length && files[0].name.toLowerCase().endsWith('.pdf')) {
+                handleFastExtract(files[0]);
+            } else {
+                showFastMessage('Kun PDF-filer støttes', 'error');
+            }
+        });
+        
+        fastFileInput.addEventListener('change', () => {
+            if (fastFileInput.files.length) {
+                handleFastExtract(fastFileInput.files[0]);
+            }
+        });
+        
+        function showFastMessage(msg, type) {
+            fastMessage.className = 'message ' + type;
+            fastMessage.textContent = msg;
+        }
+        
+        function resetFastUI() {
+            extractPreview.style.display = 'none';
+            enhancedPreview.style.display = 'none';
+            extractContent.value = '';
+            enhancedContent.value = '';
+            fastMessage.className = 'message';
+            fastMessage.style.display = 'none';
+            fastDropZone.innerHTML = `
+                <div class="icon">⚡</div>
+                <p>Dra og slipp PDF her for rask ekstrahering</p>
+                <span class="formats">Kun PDF-filer. Tekst vises umiddelbart.</span>
+            `;
+            fastFileInput.value = '';
+        }
+        
+        // Fast extraction handler
+        async function handleFastExtract(file) {
+            fastDropZone.innerHTML = '<span class="loading"></span> Ekstraherer tekst...';
+            fastMessage.className = 'message';
+            fastMessage.style.display = 'none';
+            extractPreview.style.display = 'none';
+            enhancedPreview.style.display = 'none';
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/extract-pdf', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentFilename = data.filename;
+                    extractInfo.textContent = `${data.filename} | ${data.page_count} sider | ${data.char_count} tegn | ${data.extract_time}s`;
+                    extractContent.value = data.text;
+                    extractPreview.style.display = 'block';
+                    showFastMessage(`Ekstrahert ${data.char_count} tegn på ${data.extract_time}s. Rediger ved behov.`, 'success');
+                } else {
+                    showFastMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showFastMessage('Feil: ' + error.message, 'error');
+            }
+            
+            resetDropZone();
+        }
+        
+        function resetDropZone() {
+            fastDropZone.innerHTML = `
+                <div class="icon">⚡</div>
+                <p>Dra og slipp PDF her for rask ekstrahering</p>
+                <span class="formats">Kun PDF-filer. Tekst vises umiddelbart.</span>
+            `;
+            fastFileInput.value = '';
+        }
+        
+        // Enhance with AI button
+        enhanceBtn.addEventListener('click', async () => {
+            const rawText = extractContent.value.trim();
+            if (!rawText) {
+                showFastMessage('Ingen tekst å behandle', 'error');
+                return;
+            }
+            
+            enhanceBtn.disabled = true;
+            enhanceBtn.innerHTML = '<span class="loading"></span> AI strukturerer...';
+            
+            try {
+                const response = await fetch('/enhance-pdf', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: rawText })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    enhanceInfo.textContent = `${data.original_chars} → ${data.enhanced_chars} tegn | ${data.enhance_time}s${data.truncated ? ' (trunkert)' : ''}`;
+                    enhancedContent.value = data.enhanced_text;
+                    extractPreview.style.display = 'none';
+                    enhancedPreview.style.display = 'block';
+                    showFastMessage('AI har strukturert teksten. Rediger ved behov og godkjenn.', 'success');
+                } else {
+                    showFastMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showFastMessage('Feil: ' + error.message, 'error');
+            }
+            
+            enhanceBtn.disabled = false;
+            enhanceBtn.textContent = '🤖 Strukturer med AI (valgfritt)';
+        });
+        
+        // Accept raw text
+        acceptRawBtn.addEventListener('click', async () => {
+            const content = extractContent.value.trim();
+            if (!content) {
+                showFastMessage('Ingen innhold å legge til', 'error');
+                return;
+            }
+            await addToVault(content, acceptRawBtn);
+        });
+        
+        // Accept enhanced text
+        acceptEnhancedBtn.addEventListener('click', async () => {
+            const content = enhancedContent.value.trim();
+            if (!content) {
+                showFastMessage('Ingen innhold å legge til', 'error');
+                return;
+            }
+            await addToVault(content, acceptEnhancedBtn);
+        });
+        
+        // Add content to vault
+        async function addToVault(content, btn) {
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Legger til...';
+            
+            try {
+                const response = await fetch('/approve-summary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showFastMessage(data.message + ' - Husk å laste inn søkeindeks!', 'success');
+                    extractPreview.style.display = 'none';
+                    enhancedPreview.style.display = 'none';
+                    updateStats(data.stats);
+                    refreshRecentChunks();
+                } else {
+                    showFastMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showFastMessage('Feil: ' + error.message, 'error');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+        
+        // Back to raw text
+        backToRawBtn.addEventListener('click', () => {
+            enhancedPreview.style.display = 'none';
+            extractPreview.style.display = 'block';
+            showFastMessage('Tilbake til rå tekst. Du kan redigere og godkjenne.', 'success');
+        });
+        
+        // Cancel buttons
+        cancelExtractBtn.addEventListener('click', resetFastUI);
+        cancelEnhancedBtn.addEventListener('click', resetFastUI);
     </script>
 </body>
 </html>

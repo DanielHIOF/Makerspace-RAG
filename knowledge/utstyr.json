@@ -1,0 +1,336 @@
+{
+  "version": "2.0",
+  "last_updated": "2025-12-03",
+  "description": "Utstyrsoversikt for Makerspace HiØF med tilgangsnivåer",
+  
+  "access_levels": {
+    "course_makerspace": {
+      "name_no": "MakerSpace-kurs",
+      "name_en": "MakerSpace course",
+      "description_no": "Krever kurs godkjent av labansvarlig. Labben er åpen for alle.",
+      "description_en": "Requires course approved by lab responsible. Lab is open to all.",
+      "location": "D1-044"
+    },
+    "course_fablab": {
+      "name_no": "FabLab HMS-kurs",
+      "name_en": "FabLab HMS course",
+      "description_no": "Krever HMS-kurs gjennom labansvarlig. Høyere risiko.",
+      "description_en": "Requires HMS course through lab responsible. Higher risk.",
+      "location": "D1-043"
+    },
+    "certification_required": {
+      "name_no": "Sertifisering påkrevd",
+      "name_en": "Certification required",
+      "description_no": "Krever godkjent kompetanse. Ta kontakt med labingeniøren.",
+      "description_en": "Requires approved competence. Contact the lab engineer."
+    },
+    "request_required": {
+      "name_no": "Må hentes fra labansvarlig",
+      "name_en": "Must be requested from lab responsible",
+      "description_no": "Må hentes fra labansvarlig og leveres tilbake etter bruk.",
+      "description_en": "Must be collected from lab responsible and returned after use."
+    },
+    "staff_only": {
+      "name_no": "Kun personale",
+      "name_en": "Staff only",
+      "description_no": "Kun labingeniører og studentassistenter.",
+      "description_en": "Lab engineers and student assistants only."
+    }
+  },
+
+  "categories": {
+    "3d_printing": {
+      "name_no": "3D-printing",
+      "name_en": "3D Printing",
+      "equipment": [
+        {
+          "id": "prusa-mini",
+          "name": "Prusa Mini+",
+          "location": "D1-044",
+          "status": "active",
+          "access_level": "course_makerspace",
+          "difficulty": "beginner",
+          "materials": ["PLA", "PETG"],
+          "filament_diameter": "1.75mm",
+          "build_volume": "180x180x180mm",
+          "hms_doc": "hms---prusa-mini+.pdf",
+          "keywords_no": ["3d print", "printer", "prusa", "filament", "pla", "nybegynner"],
+          "keywords_en": ["3d print", "printer", "prusa", "filament", "pla", "beginner"]
+        },
+        {
+          "id": "prusa-mk3s",
+          "name": "Prusa MK3s",
+          "location": "D1-044",
+          "status": "active",
+          "access_level": "course_makerspace",
+          "difficulty": "beginner",
+          "materials": ["PLA", "PETG", "ABS", "TPU"],
+          "filament_diameter": "1.75mm",
+          "build_volume": "250x210x210mm",
+          "hms_doc": "hms---prusa-mk3s.pdf",
+          "keywords_no": ["3d print", "printer", "prusa", "mk3", "filament"],
+          "keywords_en": ["3d print", "printer", "prusa", "mk3", "filament"]
+        },
+        {
+          "id": "ultimaker-3-extended",
+          "name": "Ultimaker 3 Extended",
+          "location": "D1-044",
+          "status": "active",
+          "access_level": "course_makerspace",
+          "difficulty": "intermediate",
+          "materials": ["PLA", "PETG", "ABS", "PVA"],
+          "filament_diameter": "2.85mm",
+          "build_volume": "215x215x300mm",
+          "notes": "Dual extrusion, vannløselig support (PVA)",
+          "hms_doc": "hms---ultimaker-3-extended.pdf",
+          "keywords_no": ["3d print", "printer", "ultimaker", "dual", "pva", "support"],
+          "keywords_en": ["3d print", "printer", "ultimaker", "dual", "pva", "support"]
+        },
+        {
+          "id": "voron-2.4r2",
+          "name": "Voron 2.4r2",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "certification_required",
+          "certifier": "labingeniør",
+          "difficulty": "advanced",
+          "materials": ["PLA", "PETG", "ABS", "TPU"],
+          "filament_diameter": "1.75mm",
+          "notes": "Avansert printer - krever ekstra opplæring og oppfølging fra labingeniør",
+          "hms_doc": "hms---avanserte-3d-printere.pdf",
+          "keywords_no": ["3d print", "voron", "avansert", "corexy"],
+          "keywords_en": ["3d print", "voron", "advanced", "corexy"]
+        },
+        {
+          "id": "voron-0.1",
+          "name": "Voron 0.1",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "certification_required",
+          "certifier": "labingeniør",
+          "difficulty": "advanced",
+          "materials": ["PLA", "PETG", "ABS", "TPU"],
+          "filament_diameter": "1.75mm",
+          "notes": "Avansert printer - krever ekstra opplæring og oppfølging fra labingeniør",
+          "hms_doc": "hms---avanserte-3d-printere.pdf",
+          "keywords_no": ["3d print", "voron", "avansert", "liten"],
+          "keywords_en": ["3d print", "voron", "advanced", "small"]
+        },
+        {
+          "id": "railcore-ii",
+          "name": "Railcore II",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "certification_required",
+          "certifier": "labingeniør",
+          "difficulty": "advanced",
+          "materials": ["PLA", "PETG", "ABS", "TPU"],
+          "filament_diameter": "1.75mm",
+          "notes": "Avansert printer - krever ekstra opplæring og oppfølging fra labingeniør",
+          "hms_doc": "hms---avanserte-3d-printere.pdf",
+          "keywords_no": ["3d print", "railcore", "avansert"],
+          "keywords_en": ["3d print", "railcore", "advanced"]
+        },
+        {
+          "id": "jubilee",
+          "name": "Jubilee",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "certification_required",
+          "certifier": "labingeniør",
+          "difficulty": "advanced",
+          "materials": ["PLA", "PETG", "ABS", "TPU"],
+          "filament_diameter": "1.75mm",
+          "notes": "Toolchanger-system. Avansert - krever opplæring fra labingeniør",
+          "hms_doc": "hms---avanserte-3d-printere.pdf",
+          "keywords_no": ["3d print", "jubilee", "avansert", "toolchanger"],
+          "keywords_en": ["3d print", "jubilee", "advanced", "toolchanger"]
+        },
+        {
+          "id": "ratrig-vcore3",
+          "name": "Ratrig Vcore 3",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "certification_required",
+          "certifier": "labingeniør",
+          "difficulty": "advanced",
+          "materials": ["PLA", "PETG", "ABS", "TPU"],
+          "filament_diameter": "1.75mm",
+          "notes": "Avansert printer - krever ekstra opplæring og oppfølging fra labingeniør",
+          "hms_doc": "hms---avanserte-3d-printere.pdf",
+          "keywords_no": ["3d print", "ratrig", "vcore", "avansert"],
+          "keywords_en": ["3d print", "ratrig", "vcore", "advanced"]
+        },
+        {
+          "id": "e3d-toolchanger",
+          "name": "E3D Toolchanger",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "certification_required",
+          "certifier": "labingeniør",
+          "difficulty": "advanced",
+          "materials": ["PLA", "PETG", "ABS", "TPU"],
+          "filament_diameter": "1.75mm",
+          "notes": "Multi-material toolchanger. Avansert - krever opplæring fra labingeniør",
+          "hms_doc": "hms---avanserte-3d-printere.pdf",
+          "keywords_no": ["3d print", "e3d", "toolchanger", "avansert", "multi-material"],
+          "keywords_en": ["3d print", "e3d", "toolchanger", "advanced", "multi-material"]
+        }
+      ]
+    },
+    "laser_cutting": {
+      "name_no": "Laserkutting",
+      "name_en": "Laser Cutting",
+      "equipment": [
+        {
+          "id": "epilog-fusion-m2",
+          "name": "Epilog Fusion M2 40 75W",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "course_fablab",
+          "difficulty": "intermediate",
+          "power": "75W",
+          "work_area": "1016x711mm",
+          "capabilities": ["cutting", "engraving"],
+          "materials_allowed": ["wood", "acrylic", "leather", "cork", "glass", "anodized_aluminum"],
+          "materials_forbidden": ["PVC", "vinyl", "ABS", "polycarbonate", "fiberglass", "carbon_fiber"],
+          "restrictions": ["Må ikke forlates under drift", "Kun i åpningstiden"],
+          "hms_doc": "hms---epilog-fusion-m40-75w.pdf",
+          "material_guide": "hms---materialeguide-epilog-fusion-m2-40-75w.pdf",
+          "keywords_no": ["laser", "kutte", "gravere", "epilog"],
+          "keywords_en": ["laser", "cut", "engrave", "epilog"]
+        },
+        {
+          "id": "glowforge-pro",
+          "name": "Glowforge Pro",
+          "location": "D1-044",
+          "status": "active",
+          "access_level": "course_makerspace",
+          "difficulty": "beginner",
+          "capabilities": ["cutting", "engraving"],
+          "restrictions": ["Må ikke forlates under drift"],
+          "hms_doc": "hms---glowforge-pro.pdf",
+          "keywords_no": ["laser", "glowforge", "kutte", "gravere"],
+          "keywords_en": ["laser", "glowforge", "cut", "engrave"]
+        }
+      ]
+    },
+    "cnc": {
+      "name_no": "CNC-fresing",
+      "name_en": "CNC Milling",
+      "equipment": [
+        {
+          "id": "wegstr-cnc",
+          "name": "Wegstr CNC (PCB Mill)",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "certification_required",
+          "certifier": "labingeniør",
+          "difficulty": "advanced",
+          "restrictions": ["Kun dagtid i åpningstiden", "Må ikke forlates under drift", "Minst 2 personer i rommet"],
+          "hms_doc": "hms---wegstr-cnc.pdf",
+          "keywords_no": ["cnc", "fres", "wegstr", "pcb"],
+          "keywords_en": ["cnc", "mill", "router", "wegstr", "pcb"]
+        },
+        {
+          "id": "avid-cnc",
+          "name": "Avid CNC",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "certification_required",
+          "certifier": "labingeniør",
+          "difficulty": "advanced",
+          "restrictions": ["Kun dagtid i åpningstiden", "Må ikke forlates under drift", "Minst 2 personer i rommet"],
+          "hms_doc": "hms---avid-cnc.pdf",
+          "keywords_no": ["cnc", "fres", "avid"],
+          "keywords_en": ["cnc", "mill", "router", "avid"]
+        }
+      ]
+    },
+    "electronics": {
+      "name_no": "Elektronikk",
+      "name_en": "Electronics",
+      "equipment": [
+        {
+          "id": "weller-we1010",
+          "name": "Weller WE1010 Loddestasjon",
+          "location": "D1-044",
+          "status": "active",
+          "access_level": "course_makerspace",
+          "difficulty": "beginner",
+          "power": "70W",
+          "temp_range": "100-450°C",
+          "features": ["Digital temperaturkontroll", "Standby-modus", "Kalibreringslås"],
+          "notes": "Krever gjennomgang med labansvarlig/ansatt før første gangs bruk",
+          "hms_doc": "hms---bruk-av-loddeutstyr.pdf",
+          "keywords_no": ["lodde", "loddestasjon", "weller", "tinn", "elektronikk", "we1010"],
+          "keywords_en": ["solder", "soldering", "weller", "iron", "electronics", "we1010"]
+        }
+      ]
+    },
+    "woodworking": {
+      "name_no": "Trearbeid",
+      "name_en": "Woodworking",
+      "equipment": [
+        {
+          "id": "bosch-drill-press",
+          "name": "Bosch PBD 40 Søylebormaskin",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "certification_required",
+          "certifier": "labingeniør",
+          "difficulty": "intermediate",
+          "notes": "Ta kontakt med labingeniøren tilknyttet labben",
+          "hms_doc": "hms---bosch-pbd-40-stasjoner-bormaskin.pdf",
+          "keywords_no": ["bor", "bormaskin", "bosch", "drill"],
+          "keywords_en": ["drill", "drill press", "bosch"]
+        },
+        {
+          "id": "metabo-table-saw",
+          "name": "Metabo TS 254 Bordsag",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "certification_required",
+          "certifier": "labingeniør",
+          "difficulty": "advanced",
+          "notes": "Bruksanvisninger finnes i egen perm",
+          "hms_doc": "hms---metabo-ts-254-(bordsag).pdf",
+          "keywords_no": ["sag", "bordsag", "metabo", "kutte", "tre"],
+          "keywords_en": ["saw", "table saw", "metabo", "cut", "wood"]
+        },
+        {
+          "id": "handheld-tools",
+          "name": "Håndholdte maskiner",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "course_fablab",
+          "difficulty": "intermediate",
+          "notes": "Inkluderer drill, Dremel og annet håndholdt utstyr",
+          "hms_doc": "hms---handholdte-maskiner.pdf",
+          "keywords_no": ["håndholdt", "maskin", "verktøy", "drill", "dremel"],
+          "keywords_en": ["handheld", "power tool", "drill", "dremel"]
+        }
+      ]
+    },
+    "chemicals": {
+      "name_no": "Kjemikalier",
+      "name_en": "Chemicals",
+      "equipment": [
+        {
+          "id": "chemicals-general",
+          "name": "Kjemikalier",
+          "location": "D1-043",
+          "status": "active",
+          "access_level": "request_required",
+          "certifier": "labansvarlig",
+          "difficulty": "intermediate",
+          "notes": "Må hentes fra labansvarlig og leveres tilbake etter bruk. Brukes strengt tatt til arbeid tilknyttet studiet og verkstedet.",
+          "restrictions": ["Krever godkjennelse av verksted ansvarlig", "Kjemikalier skal aldri tas ut av verkstedet", "Skap som inneholder kjemikalier skal alltid være lukket igjen"],
+          "hms_doc": "hms---behandling-av-kjemikalier.pdf",
+          "keywords_no": ["kjemikalier", "kjemi", "løsemidler"],
+          "keywords_en": ["chemicals", "solvents"]
+        }
+      ]
+    }
+  }
+}
