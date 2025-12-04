@@ -1,0 +1,8990 @@
+{"version": "2.0",
+"last_updated": "2025-12-04",
+"description": "Komponentoversikt for Makerspace HiØF - importert fra Inventar_MakerSpace_mal.xlsx",
+"categories": {
+  "elektronikk": {
+    "name_no": "Elektronikk",
+    "name_en": "Electronics",
+    "description": "Motstander, kondensatorer, IC-er, LED-er, dioder, transistorer",
+    "components": [
+      {
+        "id": "blinking-led",
+        "name": "Blinking LED",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "mønster",
+          "led",
+          "blinker",
+          "blinking",
+          "spesifik"
+        ],
+        "keywords_en": [
+          "mønster",
+          "led",
+          "blinker",
+          "blinking",
+          "spesifik"
+        ]
+      },
+      {
+        "id": "015-375w",
+        "name": "0.15Ω 3.75W",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "75w",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "75w",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "022-3w",
+        "name": "0,22Ω 3W",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "1",
+        "name": "1Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "10",
+        "name": "10Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "15",
+        "name": "15Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "50",
+        "name": "50Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "80",
+        "name": "80Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "100",
+        "name": "100Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "100",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "100",
+          "eller",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "150",
+        "name": "150Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "150",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "150",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "180",
+        "name": "180Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "180",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "180",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "191",
+        "name": "191Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "191",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "191",
+          "komponent"
+        ]
+      },
+      {
+        "id": "215",
+        "name": "215Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "215",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "215",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "220",
+        "name": "220Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "220",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "220",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "225",
+        "name": "225Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "225",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "225",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "250",
+        "name": "250Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "250",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "250",
+          "eller",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "270",
+        "name": "270Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "270",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "270",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "330",
+        "name": "330Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "330",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "330",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "360",
+        "name": "360Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "360",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "360",
+          "komponent"
+        ]
+      },
+      {
+        "id": "380",
+        "name": "380Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "380",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "380",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "470",
+        "name": "470Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "470",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "470",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "500",
+        "name": "500Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "500",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "500",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "550",
+        "name": "550Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "550",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "550",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "560",
+        "name": "560Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "560",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "560",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "680",
+        "name": "680Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "680",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "680",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "15k",
+        "name": "1,5KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "18k",
+        "name": "1,8KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "2k",
+        "name": "2KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "27k",
+        "name": "2,7KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "47k",
+        "name": "4,7KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "5k",
+        "name": "5KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "51k",
+        "name": "5,1KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "10k",
+        "name": "10KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "10k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "10k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "20k",
+        "name": "20KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "20k",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "20k",
+          "eller",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "35k",
+        "name": "35KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "35k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "35k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "50k",
+        "name": "50KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "50k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "50k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "56k",
+        "name": "56KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "motstand",
+          "eller",
+          "resistor",
+          "56k",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "56k",
+          "komponent"
+        ]
+      },
+      {
+        "id": "70k",
+        "name": "70KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "70k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "70k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "100k",
+        "name": "100KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "100k",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "100k",
+          "komponent"
+        ]
+      },
+      {
+        "id": "150k",
+        "name": "150KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "150k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "150k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "180k",
+        "name": "180KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "180k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "180k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "205k",
+        "name": "205KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "205k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "205k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "250k",
+        "name": "250KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent",
+          "250k"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "komponent",
+          "250k"
+        ]
+      },
+      {
+        "id": "275k",
+        "name": "275KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "275k",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "275k",
+          "eller",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "300k",
+        "name": "300KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "300k",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "300k",
+          "komponent"
+        ]
+      },
+      {
+        "id": "330k",
+        "name": "330KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "330k",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "330k",
+          "eller",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "335k",
+        "name": "335KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "335k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "335k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "400k",
+        "name": "400KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "400k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "400k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "465k",
+        "name": "465KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "465k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "465k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "470k",
+        "name": "470KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "470k",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "470k",
+          "komponent"
+        ]
+      },
+      {
+        "id": "510k",
+        "name": "510KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "510k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "510k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "590k",
+        "name": "590KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "590k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "590k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "681k",
+        "name": "681KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "681k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "681k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "750k",
+        "name": "750KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "750k",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "750k",
+          "komponent"
+        ]
+      },
+      {
+        "id": "825k",
+        "name": "825KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "825k",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "825k",
+          "eller",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "909k",
+        "name": "909KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "909k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "909k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "18m",
+        "name": "1,8MΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "82m",
+        "name": "8,2MΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "226",
+        "name": "226Ω",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "226",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "226",
+          "eller",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "1k",
+        "name": "1KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "22k",
+        "name": "2,2KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "33k",
+        "name": "3,3KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "55k",
+        "name": "5,5KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "10k",
+        "name": "10KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "10k",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "10k",
+          "resistor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "15k",
+        "name": "15KΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "15k",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "15k",
+          "komponent"
+        ]
+      },
+      {
+        "id": "1m",
+        "name": "1MΩ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "diode",
+        "name": "DIODE",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode",
+        "name": "Diode",
+        "location": "Komponentvegg",
+        "quantity": null,
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n270",
+        "name": "Diode 1N270",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "1n270",
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "1n270",
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n4001",
+        "name": "Diode 1N4001",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "1n4001",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "1n4001",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n4004",
+        "name": "Diode 1N4004",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4004",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4004",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n4007",
+        "name": "Diode 1N4007",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4007",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4007",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n4148",
+        "name": "Diode 1N4148",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4148",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4148",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n4150",
+        "name": "Diode 1N4150",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4150",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4150",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n5404",
+        "name": "Diode 1N5404",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n5404",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n5404",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n5408",
+        "name": "Diode 1N5408",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n5408",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n5408",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n5817",
+        "name": "Diode 1N5817",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n5817",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n5817",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n4733a",
+        "name": "Diode 1N4733A",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4733a",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4733a",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n4735a",
+        "name": "Diode 1N4735A",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4735a",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4735a",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n4742a",
+        "name": "Diode 1N4742A",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4742a",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n4742a",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-1n751a",
+        "name": "Diode 1N751A",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n751a",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "1n751a",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-c106b1",
+        "name": "Diode C106B1",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "c106b1",
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "c106b1",
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "diode-in4004",
+        "name": "Diode IN4004",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent",
+          "in4004"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent",
+          "in4004"
+        ]
+      },
+      {
+        "id": "diode-kbg02g",
+        "name": "Diode KBG02G",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "kbg02g",
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "kbg02g",
+          "leder",
+          "strøm",
+          "anoden",
+          "diode",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "ir-receiver-diode",
+        "name": "IR Receiver Diode",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "imot",
+          "receiver",
+          "signaler",
+          "infrarød",
+          "diode"
+        ],
+        "keywords_en": [
+          "imot",
+          "receiver",
+          "signaler",
+          "infrarød",
+          "diode"
+        ]
+      },
+      {
+        "id": "relay",
+        "name": "Relay",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "styre",
+          "eller",
+          "relay",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "styre",
+          "eller",
+          "relay",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "relay",
+        "name": "Relay",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "styre",
+          "eller",
+          "relay",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "styre",
+          "eller",
+          "relay",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "halfled-relays",
+        "name": "HalfLed Relays",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "styre",
+          "eller",
+          "relay",
+          "halfled",
+          "brukes",
+          "relays",
+          "komponent"
+        ],
+        "keywords_en": [
+          "styre",
+          "eller",
+          "relay",
+          "halfled",
+          "brukes",
+          "relays",
+          "komponent"
+        ]
+      },
+      {
+        "id": "low-power-relays",
+        "name": "Low Power Relays",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "skrudd",
+          "rele",
+          "bare",
+          "beholder",
+          "kretsen",
+          "power",
+          "relays",
+          "low"
+        ],
+        "keywords_en": [
+          "skrudd",
+          "rele",
+          "bare",
+          "beholder",
+          "kretsen",
+          "power",
+          "relays",
+          "low"
+        ]
+      },
+      {
+        "id": "smd-div",
+        "name": "SMD DIV",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "kretser",
+          "micro",
+          "komponenter",
+          "smd",
+          "div",
+          "lagd"
+        ],
+        "keywords_en": [
+          "kretser",
+          "micro",
+          "komponenter",
+          "smd",
+          "div",
+          "lagd"
+        ]
+      },
+      {
+        "id": "smd-div",
+        "name": "SMD DIV",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "kretser",
+          "micro",
+          "komponenter",
+          "smd",
+          "div",
+          "lagd"
+        ],
+        "keywords_en": [
+          "kretser",
+          "micro",
+          "komponenter",
+          "smd",
+          "div",
+          "lagd"
+        ]
+      },
+      {
+        "id": "smd-capacitors",
+        "name": "SMD Capacitors",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "kretser",
+          "micro",
+          "komponenter",
+          "smd",
+          "lagd",
+          "capacitors"
+        ],
+        "keywords_en": [
+          "kretser",
+          "micro",
+          "komponenter",
+          "smd",
+          "lagd",
+          "capacitors"
+        ]
+      },
+      {
+        "id": "smd-resistors",
+        "name": "SMD Resistors",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "kretser",
+          "micro",
+          "komponenter",
+          "smd",
+          "lagd",
+          "resistors"
+        ],
+        "keywords_en": [
+          "kretser",
+          "micro",
+          "komponenter",
+          "smd",
+          "lagd",
+          "resistors"
+        ]
+      },
+      {
+        "id": "kondensator",
+        "name": "Kondensator???",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "zener-diode",
+        "name": "Zener Diode",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "kretsen",
+          "bakover",
+          "diode",
+          "zener"
+        ],
+        "keywords_en": [
+          "kretsen",
+          "bakover",
+          "diode",
+          "zener"
+        ]
+      },
+      {
+        "id": "kjeramiske-kondensator",
+        "name": "Kjeramiske Kondensator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "kjeramiske",
+          "kondensator",
+          "brukte",
+          "ekonomiske",
+          "mest",
+          "kondensatorer"
+        ],
+        "keywords_en": [
+          "kjeramiske",
+          "brukte",
+          "ekonomiske",
+          "mest",
+          "capacitor",
+          "kondensatorer"
+        ]
+      },
+      {
+        "id": "tantalum-kondensator",
+        "name": "Tantalum Kondensator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "tantalum",
+          "spente",
+          "kondensator",
+          "kondensatorene",
+          "prosjekter",
+          "brukt",
+          "disse"
+        ],
+        "keywords_en": [
+          "tantalum",
+          "spente",
+          "kondensatorene",
+          "prosjekter",
+          "capacitor",
+          "brukt",
+          "disse"
+        ]
+      },
+      {
+        "id": "10m",
+        "name": "10μM",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "100m",
+        "name": "100μM",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "100",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "100",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "0001uf",
+        "name": "0.001uF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "001uf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "001uf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "001uf",
+        "name": "0.01uF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "01uf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "01uf",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "0022uf",
+        "name": "0.022uF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "022uf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "022uf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "0047uf",
+        "name": "0.047uF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "047uf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "047uf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "01uf",
+        "name": "0.1uF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "1uf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "1uf",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "1pf",
+        "name": "1pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "1pf",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "1pf",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "15pf",
+        "name": "1,5pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "5pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "5pf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "22pf",
+        "name": "2,2pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "2pf",
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "2pf",
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "33pf",
+        "name": "3,3pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "3pf",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "3pf",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "47pf",
+        "name": "4,7pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "7pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "7pf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "68pf",
+        "name": "6,8pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "8pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "8pf",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "10pf",
+        "name": "10pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "10pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "10pf",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "15pf",
+        "name": "15pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "15pf",
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "15pf",
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "22pf",
+        "name": "22pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "22pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "22pf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "27pf",
+        "name": "27pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "27pf",
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "27pf",
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "33pf",
+        "name": "33pf",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "33pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "33pf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "56pf",
+        "name": "56pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "56pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "56pf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "68pf",
+        "name": "68pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "68pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "68pf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "100pf",
+        "name": "100pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "100pf",
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "100pf",
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "150pf",
+        "name": "150pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "150pf",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "150pf",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "180pf",
+        "name": "180pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "180pf",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "180pf",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "220pf",
+        "name": "220pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "220pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "220pf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "270pf",
+        "name": "270pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "270pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "270pf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "330pf",
+        "name": "330pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "330pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "330pf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "390pf",
+        "name": "390pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "390pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "390pf",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "470pf",
+        "name": "470pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "470pf",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "470pf",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "560pf",
+        "name": "560pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "560pf",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "560pf",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "komponent"
+        ]
+      },
+      {
+        "id": "680pf",
+        "name": "680pF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "kondensator",
+          "enegi",
+          "elektrisk",
+          "680pf",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "enegi",
+          "elektrisk",
+          "capacitor",
+          "680pf",
+          "komponent"
+        ]
+      },
+      {
+        "id": "1nf-400v",
+        "name": "1nF 400V",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "1nf",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "1nf",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "15nf-400v",
+        "name": "1,5nF 400V",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "5nf",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "5nf",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "22nf-400v",
+        "name": "2,2nF 400V",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "2nf",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "2nf",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "33nf-400v",
+        "name": "3,3nF 400V",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "3nf",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "3nf",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "4768nf-400v",
+        "name": "4,7+6,8nF 400V",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "8nf",
+          "lagrer",
+          "400v",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "8nf",
+          "lagrer",
+          "400v",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "10nf-400v",
+        "name": "10nF 400V",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "kondensator",
+          "10nf",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "10nf",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "15nf-400v",
+        "name": "15nF 400V",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "15nf",
+          "400v",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "15nf",
+          "400v",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "2233nf-400v",
+        "name": "22+33nF 400V",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt",
+          "33nf"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt",
+          "33nf"
+        ]
+      },
+      {
+        "id": "4768nf-400v",
+        "name": "47+68nF 400V",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "kondensator",
+          "68nf",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "400v",
+          "frekvens",
+          "68nf",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "01f",
+        "name": "0,1μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "015f",
+        "name": "0,15μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "022f",
+        "name": "0,22μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "033f",
+        "name": "0,33μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "047f",
+        "name": "0,47μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "068f",
+        "name": "0,68μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "10f",
+        "name": "1,0μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "15f",
+        "name": "1,5μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "2f",
+        "name": "2μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "22f",
+        "name": "2,2μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "33f",
+        "name": "3,3μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "47f",
+        "name": "4,7μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "68f",
+        "name": "6,8μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "10f",
+        "name": "10μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "22f",
+        "name": "22μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "27f",
+        "name": "27μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "33f",
+        "name": "33μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "47f",
+        "name": "47μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "100f",
+        "name": "100μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "100",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "100",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "120f",
+        "name": "120μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "120",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "120",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "150f",
+        "name": "150μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "150",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "150",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "180f",
+        "name": "180μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "180",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "180",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "220f",
+        "name": "220μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "220",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "220",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "330f",
+        "name": "330μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "330",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "330",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "470f",
+        "name": "470μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "470",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "470",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "560f",
+        "name": "560μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "560",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "560",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "680f",
+        "name": "680μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "680",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "680",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "1000f",
+        "name": "1000μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "1000",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "1000",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "1200f",
+        "name": "1200μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "1200",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "1200",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "1500f",
+        "name": "1500μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "1500",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "1500",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "2000f",
+        "name": "2000μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "2000",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "2000",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "2200f",
+        "name": "2200μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "elektrolytt",
+          "2200"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt",
+          "2200"
+        ]
+      },
+      {
+        "id": "4700f",
+        "name": "4700μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "4700",
+          "applikasjoner",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "4700",
+          "applikasjoner",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "5600f",
+        "name": "5600μF",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "frekvens",
+          "kondensator",
+          "applikasjoner",
+          "5600",
+          "elektrolytt"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "frekvens",
+          "applikasjoner",
+          "5600",
+          "capacitor",
+          "elektrolytt"
+        ]
+      },
+      {
+        "id": "moist-resistor",
+        "name": "Moist Resistor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "resistor",
+          "moist"
+        ],
+        "keywords_en": [
+          "resistor",
+          "moist"
+        ]
+      },
+      {
+        "id": "potensiometer",
+        "name": "Potensiometer",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "spenning",
+          "brukt",
+          "potensiometer",
+          "måle",
+          "komponent"
+        ],
+        "keywords_en": [
+          "spenning",
+          "brukt",
+          "potensiometer",
+          "måle",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-ttip120",
+        "name": "Transistor TTIP120",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "ttip120",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "ttip120",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-2n5401",
+        "name": "Transistor 2N5401",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "2n5401",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "2n5401",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-2n4401",
+        "name": "Transistor 2N4401",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "2n4401",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "2n4401",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-2n4403",
+        "name": "Transistor 2N4403",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "2n4403",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "2n4403",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-mpsa13",
+        "name": "Transistor MPSA13",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "mpsa13",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "mpsa13",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-pn2222abu",
+        "name": "Transistor PN2222ABU",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "pn2222abu",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "pn2222abu",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-pn2907",
+        "name": "Transistor PN2907",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "pn2907",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "pn2907",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-mje3055t",
+        "name": "Transistor MJE3055T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "mje3055t",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "mje3055t",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-2n7000",
+        "name": "Transistor 2N7000",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent",
+          "2n7000"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent",
+          "2n7000"
+        ]
+      },
+      {
+        "id": "transistor-2n3906",
+        "name": "Transistor 2N3906",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "2n3906",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "2n3906",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-2n3904",
+        "name": "Transistor 2N3904",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent",
+          "2n3904"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent",
+          "2n3904"
+        ]
+      },
+      {
+        "id": "transistor-bc547c",
+        "name": "Transistor BC547C",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "bc547c",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "bc547c",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-mpsa06",
+        "name": "Transistor MPSA06",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "mpsa06",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "mpsa06",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-pads",
+        "name": "Transistor Pads",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "pads",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "pads",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-2n2907a",
+        "name": "Transistor 2N2907A",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "2n2907a",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "2n2907a",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-2n3053",
+        "name": "Transistor 2N3053",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "2n3053",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "2n3053",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-2n2222a",
+        "name": "Transistor 2N2222A",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "2n2222a",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "2n2222a",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-tip31a",
+        "name": "Transistor TIP31A",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "tip31a",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "tip31a",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-tip32a",
+        "name": "Transistor TIP32A",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "tip32a",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "tip32a",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-tip102",
+        "name": "Transistor TIP102",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "tip102",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "tip102",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "7905t",
+        "name": "7905T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "7905t",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "7905t",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "lm317t",
+        "name": "LM317T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent",
+          "lm317t"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent",
+          "lm317t"
+        ]
+      },
+      {
+        "id": "7815t",
+        "name": "7815T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "7815t",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "7815t",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "7805t",
+        "name": "7805T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent",
+          "7805t"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent",
+          "7805t"
+        ]
+      },
+      {
+        "id": "lm336z-25",
+        "name": "LM336Z-2.5",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lm336z",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lm336z",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "7812t",
+        "name": "7812T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "7812t",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "7812t",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "lm337t",
+        "name": "LM337T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "lm337t",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "lm337t",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "7915t",
+        "name": "7915T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "7915t",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "7915t",
+          "komponent"
+        ]
+      },
+      {
+        "id": "7808t",
+        "name": "7808T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "7808t",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "7808t",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "7806t",
+        "name": "7806T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "7806t",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "7806t",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "78l12",
+        "name": "78L12",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "78l12",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "78l12",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "7912t",
+        "name": "7912T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "7912t",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "7912t",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "7824t",
+        "name": "7824T",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "7824t",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "7824t",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "78l05",
+        "name": "78L05",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "78l05",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "78l05",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "lm317lz",
+        "name": "LM317LZ",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "lm317lz",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "lm317lz",
+          "komponent"
+        ]
+      },
+      {
+        "id": "irf529-transistor",
+        "name": "IRF529 Transistor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "irf529",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "irf529",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "l7915cv-transistor",
+        "name": "L7915CV Transistor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "l7915cv",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "l7915cv",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "l7809cv",
+        "name": "L7809CV",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "l7809cv",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "l7809cv",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-l7009cv",
+        "name": "Transistor L7009CV",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "l7009cv",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "l7009cv",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-l7009cv",
+        "name": "Transistor L7009CV",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "l7009cv",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "l7009cv",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistor-l7805cv",
+        "name": "Transistor L7805CV",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "l7805cv",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "l7805cv",
+          "komponent"
+        ]
+      },
+      {
+        "id": "l7815cv-transistor",
+        "name": "L7815CV Transistor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistor",
+          "l7815cv",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistor",
+          "l7815cv",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "l7906cv-l7908cv-transistor",
+        "name": "L7906CV L7908CV Transistor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "l7906cv",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "l7908cv",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "l7906cv",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "l7908cv",
+          "komponent"
+        ]
+      },
+      {
+        "id": "l7806cv-transistor",
+        "name": "L7806CV Transistor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "l7806cv",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "l7806cv",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "l7905cv-transistor",
+        "name": "L7905CV Transistor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "l7905cv",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "l7905cv",
+          "eller",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistors",
+        "name": "Transistors",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistors",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistors",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistors",
+        "name": "Transistors",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistors",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistors",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistors",
+        "name": "Transistors",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "eller",
+          "transistors",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ],
+        "keywords_en": [
+          "eller",
+          "transistors",
+          "transistor",
+          "forsterke",
+          "brukes",
+          "komponent"
+        ]
+      },
+      {
+        "id": "transistors-mosfet",
+        "name": "Transistors Mosfet",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "transistors",
+          "mosfet",
+          "transistor",
+          "ulikt",
+          "vanlig",
+          "transistorene"
+        ],
+        "keywords_en": [
+          "transistors",
+          "mosfet",
+          "transistor",
+          "ulikt",
+          "vanlig",
+          "transistorene"
+        ]
+      },
+      {
+        "id": "regulator",
+        "name": "Regulator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "spenning",
+          "regulert",
+          "regulator",
+          "holder",
+          "komponent"
+        ],
+        "keywords_en": [
+          "spenning",
+          "regulert",
+          "regulator",
+          "holder",
+          "komponent"
+        ]
+      },
+      {
+        "id": "decoder",
+        "name": "Decoder",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "dekoder",
+          "verdier",
+          "decoder",
+          "gjør",
+          "binær",
+          "kode"
+        ],
+        "keywords_en": [
+          "dekoder",
+          "verdier",
+          "decoder",
+          "gjør",
+          "binær",
+          "kode"
+        ]
+      },
+      {
+        "id": "eeprom",
+        "name": "EEPROM",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "eeprom",
+          "circuit",
+          "programmerbar"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "eeprom",
+          "circuit",
+          "programmerbar"
+        ]
+      },
+      {
+        "id": "ic-multirate",
+        "name": "IC Multirate",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "signaler",
+          "multirate",
+          "digitale",
+          "circuit",
+          "kontrollerer"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "signaler",
+          "multirate",
+          "digitale",
+          "circuit",
+          "kontrollerer"
+        ]
+      },
+      {
+        "id": "sheilded-induktor",
+        "name": "Sheilded Induktor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "elekromagnetisk",
+          "skjold",
+          "induktor",
+          "lager",
+          "sheilded",
+          "komponent"
+        ],
+        "keywords_en": [
+          "elekromagnetisk",
+          "skjold",
+          "induktor",
+          "lager",
+          "sheilded",
+          "komponent"
+        ]
+      },
+      {
+        "id": "ic-bus",
+        "name": "IC Bus",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "bus",
+          "lavhastighets",
+          "circuit",
+          "brukes",
+          "koble"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "bus",
+          "lavhastighets",
+          "circuit",
+          "brukes",
+          "koble"
+        ]
+      },
+      {
+        "id": "induktor",
+        "name": "Induktor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lagrer",
+          "induktor",
+          "strøm",
+          "felt",
+          "elektromgnetisk",
+          "komponent"
+        ],
+        "keywords_en": [
+          "lagrer",
+          "induktor",
+          "strøm",
+          "felt",
+          "elektromgnetisk",
+          "komponent"
+        ]
+      },
+      {
+        "id": "regulator",
+        "name": "Regulator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "spenning",
+          "regulert",
+          "regulator",
+          "holder",
+          "komponent"
+        ],
+        "keywords_en": [
+          "spenning",
+          "regulert",
+          "regulator",
+          "holder",
+          "komponent"
+        ]
+      },
+      {
+        "id": "buck-regulator",
+        "name": "Buck Regulator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "overføre",
+          "spenning",
+          "synker",
+          "buck",
+          "regulator",
+          "gjør"
+        ],
+        "keywords_en": [
+          "overføre",
+          "spenning",
+          "synker",
+          "buck",
+          "regulator",
+          "gjør"
+        ]
+      },
+      {
+        "id": "ic-reciever",
+        "name": "IC Reciever",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "reciever",
+          "circuit"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "reciever",
+          "circuit"
+        ]
+      },
+      {
+        "id": "frekvens-filter",
+        "name": "Frekvens Filter",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "kutter",
+          "filter",
+          "frekvens",
+          "eller",
+          "circuit",
+          "spesifike",
+          "filterer"
+        ],
+        "keywords_en": [
+          "kutter",
+          "filter",
+          "frekvens",
+          "eller",
+          "circuit",
+          "spesifike",
+          "filterer"
+        ]
+      },
+      {
+        "id": "resistor",
+        "name": "Resistor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "begrenser",
+          "eller",
+          "resistor",
+          "motstand",
+          "komponent"
+        ],
+        "keywords_en": [
+          "begrenser",
+          "resistor",
+          "komponent",
+          "eller"
+        ]
+      },
+      {
+        "id": "wideband-transistor",
+        "name": "Wideband Transistor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "transistor",
+          "wideband"
+        ],
+        "keywords_en": [
+          "transistor",
+          "wideband"
+        ]
+      },
+      {
+        "id": "ic-kondensator",
+        "name": "IC Kondensator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ciruits",
+          "brukt",
+          "intergrated",
+          "kondensator"
+        ],
+        "keywords_en": [
+          "ciruits",
+          "brukt",
+          "intergrated",
+          "capacitor"
+        ]
+      },
+      {
+        "id": "ferrite-bead",
+        "name": "Ferrite Bead",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "frekvens",
+          "kretser",
+          "ferrite",
+          "minker",
+          "elektronisk",
+          "bead",
+          "komponent"
+        ],
+        "keywords_en": [
+          "frekvens",
+          "kretser",
+          "ferrite",
+          "minker",
+          "elektronisk",
+          "bead",
+          "komponent"
+        ]
+      },
+      {
+        "id": "ic-krystallcrystal-oscillatorkvartsoscillator",
+        "name": "IC Krystall/Crystal oscillator/Kvartsoscillator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "konstante",
+          "frekvenser",
+          "crystal",
+          "krystall",
+          "oscillator",
+          "brukes",
+          "sender",
+          "måle"
+        ],
+        "keywords_en": [
+          "konstante",
+          "frekvenser",
+          "crystal",
+          "krystall",
+          "oscillator",
+          "brukes",
+          "sender",
+          "måle"
+        ]
+      },
+      {
+        "id": "ic-dioder",
+        "name": "IC Dioder",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "leder",
+          "strøm",
+          "anoden",
+          "dioder",
+          "katoden",
+          "komponent"
+        ],
+        "keywords_en": [
+          "leder",
+          "strøm",
+          "anoden",
+          "dioder",
+          "katoden",
+          "komponent"
+        ]
+      },
+      {
+        "id": "ic-minne",
+        "name": "IC Minne",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "memory",
+          "intergrated",
+          "eller",
+          "circuit",
+          "minne"
+        ],
+        "keywords_en": [
+          "memory",
+          "intergrated",
+          "eller",
+          "circuit",
+          "minne"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-7400-integrated-circuts",
+        "name": "Jameco, 7400 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "7400",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "7400",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "vanlige",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "vanlige",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "vanlige",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "vanlige",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "circuits",
+          "linear",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "circuits",
+          "linear",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "vanlige",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "vanlige",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-74ls00-integrated-circuts",
+        "name": "Jameco, 74LS00 Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74ls00",
+          "circuits",
+          "jameco",
+          "brukt",
+          "integrated",
+          "series",
+          "serien"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "vanlige",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "vanlige",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "jameco-linear-integrated-circuts",
+        "name": "Jameco, Linear Integrated Circuts",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ],
+        "keywords_en": [
+          "ganske",
+          "intergrated",
+          "linear",
+          "jameco",
+          "integrated",
+          "circuit",
+          "series",
+          "circuts"
+        ]
+      },
+      {
+        "id": "radio-krystall",
+        "name": "Radio Krystall",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "radio",
+          "krystall"
+        ],
+        "keywords_en": [
+          "radio",
+          "krystall"
+        ]
+      },
+      {
+        "id": "cmos",
+        "name": "Cmos",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "brukes",
+          "mikrokontrollere",
+          "cmos",
+          "mikrokompressorer"
+        ],
+        "keywords_en": [
+          "brukes",
+          "mikrokontrollere",
+          "cmos",
+          "mikrokompressorer"
+        ]
+      },
+      {
+        "id": "micros",
+        "name": "Micros",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "micros",
+          "størelser",
+          "forskjellige"
+        ],
+        "keywords_en": [
+          "micros",
+          "størelser",
+          "forskjellige"
+        ]
+      },
+      {
+        "id": "circuit-k09429",
+        "name": "Circuit K09429",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "diverse",
+          "circuits",
+          "circuit",
+          "k09429"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "diverse",
+          "circuits",
+          "circuit",
+          "k09429"
+        ]
+      },
+      {
+        "id": "circuit-24256w6",
+        "name": "Circuit 24256W6",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "diverse",
+          "circuits",
+          "24256w6",
+          "circuit"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "diverse",
+          "circuits",
+          "24256w6",
+          "circuit"
+        ]
+      },
+      {
+        "id": "circuit-24c16w6",
+        "name": "Circuit 24C16W6",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "diverse",
+          "circuits",
+          "circuit",
+          "24c16w6"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "diverse",
+          "circuits",
+          "circuit",
+          "24c16w6"
+        ]
+      },
+      {
+        "id": "circuit-sn74ls540n",
+        "name": "Circuit SN74LS540N",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "kommunisering",
+          "circuits",
+          "brukt",
+          "circuit",
+          "serien",
+          "sn74ls540n"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "kommunisering",
+          "circuits",
+          "brukt",
+          "circuit",
+          "serien",
+          "sn74ls540n"
+        ]
+      },
+      {
+        "id": "circuit-sn74hct541n",
+        "name": "Circuit SN74HCT541N",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sn74hct541n",
+          "intergrated",
+          "kommunisering",
+          "circuits",
+          "brukt",
+          "circuit",
+          "serien"
+        ],
+        "keywords_en": [
+          "sn74hct541n",
+          "intergrated",
+          "kommunisering",
+          "circuits",
+          "brukt",
+          "circuit",
+          "serien"
+        ]
+      },
+      {
+        "id": "circuit-74hct04n",
+        "name": "Circuit 74HCT04N",
+        "location": "Komponenthylla",
+        "keywords_no": [
+          "intergrated",
+          "kommunisering",
+          "circuits",
+          "brukt",
+          "74hct04n",
+          "circuit",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "kommunisering",
+          "circuits",
+          "brukt",
+          "74hct04n",
+          "circuit",
+          "serien"
+        ]
+      },
+      {
+        "id": "circuit-74hct541n",
+        "name": "Circuit 74HCT541N",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "74hct541n",
+          "kommunisering",
+          "circuits",
+          "brukt",
+          "circuit",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "74hct541n",
+          "kommunisering",
+          "circuits",
+          "brukt",
+          "circuit",
+          "serien"
+        ]
+      },
+      {
+        "id": "circuit-pc74hct541p",
+        "name": "Circuit PC74HCT541P",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "kommunisering",
+          "circuits",
+          "pc74hct541p",
+          "brukt",
+          "circuit",
+          "serien"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "kommunisering",
+          "circuits",
+          "pc74hct541p",
+          "brukt",
+          "circuit",
+          "serien"
+        ]
+      },
+      {
+        "id": "audio-power-amplifier",
+        "name": "Audio Power Amplifier",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "signaler",
+          "produsere",
+          "audio",
+          "power",
+          "amplifier",
+          "lave"
+        ],
+        "keywords_en": [
+          "signaler",
+          "produsere",
+          "audio",
+          "power",
+          "amplifier",
+          "lave"
+        ]
+      },
+      {
+        "id": "step-regulator",
+        "name": "Step Regulator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "step",
+          "gjevnt",
+          "spenning",
+          "holde",
+          "regulator",
+          "bytter"
+        ],
+        "keywords_en": [
+          "step",
+          "gjevnt",
+          "spenning",
+          "holde",
+          "regulator",
+          "bytter"
+        ]
+      },
+      {
+        "id": "shift-regulator",
+        "name": "Shift Regulator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "regulator",
+          "shift"
+        ],
+        "keywords_en": [
+          "regulator",
+          "shift"
+        ]
+      },
+      {
+        "id": "shift-register",
+        "name": "Shift Register",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "register",
+          "shift"
+        ],
+        "keywords_en": [
+          "register",
+          "shift"
+        ]
+      },
+      {
+        "id": "555-timer",
+        "name": "555  Timer",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "timekrets",
+          "555",
+          "timer",
+          "krets",
+          "integrert",
+          "sette",
+          "brukes"
+        ],
+        "keywords_en": [
+          "timekrets",
+          "555",
+          "timer",
+          "krets",
+          "integrert",
+          "sette",
+          "brukes"
+        ]
+      },
+      {
+        "id": "op-amps",
+        "name": "OP Amps",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "forsterker",
+          "brukes",
+          "elektroniske",
+          "amps",
+          "elektronisk",
+          "analoge"
+        ],
+        "keywords_en": [
+          "forsterker",
+          "brukes",
+          "elektroniske",
+          "amps",
+          "elektronisk",
+          "analoge"
+        ]
+      },
+      {
+        "id": "step-gauge",
+        "name": "Step Gauge",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "step",
+          "gauge"
+        ],
+        "keywords_en": [
+          "step",
+          "gauge"
+        ]
+      },
+      {
+        "id": "potensiometer",
+        "name": "Potensiometer",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "potensiometer"
+        ],
+        "keywords_en": [
+          "potensiometer"
+        ]
+      },
+      {
+        "id": "rotary-encoder",
+        "name": "Rotary Encoder",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "rotary",
+          "encoder"
+        ],
+        "keywords_en": [
+          "rotary",
+          "encoder"
+        ]
+      },
+      {
+        "id": "potensiometer",
+        "name": "Potensiometer",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "potensiometer"
+        ],
+        "keywords_en": [
+          "potensiometer"
+        ]
+      },
+      {
+        "id": "buzzer",
+        "name": "Buzzer",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "buzzer"
+        ],
+        "keywords_en": [
+          "buzzer"
+        ]
+      },
+      {
+        "id": "speakers",
+        "name": "Speakers",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "speakers"
+        ],
+        "keywords_en": [
+          "speakers"
+        ]
+      }
+    ]
+  },
+  "moduler": {
+    "name_no": "Moduler",
+    "name_en": "Modules",
+    "description": "Arduino, ESP32, Raspberry Pi, displays, kommunikasjon, Adafruit",
+    "components": [
+      {
+        "id": "div-mikrokontroller",
+        "name": "Div Mikrokontroller",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "div",
+          "mikrokontroller"
+        ],
+        "keywords_en": [
+          "div",
+          "mikrokontroller"
+        ]
+      },
+      {
+        "id": "i2c-converter",
+        "name": "I2C Converter",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "inneholder",
+          "i2c",
+          "adapter",
+          "converter",
+          "mikrokontroller"
+        ],
+        "keywords_en": [
+          "inneholder",
+          "i2c",
+          "adapter",
+          "converter",
+          "mikrokontroller"
+        ]
+      },
+      {
+        "id": "dc-dc-converter",
+        "name": "DC DC Converter",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "dette",
+          "signaler",
+          "spennings",
+          "forsterker",
+          "converter"
+        ],
+        "keywords_en": [
+          "dette",
+          "signaler",
+          "spennings",
+          "forsterker",
+          "converter"
+        ]
+      },
+      {
+        "id": "div-konnektorer",
+        "name": "DIV Konnektorer",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "konnektorer",
+          "blir",
+          "strøm",
+          "div",
+          "brukt",
+          "disse"
+        ],
+        "keywords_en": [
+          "konnektorer",
+          "blir",
+          "strøm",
+          "div",
+          "brukt",
+          "disse"
+        ]
+      },
+      {
+        "id": "div-konnektorer",
+        "name": "DIV Konnektorer",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "konnektorer",
+          "blir",
+          "strøm",
+          "div",
+          "brukt",
+          "disse"
+        ],
+        "keywords_en": [
+          "konnektorer",
+          "blir",
+          "strøm",
+          "div",
+          "brukt",
+          "disse"
+        ]
+      },
+      {
+        "id": "actuator",
+        "name": "Actuator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "motorer",
+          "actuator",
+          "herkulex",
+          "servo",
+          "smart"
+        ],
+        "keywords_en": [
+          "motorer",
+          "actuator",
+          "herkulex",
+          "servo",
+          "smart"
+        ]
+      },
+      {
+        "id": "pump",
+        "name": "Pump",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "pump",
+          "pumpe",
+          "peristaltic",
+          "rotasjon",
+          "bruker"
+        ],
+        "keywords_en": [
+          "pump",
+          "pumpe",
+          "peristaltic",
+          "rotasjon",
+          "bruker"
+        ]
+      },
+      {
+        "id": "under-adafruit-komponenter",
+        "name": "Under Adafruit Komponenter",
+        "location": "ඞඞඞඞඞඞඞඞ",
+        "quantity": null,
+        "keywords_no": [
+          "under",
+          "komponenter",
+          "adafruit"
+        ],
+        "keywords_en": [
+          "under",
+          "komponenter",
+          "adafruit"
+        ]
+      },
+      {
+        "id": "gps-antenna",
+        "name": "GPS Antenna",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "gps",
+          "atenne",
+          "antenna",
+          "prosjektet",
+          "biler",
+          "blant",
+          "brukes"
+        ],
+        "keywords_en": [
+          "gps",
+          "atenne",
+          "antenna",
+          "prosjektet",
+          "biler",
+          "blant",
+          "brukes"
+        ]
+      },
+      {
+        "id": "knapper",
+        "name": "Knapper",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "knapper",
+          "adafruit"
+        ],
+        "keywords_en": [
+          "knapper",
+          "adafruit"
+        ]
+      },
+      {
+        "id": "rtcsd-add-on",
+        "name": "RTC+SD Add-on",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "add",
+          "clock",
+          "rtc",
+          "består",
+          "time",
+          "real",
+          "komponent"
+        ],
+        "keywords_en": [
+          "add",
+          "clock",
+          "rtc",
+          "består",
+          "time",
+          "real",
+          "komponent"
+        ]
+      },
+      {
+        "id": "qwiic-shield",
+        "name": "QWIIC Shield",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "andre",
+          "qwiic",
+          "circuit",
+          "koble",
+          "shield"
+        ],
+        "keywords_en": [
+          "andre",
+          "qwiic",
+          "circuit",
+          "koble",
+          "shield"
+        ]
+      },
+      {
+        "id": "strøm-måler",
+        "name": "Strøm måler",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "litt",
+          "strøm",
+          "selv",
+          "måler",
+          "komponenten",
+          "denne",
+          "sier"
+        ],
+        "keywords_en": [
+          "litt",
+          "strøm",
+          "selv",
+          "måler",
+          "komponenten",
+          "denne",
+          "sier"
+        ]
+      },
+      {
+        "id": "jack-terminal",
+        "name": "Jack Terminal",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "jack",
+          "terminal"
+        ],
+        "keywords_en": [
+          "jack",
+          "terminal"
+        ]
+      },
+      {
+        "id": "feather-01-pitch",
+        "name": "Feather 0,1\" Pitch",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "pitch",
+          "feather"
+        ],
+        "keywords_en": [
+          "pitch",
+          "feather"
+        ]
+      },
+      {
+        "id": "skjerm",
+        "name": "Skjerm",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "skjerm"
+        ],
+        "keywords_en": [
+          "skjerm"
+        ]
+      },
+      {
+        "id": "micro-lipo",
+        "name": "Micro lipo",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "micro",
+          "lipo"
+        ],
+        "keywords_en": [
+          "micro",
+          "lipo"
+        ]
+      },
+      {
+        "id": "ps2",
+        "name": "PS/2",
+        "location": "Komponentvegg",
+        "keywords_no": [],
+        "keywords_en": []
+      },
+      {
+        "id": "panel-mount-21mm-jack",
+        "name": "Panel mount 2,1mm jack",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "panel",
+          "1mm",
+          "mount",
+          "jack"
+        ],
+        "keywords_en": [
+          "panel",
+          "1mm",
+          "mount",
+          "jack"
+        ]
+      },
+      {
+        "id": "level-converter",
+        "name": "Level converter",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "converter",
+          "level"
+        ],
+        "keywords_en": [
+          "converter",
+          "level"
+        ]
+      },
+      {
+        "id": "div",
+        "name": "Div",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "div"
+        ],
+        "keywords_en": [
+          "div"
+        ]
+      },
+      {
+        "id": "radio-module",
+        "name": "Radio Module",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "radio",
+          "module"
+        ],
+        "keywords_en": [
+          "radio",
+          "module"
+        ]
+      },
+      {
+        "id": "musikmaker",
+        "name": "Musikmaker",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "musikmaker"
+        ],
+        "keywords_en": [
+          "musikmaker"
+        ]
+      },
+      {
+        "id": "breakout",
+        "name": "Breakout",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "breakout"
+        ],
+        "keywords_en": [
+          "breakout"
+        ]
+      },
+      {
+        "id": "circle-playground",
+        "name": "Circle playground",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "circle",
+          "playground"
+        ],
+        "keywords_en": [
+          "circle",
+          "playground"
+        ]
+      },
+      {
+        "id": "nfcrfid",
+        "name": "NFC+RFID",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "rfid",
+          "nfc"
+        ],
+        "keywords_en": [
+          "rfid",
+          "nfc"
+        ]
+      },
+      {
+        "id": "adafruit-shields",
+        "name": "Adafruit Shields",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "shields",
+          "adafruit"
+        ],
+        "keywords_en": [
+          "shields",
+          "adafruit"
+        ]
+      },
+      {
+        "id": "menta-pcb",
+        "name": "Menta PCB",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "pcb",
+          "menta"
+        ],
+        "keywords_en": [
+          "pcb",
+          "menta"
+        ]
+      },
+      {
+        "id": "adafruit-esp32",
+        "name": "Adafruit ESP32",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "esp32",
+          "adafruit"
+        ],
+        "keywords_en": [
+          "esp32",
+          "adafruit"
+        ]
+      },
+      {
+        "id": "adafruit-feather",
+        "name": "Adafruit Feather",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "feather",
+          "adafruit"
+        ],
+        "keywords_en": [
+          "feather",
+          "adafruit"
+        ]
+      },
+      {
+        "id": "featherwing-proto",
+        "name": "Featherwing proto",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "proto",
+          "featherwing"
+        ],
+        "keywords_en": [
+          "proto",
+          "featherwing"
+        ]
+      },
+      {
+        "id": "rele",
+        "name": "Rele",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "rele"
+        ],
+        "keywords_en": [
+          "rele"
+        ]
+      },
+      {
+        "id": "featherwing-doubler",
+        "name": "Featherwing doubler",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "doubler",
+          "featherwing"
+        ],
+        "keywords_en": [
+          "doubler",
+          "featherwing"
+        ]
+      },
+      {
+        "id": "featherwing-tripler",
+        "name": "Featherwing tripler",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "featherwing",
+          "tripler"
+        ],
+        "keywords_en": [
+          "featherwing",
+          "tripler"
+        ]
+      },
+      {
+        "id": "motorshield",
+        "name": "Motorshield",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "motorshield"
+        ],
+        "keywords_en": [
+          "motorshield"
+        ]
+      },
+      {
+        "id": "mikrokontrollere",
+        "name": "Mikrokontrollere",
+        "location": "Komponentvegg",
+        "quantity": null,
+        "keywords_no": [
+          "mikrokontrollere"
+        ],
+        "keywords_en": [
+          "mikrokontrollere"
+        ]
+      },
+      {
+        "id": "lcd",
+        "name": "Lcd",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lcd"
+        ],
+        "keywords_en": [
+          "lcd"
+        ]
+      },
+      {
+        "id": "number-display",
+        "name": "Number Display",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "display",
+          "number"
+        ],
+        "keywords_en": [
+          "display",
+          "number"
+        ]
+      },
+      {
+        "id": "display",
+        "name": "Display",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "display"
+        ],
+        "keywords_en": [
+          "display"
+        ]
+      },
+      {
+        "id": "usb-wifi",
+        "name": "USB Wifi",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "usb",
+          "wifi"
+        ],
+        "keywords_en": [
+          "usb",
+          "wifi"
+        ]
+      },
+      {
+        "id": "digital-controller",
+        "name": "Digital Controller",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "controller",
+          "digital"
+        ],
+        "keywords_en": [
+          "controller",
+          "digital"
+        ]
+      },
+      {
+        "id": "xbee",
+        "name": "XBee",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "xbee"
+        ],
+        "keywords_en": [
+          "xbee"
+        ]
+      },
+      {
+        "id": "dc-motor-stepper-featherwing-add-on",
+        "name": "DC Motor + Stepper Featherwing Add-on",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "motor",
+          "stepper",
+          "add",
+          "featherwing"
+        ],
+        "keywords_en": [
+          "motor",
+          "stepper",
+          "add",
+          "featherwing"
+        ]
+      },
+      {
+        "id": "pwm-servo-featherwing",
+        "name": "PWM Servo Featherwing",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "servo",
+          "pwm",
+          "featherwing"
+        ],
+        "keywords_en": [
+          "servo",
+          "pwm",
+          "featherwing"
+        ]
+      },
+      {
+        "id": "pwm-servo-shield-b",
+        "name": "PWM Servo Shield B",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "servo",
+          "pwm",
+          "shield"
+        ],
+        "keywords_en": [
+          "servo",
+          "pwm",
+          "shield"
+        ]
+      },
+      {
+        "id": "rfid-rc522",
+        "name": "RFID-RC522",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "rfid",
+          "rc522"
+        ],
+        "keywords_en": [
+          "rfid",
+          "rc522"
+        ]
+      },
+      {
+        "id": "rfid-rc522-id-chip",
+        "name": "RFID-RC522 ID Chip",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "rfid",
+          "chip",
+          "rc522"
+        ],
+        "keywords_en": [
+          "rfid",
+          "chip",
+          "rc522"
+        ]
+      },
+      {
+        "id": "rfid-rc522-id-card",
+        "name": "RFID-RC522 ID Card",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "card",
+          "rfid",
+          "rc522"
+        ],
+        "keywords_en": [
+          "card",
+          "rfid",
+          "rc522"
+        ]
+      },
+      {
+        "id": "arduino-uno",
+        "name": "Arduino UNO",
+        "location": "I boks Arduino UNO",
+        "keywords_no": [
+          "uno",
+          "arduino",
+          "kabler"
+        ],
+        "keywords_en": [
+          "uno",
+          "arduino",
+          "kabler"
+        ]
+      },
+      {
+        "id": "arduino-due",
+        "name": "Arduino DUE",
+        "location": "I boks Arduino",
+        "keywords_no": [
+          "due",
+          "arduino"
+        ],
+        "keywords_en": [
+          "due",
+          "arduino"
+        ]
+      },
+      {
+        "id": "arduino-nano",
+        "name": "Arduino NANO",
+        "location": "I boks Arduino",
+        "keywords_no": [
+          "nano",
+          "arduino"
+        ],
+        "keywords_en": [
+          "nano",
+          "arduino"
+        ]
+      },
+      {
+        "id": "arduino-ethernet",
+        "name": "Arduino Ethernet",
+        "location": "I boks Arduino",
+        "keywords_no": [
+          "arduino",
+          "ethernet"
+        ],
+        "keywords_en": [
+          "arduino",
+          "ethernet"
+        ]
+      },
+      {
+        "id": "arduino-extension",
+        "name": "Arduino Extension",
+        "location": "I boks Arduino Extension",
+        "keywords_no": [
+          "utstyr",
+          "forskjelige",
+          "ekstra",
+          "extension",
+          "arduino"
+        ],
+        "keywords_en": [
+          "utstyr",
+          "forskjelige",
+          "ekstra",
+          "extension",
+          "arduino"
+        ]
+      },
+      {
+        "id": "brick-pi",
+        "name": "Brick PI",
+        "location": "I boks BRICK PI",
+        "keywords_no": [
+          "brick"
+        ],
+        "keywords_en": [
+          "brick"
+        ]
+      },
+      {
+        "id": "breadbord",
+        "name": "Breadbord",
+        "location": "I boks BREADBORD",
+        "keywords_no": [
+          "breadbord",
+          "forskjelig",
+          "størelser",
+          "litt"
+        ],
+        "keywords_en": [
+          "breadbord",
+          "forskjelig",
+          "størelser",
+          "litt"
+        ]
+      },
+      {
+        "id": "tinkerkit-sansor-shield",
+        "name": "Tinkerkit sansor shield",
+        "location": "I boks Thinkerkit Modules",
+        "keywords_no": [
+          "sansor",
+          "tinkerkit",
+          "shield"
+        ],
+        "keywords_en": [
+          "sansor",
+          "tinkerkit",
+          "shield"
+        ]
+      },
+      {
+        "id": "micro-tinkerkit",
+        "name": "Micro Tinkerkit",
+        "location": "I boks Thinkerkit Modules",
+        "keywords_no": [
+          "tinkerkit",
+          "micro"
+        ],
+        "keywords_en": [
+          "tinkerkit",
+          "micro"
+        ]
+      },
+      {
+        "id": "iobit",
+        "name": "IObit",
+        "location": "I boks IOBIT",
+        "keywords_no": [
+          "iobit"
+        ],
+        "keywords_en": [
+          "iobit"
+        ]
+      },
+      {
+        "id": "batteriholdere",
+        "name": "Batteriholdere",
+        "location": "I boks Batteri holder",
+        "keywords_no": [
+          "batteriholdere",
+          "batteri",
+          "holdere"
+        ],
+        "keywords_en": [
+          "batteriholdere",
+          "batteri",
+          "holdere"
+        ]
+      },
+      {
+        "id": "kabler",
+        "name": "Kabler",
+        "location": "I boks Kabler",
+        "keywords_no": [
+          "bådde",
+          "kabler"
+        ],
+        "keywords_en": [
+          "bådde",
+          "kabler"
+        ]
+      },
+      {
+        "id": "led-strip",
+        "name": "LED Strip",
+        "location": "I boks LED STRIPS",
+        "keywords_no": [
+          "led",
+          "strip",
+          "forskjelige",
+          "lengder"
+        ],
+        "keywords_en": [
+          "led",
+          "strip",
+          "forskjelige",
+          "lengder"
+        ]
+      },
+      {
+        "id": "dev-boards",
+        "name": "DEV. Boards",
+        "location": "I boks DEV. BOARD",
+        "keywords_no": [
+          "dev",
+          "boards"
+        ],
+        "keywords_en": [
+          "dev",
+          "boards"
+        ]
+      },
+      {
+        "id": "jumper-cables",
+        "name": "Jumper Cables",
+        "location": "I boks JUPERCABLES",
+        "keywords_no": [
+          "jumper",
+          "cables",
+          "storre",
+          "kabler"
+        ],
+        "keywords_en": [
+          "jumper",
+          "cables",
+          "storre",
+          "kabler"
+        ]
+      },
+      {
+        "id": "krokkodille-klemmer",
+        "name": "Krokkodille klemmer",
+        "location": "I boks KROKKODILLE KLEMMER",
+        "keywords_no": [
+          "klemmer",
+          "krokkodille"
+        ],
+        "keywords_en": [
+          "klemmer",
+          "krokkodille"
+        ]
+      },
+      {
+        "id": "ethernet-kit",
+        "name": "Ethernet kit",
+        "location": "Ligger inne i en bag",
+        "keywords_no": [
+          "kit",
+          "ethernet"
+        ],
+        "keywords_en": [
+          "kit",
+          "ethernet"
+        ]
+      },
+      {
+        "id": "gpio-extension-board",
+        "name": "GPIO Extension Board",
+        "location": "I boks GPIO EXTENSION BOARD",
+        "keywords_no": [
+          "gpio",
+          "extension",
+          "board"
+        ],
+        "keywords_en": [
+          "gpio",
+          "extension",
+          "board"
+        ]
+      },
+      {
+        "id": "micro-usb",
+        "name": "Micro USB",
+        "location": "I boks USB MICRO B",
+        "keywords_no": [
+          "andre",
+          "usb",
+          "micro",
+          "siden"
+        ],
+        "keywords_en": [
+          "andre",
+          "usb",
+          "micro",
+          "siden"
+        ]
+      },
+      {
+        "id": "hovedkort-microbit",
+        "name": "Hovedkort MicroBit",
+        "location": "I boks HOVEDKORT MICROBIT",
+        "keywords_no": [
+          "hovedkort",
+          "microbit"
+        ],
+        "keywords_en": [
+          "hovedkort",
+          "microbit"
+        ]
+      },
+      {
+        "id": "elecrtromagnet",
+        "name": "elecrtromagnet",
+        "location": "I boks DEV ELECRTOMAGNET",
+        "keywords_no": [
+          "elecrtromagnet",
+          "storre",
+          "bådde"
+        ],
+        "keywords_en": [
+          "elecrtromagnet",
+          "storre",
+          "bådde"
+        ]
+      },
+      {
+        "id": "led-matrix",
+        "name": "LED matrix",
+        "location": "I boks DEV LED MATRIX",
+        "keywords_no": [
+          "led",
+          "adafrut",
+          "matrix"
+        ],
+        "keywords_en": [
+          "led",
+          "adafrut",
+          "matrix"
+        ]
+      },
+      {
+        "id": "category-5e",
+        "name": "CateGory 5E",
+        "location": "I en papp boks",
+        "keywords_no": [
+          "category",
+          "rull",
+          "ethernet",
+          "kabel"
+        ],
+        "keywords_en": [
+          "category",
+          "cable",
+          "ethernet",
+          "rull"
+        ]
+      },
+      {
+        "id": "sparkfun-kit",
+        "name": "Sparkfun kit",
+        "location": "I boks SPARKFUN Borard",
+        "keywords_no": [
+          "sparkfun",
+          "kit"
+        ],
+        "keywords_en": [
+          "sparkfun",
+          "kit"
+        ]
+      },
+      {
+        "id": "raspberry-pi-zero",
+        "name": "Raspberry pi Zero",
+        "location": "I boks RASPERRY PI ZERO",
+        "keywords_no": [
+          "raspberry",
+          "zero"
+        ],
+        "keywords_en": [
+          "raspberry",
+          "zero"
+        ]
+      },
+      {
+        "id": "mini-hdmi",
+        "name": "mini HDMI",
+        "location": "I boks RASPERRY PI ZERO",
+        "keywords_no": [
+          "hdmi",
+          "vanlig",
+          "mini"
+        ],
+        "keywords_en": [
+          "hdmi",
+          "vanlig",
+          "mini"
+        ]
+      },
+      {
+        "id": "strøm-adaptere",
+        "name": "Strøm adaptere",
+        "location": "I boks RASPERRY PI ZERO",
+        "keywords_no": [
+          "bådde",
+          "adaptere",
+          "strøm",
+          "europeisk",
+          "amerikansk"
+        ],
+        "keywords_en": [
+          "bådde",
+          "adaptere",
+          "strøm",
+          "europeisk",
+          "amerikansk"
+        ]
+      },
+      {
+        "id": "moterer",
+        "name": "Moterer",
+        "location": "I boks MOTOR",
+        "keywords_no": [
+          "moterer"
+        ],
+        "keywords_en": [
+          "moterer"
+        ]
+      },
+      {
+        "id": "sd-kort",
+        "name": "SD kort",
+        "location": "I boks Freenove Ultimate Starer kit",
+        "keywords_no": [
+          "kort"
+        ],
+        "keywords_en": [
+          "kort"
+        ]
+      },
+      {
+        "id": "dev-kabler",
+        "name": "DEV Kabler",
+        "location": "I forskjelinge bokser",
+        "keywords_no": [
+          "høyre",
+          "dev",
+          "ligger",
+          "kabler",
+          "borterst"
+        ],
+        "keywords_en": [
+          "høyre",
+          "dev",
+          "ligger",
+          "kabler",
+          "borterst"
+        ]
+      },
+      {
+        "id": "arduino-kit",
+        "name": "Arduino kit",
+        "location": "I boks Arduino kits",
+        "keywords_no": [
+          "diverse",
+          "ekstra",
+          "kit",
+          "arduino",
+          "ting"
+        ],
+        "keywords_en": [
+          "diverse",
+          "ekstra",
+          "kit",
+          "arduino",
+          "ting"
+        ]
+      },
+      {
+        "id": "mg90s-sero",
+        "name": "MG90S Sero",
+        "location": "I Små bokser",
+        "keywords_no": [
+          "sero",
+          "mg90s"
+        ],
+        "keywords_en": [
+          "sero",
+          "mg90s"
+        ]
+      }
+    ]
+  },
+  "sensorer": {
+    "name_no": "Sensorer",
+    "name_en": "Sensors",
+    "description": "Temperatur, bevegelse, avstand, lys, lyd, trykk",
+    "components": [
+      {
+        "id": "termistorer",
+        "name": "Termistorer",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "strøm",
+          "temperatur",
+          "basert",
+          "sensor",
+          "endrer",
+          "termistorer"
+        ],
+        "keywords_en": [
+          "strøm",
+          "temperatur",
+          "basert",
+          "sensor",
+          "endrer",
+          "termistorer"
+        ]
+      },
+      {
+        "id": "led",
+        "name": "LED",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lysdiode",
+          "led",
+          "blir",
+          "brukt",
+          "fler",
+          "farger"
+        ],
+        "keywords_en": [
+          "lysdiode",
+          "led",
+          "blir",
+          "brukt",
+          "fler",
+          "farger"
+        ]
+      },
+      {
+        "id": "led-3mm",
+        "name": "LED 3mm",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lysdiode",
+          "3mm",
+          "led",
+          "blir",
+          "brukt",
+          "fler",
+          "farger"
+        ],
+        "keywords_en": [
+          "lysdiode",
+          "3mm",
+          "led",
+          "blir",
+          "brukt",
+          "fler",
+          "farger"
+        ]
+      },
+      {
+        "id": "rgb-led",
+        "name": "RGB LED",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lysdiode",
+          "led",
+          "selv",
+          "endre",
+          "fargen",
+          "rgb"
+        ],
+        "keywords_en": [
+          "lysdiode",
+          "led",
+          "selv",
+          "endre",
+          "fargen",
+          "rgb"
+        ]
+      },
+      {
+        "id": "mixed-led",
+        "name": "Mixed LED",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lysdiode",
+          "mixed",
+          "led",
+          "mikse",
+          "farger"
+        ],
+        "keywords_en": [
+          "lysdiode",
+          "mixed",
+          "led",
+          "mikse",
+          "farger"
+        ]
+      },
+      {
+        "id": "infrared-led",
+        "name": "Infrared LED",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "led",
+          "infrared",
+          "lyser",
+          "infrarød"
+        ],
+        "keywords_en": [
+          "led",
+          "infrared",
+          "lyser",
+          "infrarød"
+        ]
+      },
+      {
+        "id": "5mm-led-white",
+        "name": "5mm LED white",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lyser",
+          "lysdiode",
+          "5mm",
+          "led",
+          "white",
+          "vanlig",
+          "hvit"
+        ],
+        "keywords_en": [
+          "lyser",
+          "lysdiode",
+          "5mm",
+          "led",
+          "white",
+          "vanlig",
+          "hvit"
+        ]
+      },
+      {
+        "id": "5mm-led-yellow",
+        "name": "5mm LED yellow",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lyser",
+          "lysdiode",
+          "5mm",
+          "led",
+          "yellow",
+          "gult",
+          "vanlig"
+        ],
+        "keywords_en": [
+          "lyser",
+          "lysdiode",
+          "5mm",
+          "led",
+          "yellow",
+          "gult",
+          "vanlig"
+        ]
+      },
+      {
+        "id": "5mm-led-red-green",
+        "name": "5mm LED red & green",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "green",
+          "lysdiode",
+          "5mm",
+          "led",
+          "red",
+          "grønne",
+          "vanlig",
+          "lysdiodene"
+        ],
+        "keywords_en": [
+          "green",
+          "lysdiode",
+          "5mm",
+          "led",
+          "red",
+          "grønne",
+          "vanlig",
+          "lysdiodene"
+        ]
+      },
+      {
+        "id": "5mm-led-blue",
+        "name": "5mm LED blue",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "lyser",
+          "lysdiode",
+          "5mm",
+          "led",
+          "blue",
+          "vanlig",
+          "blått"
+        ],
+        "keywords_en": [
+          "lyser",
+          "lysdiode",
+          "5mm",
+          "led",
+          "blue",
+          "vanlig",
+          "blått"
+        ]
+      },
+      {
+        "id": "mylar-kondensator",
+        "name": "Mylar Kondensator",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "kondensator",
+          "kondensatorene",
+          "spenning",
+          "mylar",
+          "tåler",
+          "fuktighet"
+        ],
+        "keywords_en": [
+          "kondensatorene",
+          "spenning",
+          "capacitor",
+          "mylar",
+          "tåler",
+          "fuktighet"
+        ]
+      },
+      {
+        "id": "strain-gages",
+        "name": "Strain Gages",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "gages",
+          "strain",
+          "ment",
+          "måle",
+          "komponent"
+        ],
+        "keywords_en": [
+          "gages",
+          "strain",
+          "ment",
+          "måle",
+          "komponent"
+        ]
+      },
+      {
+        "id": "led",
+        "name": "LED",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "led",
+          "vanlig",
+          "lysdiode"
+        ],
+        "keywords_en": [
+          "led",
+          "vanlig",
+          "lysdiode"
+        ]
+      },
+      {
+        "id": "ic-led-driver",
+        "name": "IC Led Driver",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "intergrated",
+          "driver",
+          "led",
+          "styrer",
+          "circuit"
+        ],
+        "keywords_en": [
+          "intergrated",
+          "driver",
+          "led",
+          "styrer",
+          "circuit"
+        ]
+      },
+      {
+        "id": "i2c-sensor",
+        "name": "I2C Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "andre",
+          "i2c",
+          "komponenter",
+          "sensor",
+          "komuniserer",
+          "buss",
+          "samme"
+        ],
+        "keywords_en": [
+          "andre",
+          "i2c",
+          "komponenter",
+          "sensor",
+          "komuniserer",
+          "buss",
+          "samme"
+        ]
+      },
+      {
+        "id": "fotoceller",
+        "name": "Fotoceller",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "brukes",
+          "fotoceller",
+          "registrere",
+          "komponent"
+        ],
+        "keywords_en": [
+          "brukes",
+          "fotoceller",
+          "registrere",
+          "komponent"
+        ]
+      },
+      {
+        "id": "pixy",
+        "name": "Pixy",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "kamera",
+          "blir",
+          "pixy",
+          "brukt",
+          "roboter"
+        ],
+        "keywords_en": [
+          "kamera",
+          "blir",
+          "pixy",
+          "brukt",
+          "roboter"
+        ]
+      },
+      {
+        "id": "proximity-switches",
+        "name": "Proximity Switches",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "blir",
+          "sensor",
+          "switches",
+          "brukt",
+          "proximity",
+          "måle",
+          "distansen"
+        ],
+        "keywords_en": [
+          "blir",
+          "sensor",
+          "switches",
+          "brukt",
+          "proximity",
+          "måle",
+          "distansen"
+        ]
+      },
+      {
+        "id": "pulse-sensor",
+        "name": "Pulse Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "pulse",
+          "sparkfun",
+          "sensor",
+          "brukt",
+          "måle"
+        ],
+        "keywords_en": [
+          "pulse",
+          "sparkfun",
+          "sensor",
+          "brukt",
+          "måle"
+        ]
+      },
+      {
+        "id": "temperature-sensor",
+        "name": "Temperature sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "også",
+          "ligger",
+          "sensor",
+          "temperature",
+          "måler",
+          "temperaturen"
+        ],
+        "keywords_en": [
+          "også",
+          "ligger",
+          "sensor",
+          "temperature",
+          "måler",
+          "temperaturen"
+        ]
+      },
+      {
+        "id": "led",
+        "name": "LED",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "led",
+          "diode",
+          "komponenter",
+          "adafruit"
+        ],
+        "keywords_en": [
+          "led",
+          "diode",
+          "komponenter",
+          "adafruit"
+        ]
+      },
+      {
+        "id": "luftsensor",
+        "name": "LuftSensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "luftsensor",
+          "også",
+          "sensor",
+          "luft",
+          "måler",
+          "adafruit"
+        ],
+        "keywords_en": [
+          "luftsensor",
+          "også",
+          "sensor",
+          "luft",
+          "måler",
+          "adafruit"
+        ]
+      },
+      {
+        "id": "temp-kamera",
+        "name": "Temp kamera",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "deretter",
+          "kamera",
+          "viser",
+          "temp",
+          "måler",
+          "varmesensor"
+        ],
+        "keywords_en": [
+          "deretter",
+          "kamera",
+          "viser",
+          "temp",
+          "måler",
+          "varmesensor"
+        ]
+      },
+      {
+        "id": "strekiningsmåler",
+        "name": "Strekiningsmåler",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "streknings",
+          "altså",
+          "strekiningsmåler",
+          "måler",
+          "adafruit",
+          "komponent"
+        ],
+        "keywords_en": [
+          "streknings",
+          "altså",
+          "strekiningsmåler",
+          "måler",
+          "adafruit",
+          "komponent"
+        ]
+      },
+      {
+        "id": "tempfukttrykk-sensor",
+        "name": "Temp/Fukt/Trykk Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "trykk",
+          "sensor",
+          "temp",
+          "fukt"
+        ],
+        "keywords_en": [
+          "trykk",
+          "sensor",
+          "temp",
+          "fukt"
+        ]
+      },
+      {
+        "id": "fargesensor",
+        "name": "Fargesensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "fargesensor"
+        ],
+        "keywords_en": [
+          "fargesensor"
+        ]
+      },
+      {
+        "id": "vinkelsensor",
+        "name": "Vinkelsensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "vinkelsensor"
+        ],
+        "keywords_en": [
+          "vinkelsensor"
+        ]
+      },
+      {
+        "id": "akselerasjons-sensor",
+        "name": "Akselerasjons Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "akselerasjons",
+          "sensor"
+        ],
+        "keywords_en": [
+          "akselerasjons",
+          "sensor"
+        ]
+      },
+      {
+        "id": "distance-proximity",
+        "name": "Distance Proximity",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "distance",
+          "proximity"
+        ],
+        "keywords_en": [
+          "distance",
+          "proximity"
+        ]
+      },
+      {
+        "id": "light-sensor",
+        "name": "Light Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "light",
+          "sensor"
+        ],
+        "keywords_en": [
+          "light",
+          "sensor"
+        ]
+      },
+      {
+        "id": "div-sensor",
+        "name": "Div Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "div",
+          "sensor"
+        ],
+        "keywords_en": [
+          "div",
+          "sensor"
+        ]
+      },
+      {
+        "id": "mikrofoner",
+        "name": "Mikrofoner",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "mikrofoner"
+        ],
+        "keywords_en": [
+          "mikrofoner"
+        ]
+      },
+      {
+        "id": "i-pendulum",
+        "name": "i-Pendulum",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "pendulum",
+          "bevegelses"
+        ],
+        "keywords_en": [
+          "sensor",
+          "pendulum",
+          "bevegelses"
+        ]
+      },
+      {
+        "id": "minipov4",
+        "name": "MiniPOV4",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "forskjellige",
+          "kombinasjoner",
+          "lage",
+          "adafruit",
+          "minipov4"
+        ],
+        "keywords_en": [
+          "forskjellige",
+          "kombinasjoner",
+          "lage",
+          "adafruit",
+          "minipov4"
+        ]
+      },
+      {
+        "id": "reflective-sensor",
+        "name": "Reflective sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "photoelectirc",
+          "sensor",
+          "aktiveres",
+          "reflective"
+        ],
+        "keywords_en": [
+          "photoelectirc",
+          "sensor",
+          "aktiveres",
+          "reflective"
+        ]
+      },
+      {
+        "id": "hall-effects-sensor",
+        "name": "Hall-Effects Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "effects",
+          "elektromagnetikk",
+          "sensor",
+          "brukt",
+          "spenninger",
+          "hall",
+          "oppdage"
+        ],
+        "keywords_en": [
+          "effects",
+          "elektromagnetikk",
+          "sensor",
+          "brukt",
+          "spenninger",
+          "hall",
+          "oppdage"
+        ]
+      },
+      {
+        "id": "vibrator-sensor",
+        "name": "Vibrator Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "frekvensen",
+          "sensor",
+          "brukt",
+          "vibrasjon",
+          "vibrator",
+          "måle"
+        ],
+        "keywords_en": [
+          "frekvensen",
+          "sensor",
+          "brukt",
+          "vibrasjon",
+          "vibrator",
+          "måle"
+        ]
+      },
+      {
+        "id": "tilt-sensor",
+        "name": "Tilt Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "måle",
+          "brukt",
+          "tilt"
+        ],
+        "keywords_en": [
+          "sensor",
+          "måle",
+          "brukt",
+          "tilt"
+        ]
+      },
+      {
+        "id": "sharp-distance-sensor",
+        "name": "Sharp Distance Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "distance",
+          "sensor",
+          "sharp"
+        ],
+        "keywords_en": [
+          "distance",
+          "sensor",
+          "sharp"
+        ]
+      },
+      {
+        "id": "time-of-flight-distance-sensor",
+        "name": "Time of Flight Distance Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "distance",
+          "time",
+          "sensor",
+          "flight"
+        ],
+        "keywords_en": [
+          "distance",
+          "time",
+          "sensor",
+          "flight"
+        ]
+      },
+      {
+        "id": "rgb-sensor-with-ir-filter",
+        "name": "RGB Sensor with IR Filter",
+        "location": "Komponentvegg",
+        "quantity": null,
+        "keywords_no": [
+          "sensor",
+          "filter",
+          "rgb",
+          "with"
+        ],
+        "keywords_en": [
+          "sensor",
+          "filter",
+          "rgb",
+          "with"
+        ]
+      },
+      {
+        "id": "pololu-distance-sensor",
+        "name": "Pololu Distance Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "distance",
+          "sensor",
+          "pololu"
+        ],
+        "keywords_en": [
+          "distance",
+          "sensor",
+          "pololu"
+        ]
+      },
+      {
+        "id": "generic-distance-sensor",
+        "name": "Generic Distance Sensor",
+        "location": "Komponentvegg",
+        "quantity": null,
+        "keywords_no": [
+          "distance",
+          "sensor",
+          "generic"
+        ],
+        "keywords_en": [
+          "distance",
+          "sensor",
+          "generic"
+        ]
+      },
+      {
+        "id": "camera",
+        "name": "Camera",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "camera"
+        ],
+        "keywords_en": [
+          "camera"
+        ]
+      },
+      {
+        "id": "ultra-sensor",
+        "name": "Ultra Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "ultra"
+        ],
+        "keywords_en": [
+          "sensor",
+          "ultra"
+        ]
+      },
+      {
+        "id": "magnetic-sensor",
+        "name": "Magnetic Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "magnetic",
+          "sensor"
+        ],
+        "keywords_en": [
+          "magnetic",
+          "sensor"
+        ]
+      },
+      {
+        "id": "force-sensor",
+        "name": "Force Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "force"
+        ],
+        "keywords_en": [
+          "sensor",
+          "force"
+        ]
+      },
+      {
+        "id": "knock-sensor",
+        "name": "Knock Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "knock"
+        ],
+        "keywords_en": [
+          "sensor",
+          "knock"
+        ]
+      },
+      {
+        "id": "flex-sensor",
+        "name": "Flex Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "flex"
+        ],
+        "keywords_en": [
+          "sensor",
+          "flex"
+        ]
+      },
+      {
+        "id": "flex-sensor-2",
+        "name": "Flex Sensor 2",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "flex"
+        ],
+        "keywords_en": [
+          "sensor",
+          "flex"
+        ]
+      },
+      {
+        "id": "fultfororengs-sensor",
+        "name": "Fultfororengs Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "fultfororengs"
+        ],
+        "keywords_en": [
+          "sensor",
+          "fultfororengs"
+        ]
+      },
+      {
+        "id": "gass-sensor",
+        "name": "Gass Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "gass",
+          "sensor"
+        ],
+        "keywords_en": [
+          "gass",
+          "sensor"
+        ]
+      },
+      {
+        "id": "reflex-detektor",
+        "name": "Reflex Detektor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "detektor",
+          "reflex"
+        ],
+        "keywords_en": [
+          "detektor",
+          "reflex"
+        ]
+      },
+      {
+        "id": "pir-sensor",
+        "name": "PIR Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "pir"
+        ],
+        "keywords_en": [
+          "sensor",
+          "pir"
+        ]
+      },
+      {
+        "id": "soil-moisture-sensor",
+        "name": "Soil Moisture Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "soil",
+          "moisture"
+        ],
+        "keywords_en": [
+          "sensor",
+          "soil",
+          "moisture"
+        ]
+      },
+      {
+        "id": "accelerometer-board",
+        "name": "Accelerometer Board",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "accelerometer",
+          "board"
+        ],
+        "keywords_en": [
+          "accelerometer",
+          "board"
+        ]
+      },
+      {
+        "id": "magnetometer",
+        "name": "Magnetometer",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "magnetometer"
+        ],
+        "keywords_en": [
+          "magnetometer"
+        ]
+      },
+      {
+        "id": "grove-collision-sensor",
+        "name": "Grove Collision Sensor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "sensor",
+          "collision",
+          "grove"
+        ],
+        "keywords_en": [
+          "sensor",
+          "collision",
+          "grove"
+        ]
+      }
+    ]
+  },
+  "mekanisk": {
+    "name_no": "Mekanisk",
+    "name_en": "Mechanical",
+    "description": "Motorer, servoer, tannhjul, lagre, skruer, muttere",
+    "components": [
+      {
+        "id": "mutter-m2",
+        "name": "Mutter M2",
+        "location": "E-30",
+        "keywords_no": [
+          "mutter",
+          "muter"
+        ],
+        "keywords_en": [
+          "nut",
+          "muter"
+        ]
+      },
+      {
+        "id": "mutter-m25",
+        "name": "Mutter M2.5",
+        "location": "E-30",
+        "keywords_no": [
+          "mutter"
+        ],
+        "keywords_en": [
+          "nut"
+        ]
+      },
+      {
+        "id": "mutter-m3",
+        "name": "Mutter M3",
+        "location": "E-30",
+        "keywords_no": [
+          "mutter"
+        ],
+        "keywords_en": [
+          "nut"
+        ]
+      },
+      {
+        "id": "mutter-m4",
+        "name": "Mutter M4",
+        "location": "E-30",
+        "keywords_no": [
+          "mutter"
+        ],
+        "keywords_en": [
+          "nut"
+        ]
+      },
+      {
+        "id": "mutter-m4",
+        "name": "Mutter M4",
+        "location": "E-30",
+        "keywords_no": [
+          "mutter",
+          "locknuts"
+        ],
+        "keywords_en": [
+          "nut",
+          "locknuts"
+        ]
+      },
+      {
+        "id": "mutter-m5",
+        "name": "Mutter M5",
+        "location": "E-30",
+        "keywords_no": [
+          "mutter"
+        ],
+        "keywords_en": [
+          "nut"
+        ]
+      },
+      {
+        "id": "mutter-m6",
+        "name": "Mutter M6",
+        "location": "E-30",
+        "keywords_no": [
+          "mutter"
+        ],
+        "keywords_en": [
+          "nut"
+        ]
+      },
+      {
+        "id": "mutter-m6",
+        "name": "Mutter M6",
+        "location": "E-30",
+        "keywords_no": [
+          "mutter",
+          "locknuts"
+        ],
+        "keywords_en": [
+          "nut",
+          "locknuts"
+        ]
+      },
+      {
+        "id": "mutter-m8",
+        "name": "Mutter M8",
+        "location": "E-30",
+        "keywords_no": [
+          "mutter"
+        ],
+        "keywords_en": [
+          "nut"
+        ]
+      },
+      {
+        "id": "mutter-m10",
+        "name": "Mutter M10",
+        "location": "E-30",
+        "keywords_no": [
+          "mutter",
+          "m10"
+        ],
+        "keywords_en": [
+          "nut",
+          "m10"
+        ]
+      },
+      {
+        "id": "bolt-m2",
+        "name": "Bolt M2",
+        "location": "E-30",
+        "keywords_no": [
+          "bolt"
+        ],
+        "keywords_en": [
+          "bolt"
+        ]
+      },
+      {
+        "id": "bolt-m25",
+        "name": "Bolt M2.5",
+        "location": "E-30",
+        "keywords_no": [
+          "bolt"
+        ],
+        "keywords_en": [
+          "bolt"
+        ]
+      },
+      {
+        "id": "bolt-m3",
+        "name": "Bolt M3",
+        "location": "E-30",
+        "keywords_no": [
+          "bolt"
+        ],
+        "keywords_en": [
+          "bolt"
+        ]
+      },
+      {
+        "id": "bolt-m3",
+        "name": "Bolt M3",
+        "location": "E-30",
+        "keywords_no": [
+          "bolt"
+        ],
+        "keywords_en": [
+          "bolt"
+        ]
+      },
+      {
+        "id": "bolt-m3",
+        "name": "Bolt M3",
+        "location": "E-30",
+        "keywords_no": [
+          "bolt"
+        ],
+        "keywords_en": [
+          "bolt"
+        ]
+      },
+      {
+        "id": "bolt-m3",
+        "name": "Bolt M3",
+        "location": "E-30",
+        "keywords_no": [
+          "bolt"
+        ],
+        "keywords_en": [
+          "bolt"
+        ]
+      },
+      {
+        "id": "bollt-m3",
+        "name": "Bollt M3",
+        "location": "E-30",
+        "keywords_no": [
+          "bollt"
+        ],
+        "keywords_en": [
+          "bollt"
+        ]
+      },
+      {
+        "id": "bolt-m5",
+        "name": "Bolt M5",
+        "location": "E-30",
+        "keywords_no": [
+          "bolt"
+        ],
+        "keywords_en": [
+          "bolt"
+        ]
+      },
+      {
+        "id": "bolt-m5",
+        "name": "Bolt M5",
+        "location": "E-30",
+        "keywords_no": [
+          "bolt"
+        ],
+        "keywords_en": [
+          "bolt"
+        ]
+      },
+      {
+        "id": "bolt-m5",
+        "name": "Bolt M5",
+        "location": "E-30",
+        "keywords_no": [
+          "bolt"
+        ],
+        "keywords_en": [
+          "bolt"
+        ]
+      },
+      {
+        "id": "bolt-m5",
+        "name": "Bolt M5",
+        "location": "E-30",
+        "keywords_no": [
+          "bolt"
+        ],
+        "keywords_en": [
+          "bolt"
+        ]
+      },
+      {
+        "id": "solenoid",
+        "name": "Solenoid",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "tettviklet",
+          "spole",
+          "isolert",
+          "sylindrisk",
+          "solenoid"
+        ],
+        "keywords_en": [
+          "tettviklet",
+          "spole",
+          "isolert",
+          "sylindrisk",
+          "solenoid"
+        ]
+      },
+      {
+        "id": "solenoid-valve",
+        "name": "Solenoid Valve",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "solenoid",
+          "valve"
+        ],
+        "keywords_en": [
+          "solenoid",
+          "valve"
+        ]
+      },
+      {
+        "id": "small-stepper-motor-12v-dc",
+        "name": "Small Stepper Motor 12V DC",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "small",
+          "stepper",
+          "motor",
+          "12v"
+        ],
+        "keywords_en": [
+          "small",
+          "stepper",
+          "motor",
+          "12v"
+        ]
+      },
+      {
+        "id": "standard-servo-towerpro",
+        "name": "Standard Servo Towerpro",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "servo",
+          "standard",
+          "towerpro"
+        ],
+        "keywords_en": [
+          "servo",
+          "standard",
+          "towerpro"
+        ]
+      },
+      {
+        "id": "vibration-motor",
+        "name": "Vibration motor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "motor",
+          "vibration"
+        ],
+        "keywords_en": [
+          "motor",
+          "vibration"
+        ]
+      },
+      {
+        "id": "dc-toy-motor",
+        "name": "DC Toy Motor",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "motor",
+          "toy"
+        ],
+        "keywords_en": [
+          "motor",
+          "toy"
+        ]
+      },
+      {
+        "id": "vibrator-motors",
+        "name": "Vibrator Motors",
+        "location": "Komponentvegg",
+        "quantity": null,
+        "keywords_no": [
+          "vibrator",
+          "motors"
+        ],
+        "keywords_en": [
+          "vibrator",
+          "motors"
+        ]
+      },
+      {
+        "id": "motorer-og-motorkontroll",
+        "name": "Motorer og Motorkontroll",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "motorer",
+          "motorkontroll"
+        ],
+        "keywords_en": [
+          "motorer",
+          "motorkontroll"
+        ]
+      },
+      {
+        "id": "geared-motors",
+        "name": "Geared Motors",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "geared",
+          "motors"
+        ],
+        "keywords_en": [
+          "geared",
+          "motors"
+        ]
+      },
+      {
+        "id": "geared-motors",
+        "name": "Geared Motors",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "geared",
+          "motors"
+        ],
+        "keywords_en": [
+          "geared",
+          "motors"
+        ]
+      },
+      {
+        "id": "geared-motors",
+        "name": "Geared Motors",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "geared",
+          "motors"
+        ],
+        "keywords_en": [
+          "geared",
+          "motors"
+        ]
+      },
+      {
+        "id": "motors",
+        "name": "Motors",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "motors"
+        ],
+        "keywords_en": [
+          "motors"
+        ]
+      },
+      {
+        "id": "micro-servo",
+        "name": "Micro Servo",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "servo",
+          "micro"
+        ],
+        "keywords_en": [
+          "servo",
+          "micro"
+        ]
+      },
+      {
+        "id": "servo",
+        "name": "Servo",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "servo"
+        ],
+        "keywords_en": [
+          "servo"
+        ]
+      },
+      {
+        "id": "servo-horns",
+        "name": "Servo Horns",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "servo",
+          "horns"
+        ],
+        "keywords_en": [
+          "servo",
+          "horns"
+        ]
+      },
+      {
+        "id": "fans",
+        "name": "Fans",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "fans"
+        ],
+        "keywords_en": [
+          "fans"
+        ]
+      },
+      {
+        "id": "dc-motor-stepper",
+        "name": "DC Motor + Stepper",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "stepper",
+          "motor"
+        ],
+        "keywords_en": [
+          "stepper",
+          "motor"
+        ]
+      }
+    ]
+  },
+  "tilkobling": {
+    "name_no": "Tilkobling",
+    "name_en": "Connectivity",
+    "description": "Kabler, ledninger, kontakter, brytere, knapper",
+    "components": [
+      {
+        "id": "tactile-buttons",
+        "name": "Tactile Buttons",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "tactile",
+          "buttons"
+        ],
+        "keywords_en": [
+          "tactile",
+          "buttons"
+        ]
+      },
+      {
+        "id": "små-tactile-buttons",
+        "name": "Små Tactile buttons",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "tactile",
+          "små",
+          "buttons"
+        ],
+        "keywords_en": [
+          "tactile",
+          "små",
+          "buttons"
+        ]
+      },
+      {
+        "id": "små-toggle-switch",
+        "name": "Små Toggle switch",
+        "location": "Komponentvegg",
+        "quantity": null,
+        "keywords_no": [
+          "switch",
+          "små",
+          "toggle"
+        ],
+        "keywords_en": [
+          "switch",
+          "små",
+          "toggle"
+        ]
+      },
+      {
+        "id": "dip-switch",
+        "name": "Dip switch",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "dip",
+          "switch"
+        ],
+        "keywords_en": [
+          "dip",
+          "switch"
+        ]
+      },
+      {
+        "id": "diverse-buttons",
+        "name": "Diverse buttons",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "diverse",
+          "buttons"
+        ],
+        "keywords_en": [
+          "diverse",
+          "buttons"
+        ]
+      },
+      {
+        "id": "toggle-switch",
+        "name": "Toggle switch",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "switch",
+          "toggle"
+        ],
+        "keywords_en": [
+          "switch",
+          "toggle"
+        ]
+      },
+      {
+        "id": "slide-switch",
+        "name": "Slide switch",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "switch",
+          "slide"
+        ],
+        "keywords_en": [
+          "switch",
+          "slide"
+        ]
+      },
+      {
+        "id": "io-switch",
+        "name": "I/O switch",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "switch"
+        ],
+        "keywords_en": [
+          "switch"
+        ]
+      },
+      {
+        "id": "ic-switch",
+        "name": "IC Switch",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "switch",
+          "intergrated",
+          "verdier",
+          "aktivert",
+          "blir",
+          "circuit"
+        ],
+        "keywords_en": [
+          "switch",
+          "intergrated",
+          "verdier",
+          "aktivert",
+          "blir",
+          "circuit"
+        ]
+      },
+      {
+        "id": "io-expander",
+        "name": "I/O Expander",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "signaler",
+          "øker",
+          "flere",
+          "expander",
+          "koble",
+          "mikrokontroller"
+        ],
+        "keywords_en": [
+          "signaler",
+          "øker",
+          "flere",
+          "expander",
+          "koble",
+          "mikrokontroller"
+        ]
+      },
+      {
+        "id": "ic-holder",
+        "name": "IC Holder",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "fjerne",
+          "lett",
+          "holder",
+          "koble",
+          "ønsket",
+          "komponent"
+        ],
+        "keywords_en": [
+          "fjerne",
+          "lett",
+          "holder",
+          "koble",
+          "ønsket",
+          "komponent"
+        ]
+      },
+      {
+        "id": "socket-housing-2-pin",
+        "name": "Socket Housing 2 Pin",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "socket",
+          "pins",
+          "holde",
+          "connector",
+          "pin",
+          "housing",
+          "sammen"
+        ],
+        "keywords_en": [
+          "socket",
+          "pins",
+          "holde",
+          "connector",
+          "pin",
+          "housing",
+          "sammen"
+        ]
+      },
+      {
+        "id": "reed-switch",
+        "name": "Reed Switch",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "switch",
+          "aktiveres",
+          "elektromagneter",
+          "bryter",
+          "reed"
+        ],
+        "keywords_en": [
+          "reed",
+          "switch",
+          "elektromagneter",
+          "aktiveres"
+        ]
+      },
+      {
+        "id": "matrix-keypad",
+        "name": "Matrix Keypad",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "matrix",
+          "keypad"
+        ],
+        "keywords_en": [
+          "matrix",
+          "keypad"
+        ]
+      }
+    ]
+  },
+  "forbruksvarer": {
+    "name_no": "Forbruksvarer",
+    "name_en": "Consumables",
+    "description": "Loddetinn, tape, lim, krympeslanger, filament, sikringer",
+    "components": [
+      {
+        "id": "sikringer",
+        "name": "Sikringer",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "hindrer",
+          "eller",
+          "fuses",
+          "sikringer",
+          "komponent"
+        ],
+        "keywords_en": [
+          "hindrer",
+          "eller",
+          "fuses",
+          "sikringer",
+          "komponent"
+        ]
+      },
+      {
+        "id": "rft-fuses",
+        "name": "RFT Fuses",
+        "location": "Komponentvegg",
+        "keywords_no": [
+          "hindrer",
+          "rft",
+          "eller",
+          "fuses",
+          "sikringer",
+          "komponent"
+        ],
+        "keywords_en": [
+          "hindrer",
+          "rft",
+          "eller",
+          "fuses",
+          "sikringer",
+          "komponent"
+        ]
+      }
+    ]
+  },
+  "annet": {
+    "name_no": "Annet",
+    "name_en": "Other",
+    "description": "Alt annet",
+    "components": []
+  }
+}

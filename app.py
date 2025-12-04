@@ -122,11 +122,12 @@ knowledge_utstyr = {}
 knowledge_regler = {}
 knowledge_rom = {}
 knowledge_ressurser = {}
+knowledge_components = {}
 
 
 def load_json_knowledge():
     """Load structured knowledge from JSON files."""
-    global knowledge_utstyr, knowledge_regler, knowledge_rom, knowledge_ressurser
+    global knowledge_utstyr, knowledge_regler, knowledge_rom, knowledge_ressurser, knowledge_components
     
     knowledge_dir = 'knowledge'
     
@@ -161,6 +162,14 @@ def load_json_knowledge():
     except Exception as e:
         print(f"  Warning: Could not load ressurser.json: {e}")
         knowledge_ressurser = {}
+    
+    try:
+        with open(os.path.join(knowledge_dir, 'components.json'), 'r', encoding='utf-8') as f:
+            knowledge_components = json.load(f)
+        print(f"  Loaded components.json")
+    except Exception as e:
+        print(f"  Warning: Could not load components.json: {e}")
+        knowledge_components = {}
 
 
 def get_equipment_context(tool_type):
@@ -255,6 +264,110 @@ def get_all_equipment_by_access():
     lines.append("VIKTIG: Uten opplæring kan du IKKE bruke noe utstyr.")
     lines.append("Start med: MakerSpace introduksjonskurs for å få tilgang til 3D-printere, lodding, osv.")
     lines.append("Mer info: https://www.hiof.no/iio/itk/om/labber/makerspace/arrangementer/")
+    
+    return "\n".join(lines)
+
+
+def search_components(query):
+    """Search for components by name, category, or location."""
+    if not knowledge_components:
+        return ""
+
+    # Handle both structures: with 'categories' key or categories at root
+    categories = knowledge_components.get('categories', knowledge_components)
+
+    query_lower = query.lower()
+    
+    # Extract search terms from query
+    search_terms = []
+    for term in ['motstand', 'resistor', 'kondensator', 'capacitor', 'led', 'diode', 
+                 'transistor', 'arduino', 'esp32', 'sensor', 'fotocelle', 'photodiode',
+                 'motor', 'servo', 'relay', 'relé', 'skrue', 'mutter', 'bolt']:
+        if term in query_lower:
+            search_terms.append(term)
+    
+    # If no specific terms found, use the whole query
+    if not search_terms:
+        search_terms = [query_lower]
+    
+    matches = []
+
+    for cat_key, cat_data in categories.items():
+        # Skip non-category keys like 'last_updated'
+        if not isinstance(cat_data, dict) or 'components' not in cat_data:
+            continue
+        for comp in cat_data.get('components', []):
+            # Check if query matches name, location, or keywords
+            name = comp.get('name', '').lower()
+            location = comp.get('location', '').lower()
+            keywords = comp.get('keywords_no', []) + comp.get('keywords_en', [])
+            keywords_str = ' '.join(keywords).lower()
+            
+            # Check each search term
+            for term in search_terms:
+                if term in name or term in keywords_str:
+                    matches.append({
+                        'name': comp.get('name', 'Ukjent'),
+                        'location': comp.get('location', '-'),
+                        'category': cat_data.get('name_no', cat_key),
+                        'notes': comp.get('notes', ''),
+                        'matched_term': term
+                    })
+                    break  # Don't add same component twice
+    
+    if not matches:
+        return ""
+    
+    # Build context string - group by matched term for clarity
+    lines = [f"KOMPONENTER FUNNET ({len(matches)} treff):"]
+    lines.append("VIKTIG: List DISSE komponentene, ikke andre!")
+    lines.append("")
+    
+    for m in matches[:15]:  # Limit to 15 results
+        line = f"- {m['name']} @ {m['location']} ({m['category']})"
+        if m['notes']:
+            line += f" - {m['notes']}"
+        lines.append(line)
+    
+    if len(matches) > 15:
+        lines.append(f"... og {len(matches) - 15} flere")
+    
+    return "\n".join(lines)
+
+
+def get_all_components_summary():
+    """Get a summary of all available components - for 'what components do you have' questions."""
+    if not knowledge_components:
+        return "Ingen komponenter registrert ennå."
+
+    # Handle both structures: with 'categories' key or categories at root
+    categories = knowledge_components.get('categories', knowledge_components)
+
+    lines = ["TILGJENGELIGE KOMPONENTER VED MAKERSPACE HiØF:", ""]
+
+    total_count = 0
+    for cat_key, cat_data in categories.items():
+        # Skip non-category keys like 'last_updated'
+        if not isinstance(cat_data, dict) or 'components' not in cat_data:
+            continue
+        components = cat_data.get('components', [])
+        if components:
+            cat_name = cat_data.get('name_no', cat_key)
+            lines.append(f"{cat_name}:")
+            for comp in components[:10]:  # Show first 10 per category
+                name = comp.get('name', 'Ukjent')
+                loc = comp.get('location', '-')
+                lines.append(f"  - {name} @ {loc}")
+                total_count += 1
+            if len(components) > 10:
+                lines.append(f"  ... og {len(components) - 10} flere")
+            lines.append("")
+    
+    if total_count == 0:
+        return "Ingen komponenter registrert ennå."
+    
+    lines.append(f"Totalt: {total_count}+ komponenter tilgjengelig.")
+    lines.append("Spør om spesifikke komponenter for mer info!")
     
     return "\n".join(lines)
 
@@ -560,15 +673,15 @@ def detect_level(query):
 
 
 def detect_language(query):
-    """Detect language preference from query."""
+    """Detect language preference from query. Default is Norwegian."""
     query_lower = query.lower()
     
-    if '/norsk' in query_lower or '/no' in query_lower:
-        return 'norwegian', "Du MÅ svare på norsk. Bruk norsk språk i hele svaret."
-    elif '/english' in query_lower or '/en' in query_lower:
+    # Explicit English request
+    if '/english' in query_lower or '/en' in query_lower:
         return 'english', "You MUST respond in English. Use English throughout your entire response."
     
-    return 'auto', "Svar på SAMME språk som brukeren skriver. Norsk spørsmål = norsk svar. English question = English answer."
+    # Default to Norwegian (explicit /norsk or /no also works)
+    return 'norwegian', "Du MÅ svare på NORSK. Bruk norsk språk i hele svaret. ALDRI svar på engelsk med mindre brukeren eksplisitt ber om det med /english"
 
 
 def classify_query(query):
@@ -674,6 +787,26 @@ def is_inventory_query(query):
     return any(p in query_lower for p in inventory_patterns)
 
 
+def is_component_query(query):
+    """Detect if query is asking about components/parts."""
+    query_lower = query.lower()
+    
+    component_patterns = [
+        'komponent', 'component', 'deler', 'parts',
+        'motstand', 'resistor', 'kondensator', 'capacitor',
+        'led', 'diode', 'transistor', 'ic', 'chip',
+        'sensor', 'modul', 'module', 'arduino', 'esp32', 'esp8266',
+        'raspberry', 'motor', 'servo', 'relay', 'relé',
+        'kabel', 'wire', 'ledning', 'connector', 'kontakt',
+        'skrue', 'screw', 'mutter', 'nut', 'bolt',
+        'loddetinn', 'solder', 'tape', 'lim', 'glue',
+        'har dere', 'finnes det', 'hvor finner jeg',
+        'elektronikk-deler', 'electronics parts'
+    ]
+    
+    return any(p in query_lower for p in component_patterns)
+
+
 # =============================================================================
 # Conversation Compression
 # =============================================================================
@@ -771,6 +904,19 @@ RELEVANT INFORMASJON:
 FERDIGHETSNIVÅ: {level_instruction}
 
 SPRÅK: {language_instruction}
+
+KRITISK FOR KOMPONENTER:
+- Bruk informasjonen fra "KOMPONENTER FUNNET" men SKRIV NATURLIG
+- IKKE bruk "@" eller list-format fra konteksten
+- GODT: "Vi har motstander på Komponentvegg, blant annet 10Ω, 15Ω og 100Ω."
+- DÅRLIG: "10Ω @ Komponentvegg, 15Ω @ Komponentvegg..."
+- Nevn lokasjonen ÉN gang, så list noen eksempler
+
+FORMATERING:
+- Bruk "-" for kulepunkt (ikke *)
+- ALDRI bruk **bold** eller *italic* - det rendres ikke riktig
+- Nummererte lister (1. 2. 3.) er OK når rekkefølge betyr noe
+- Links er OK: [tekst](url)
 
 REGLER FOR SVAR:
 - Svar KORT (2-4 setninger) men informativt
@@ -1301,15 +1447,32 @@ Du kan også besøke siden direkte: https://www.vg.no"""
     query_category = classify_query(combined_context)
     detected_tool = detect_tool(combined_context)
     inventory_query = is_inventory_query(message)  # Keep this on current message only
+    component_query = is_component_query(message)  # Check for component questions
     
     print(f"  Kategori: {query_category}")
     if detected_tool:
         print(f"  Verktoy: {detected_tool}")
     if inventory_query:
         print(f"  Type: INVENTAR-SPØRSMÅL (bruker kun JSON)")
+    if component_query:
+        print(f"  Type: KOMPONENT-SPØRSMÅL (søker i components.json)")
     
     # Build context from multiple sources
     context_parts = []
+    
+    # 0. For component queries: search components.json
+    if component_query:
+        # Try to find specific component
+        comp_ctx = search_components(message)
+        if comp_ctx:
+            context_parts.append(comp_ctx)
+            print(f"  [JSON] Fant komponenter som matcher spørringen")
+        else:
+            # No specific match, show summary
+            comp_summary = get_all_components_summary()
+            if comp_summary:
+                context_parts.append(comp_summary)
+                print(f"  [JSON] Lagt til komponentoversikt")
     
     # 1. For inventory queries without specific tool: show ALL equipment by access level
     if inventory_query and not detected_tool:
@@ -1655,25 +1818,85 @@ def reload():
 
 
 # =============================================================================
-# Fast PDF Import - Quick extraction with optional AI enhancement
+# Fast PDF Import - OCR-based extraction
 # =============================================================================
 def extract_pdf_fast(file_path):
-    """Fast PDF text extraction using PyPDF2 only. Returns text quickly."""
-    text = ''
+    """
+    PDF text extraction using OCR (EasyOCR).
+    
+    All PDFs are processed with OCR for consistent results.
+    Works well for both scanned documents and text-based PDFs.
+    """
+    import fitz  # PyMuPDF
+    
+    # Get page count
+    doc = fitz.open(file_path)
+    total_pages = len(doc)
+    doc.close()
+    
+    print(f"  [PDF] Extracting {total_pages} pages using OCR...")
+    
     try:
-        print(f"  [PDF-FAST] Using PyPDF2 for quick extraction...")
-        with open(file_path, 'rb') as pdf_file:
-            pdf_reader = PyPDF2.PdfReader(pdf_file)
-            total_pages = len(pdf_reader.pages)
-            for i, page in enumerate(pdf_reader.pages):
-                page_text = page.extract_text()
-                if page_text:
-                    text += page_text + "\n\n"
-        print(f"  [PDF-FAST] Extracted {len(text)} chars from {total_pages} pages")
-        return text, total_pages
+        text = extract_pdf_ocr(file_path)
+        if text and len(text.strip()) > 50:
+            print(f"  [PDF] OCR extracted {len(text)} chars from {total_pages} pages")
+            return text, total_pages
+        else:
+            raise Exception("OCR returned insufficient text")
     except Exception as e:
-        print(f"  [PDF-FAST] Error: {e}")
-        raise
+        print(f"  [PDF] OCR failed: {e}")
+        raise Exception(f"PDF extraction failed: {e}")
+
+
+def extract_pdf_ocr(file_path):
+    """
+    OCR extraction for image-based PDFs using EasyOCR.
+    Converts PDF pages to images and runs OCR on each.
+    """
+    import fitz  # PyMuPDF for PDF to image
+    import easyocr
+    import numpy as np
+    from PIL import Image
+    import io
+    
+    print(f"  [OCR] Initializing EasyOCR (first run downloads models ~100MB)...")
+    
+    # Initialize reader with Norwegian and English
+    reader = easyocr.Reader(['no', 'en'], gpu=False)  # CPU mode for compatibility
+    
+    doc = fitz.open(file_path)
+    all_text = []
+    
+    for page_num, page in enumerate(doc):
+        print(f"  [OCR] Processing page {page_num + 1}/{len(doc)}...")
+        
+        # Render page to image (higher DPI = better OCR)
+        mat = fitz.Matrix(2.0, 2.0)  # 2x zoom for better quality
+        pix = page.get_pixmap(matrix=mat)
+        
+        # Convert to PIL Image
+        img_data = pix.tobytes("png")
+        img = Image.open(io.BytesIO(img_data))
+        
+        # Convert to numpy array for easyocr
+        img_array = np.array(img)
+        
+        # Run OCR
+        results = reader.readtext(img_array)
+        
+        # Extract text from results
+        page_text = []
+        for (bbox, text, confidence) in results:
+            if confidence > 0.3:  # Filter low confidence results
+                page_text.append(text)
+        
+        if page_text:
+            all_text.append(f"--- Page {page_num + 1} ---")
+            all_text.append("\n".join(page_text))
+    
+    doc.close()
+    
+    return "\n\n".join(all_text)
 
 
 @app.route('/extract-pdf', methods=['POST'])
@@ -1722,48 +1945,497 @@ def extract_pdf():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+# =============================================================================
+# XLSX Import - Component/Equipment Lists from Excel
+# =============================================================================
+
+def parse_xlsx_to_equipment(file_path):
+    """
+    Parse XLSX file and convert rows to component entries.
+    Auto-detects column mapping based on header names.
+    """
+    import openpyxl
+    
+    wb = openpyxl.load_workbook(file_path, data_only=True)
+    sheet = wb.active
+    
+    # Get headers from first row
+    headers = []
+    for cell in sheet[1]:
+        headers.append(str(cell.value).lower().strip() if cell.value else '')
+    
+    print(f"  [XLSX] Found headers: {headers}")
+    
+    # Column mapping - maps various header names to our component fields
+    COLUMN_MAPPINGS = {
+        'id': ['id', 'product_id', 'produktid', 'varenr', 'item_id', 'sku', 'part_number', 'partnumber'],
+        'name': ['name', 'navn', 'product', 'produkt', 'description', 'beskrivelse', 'item', 'component', 'komponent', 'del'],
+        'location': ['location', 'lokasjon', 'sted', 'rom', 'room', 'placement', 'plassering', 'shelf', 'hylle', 'drawer', 'skuff', 'boks', 'box'],
+        'category': ['category', 'kategori', 'type', 'gruppe', 'group', 'class', 'klasse'],
+        'notes': ['notes', 'notater', 'kommentar', 'comment', 'remarks', 'merknad', 'info'],
+    }
+    
+    # Find which columns map to which fields
+    column_map = {}
+    for field, possible_names in COLUMN_MAPPINGS.items():
+        for i, header in enumerate(headers):
+            if header in possible_names:
+                column_map[field] = i
+                break
+    
+    print(f"  [XLSX] Column mapping: {column_map}")
+    
+    # Parse rows
+    equipment_list = []
+    for row_num, row in enumerate(sheet.iter_rows(min_row=2, values_only=True), start=2):
+        # Skip empty rows
+        if not any(row):
+            continue
+        
+        # Build component entry
+        entry = {
+            'id': '',
+            'name': '',
+            'location': '',
+            'category': 'other',
+            'notes': '',
+            'keywords_no': [],
+            'keywords_en': [],
+            '_row': row_num  # Track source row for debugging
+        }
+        
+        # Map columns to fields
+        for field, col_idx in column_map.items():
+            if col_idx < len(row) and row[col_idx] is not None:
+                value = str(row[col_idx]).strip()
+                entry[field] = value
+        
+        # Generate ID if not present
+        if not entry['id'] and entry['name']:
+            # Create slug from name
+            import re
+            slug = re.sub(r'[^a-z0-9]+', '-', entry['name'].lower())
+            slug = slug.strip('-')[:50]
+            entry['id'] = slug
+        
+        # Generate keywords from name
+        if entry['name']:
+            words = entry['name'].lower().split()
+            entry['keywords_no'] = [w for w in words if len(w) > 2]
+            entry['keywords_en'] = entry['keywords_no']  # Same for now
+        
+        # Only add if we have at least a name
+        if entry['name']:
+            equipment_list.append(entry)
+    
+    wb.close()
+    return equipment_list, headers, column_map
+
+
+def check_component_duplicates(new_items, existing_components):
+    """
+    Check for duplicates based on id, name, and location.
+    Returns: (items_to_add, duplicates_skipped)
+    """
+    # Build lookup of existing items: key = (id, name_lower, location_lower)
+    existing_keys = set()
+    
+    for category in existing_components.get('categories', {}).values():
+        for item in category.get('components', []):
+            key = (
+                item.get('id', '').lower(),
+                item.get('name', '').lower(),
+                item.get('location', '').lower()
+            )
+            existing_keys.add(key)
+    
+    items_to_add = []
+    duplicates_skipped = []
+    
+    for item in new_items:
+        key = (
+            item.get('id', '').lower(),
+            item.get('name', '').lower(),
+            item.get('location', '').lower()
+        )
+        
+        # Check for exact match (all three match)
+        if key in existing_keys:
+            duplicates_skipped.append(item)
+        else:
+            # Also check partial matches (same id OR same name+location)
+            is_duplicate = False
+            for ex_key in existing_keys:
+                # Same ID
+                if key[0] and key[0] == ex_key[0]:
+                    duplicates_skipped.append({**item, '_duplicate_reason': f'Same ID: {key[0]}'})
+                    is_duplicate = True
+                    break
+                # Same name AND location
+                if key[1] and key[2] and key[1] == ex_key[1] and key[2] == ex_key[2]:
+                    duplicates_skipped.append({**item, '_duplicate_reason': f'Same name+location: {key[1]} @ {key[2]}'})
+                    is_duplicate = True
+                    break
+            
+            if not is_duplicate:
+                items_to_add.append(item)
+    
+    return items_to_add, duplicates_skipped
+
+
+@app.route('/extract-xlsx', methods=['POST'])
+@login_required
+def extract_xlsx():
+    """Parse XLSX and return equipment entries for preview."""
+    if 'file' not in request.files:
+        return jsonify({'success': False, 'error': 'Ingen fil lastet opp'}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'success': False, 'error': 'Ingen fil valgt'}), 400
+    
+    if not file.filename.lower().endswith('.xlsx'):
+        return jsonify({'success': False, 'error': 'Kun XLSX-filer støttes (ikke .xls)'}), 400
+    
+    try:
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(file_path)
+        
+        print(f"[XLSX EXTRACT] Processing {filename}...")
+        start_time = time.time()
+        
+        # Parse XLSX
+        equipment_list, headers, column_map = parse_xlsx_to_equipment(file_path)
+        
+        # Load existing components for duplicate check
+        components_path = 'knowledge/components.json'
+        existing_components = {}
+        if os.path.exists(components_path):
+            with open(components_path, 'r', encoding='utf-8') as f:
+                existing_components = json.load(f)
+        
+        # Check duplicates
+        items_to_add, duplicates_skipped = check_component_duplicates(equipment_list, existing_components)
+        
+        os.remove(file_path)
+        
+        elapsed = time.time() - start_time
+        print(f"[XLSX EXTRACT] Found {len(equipment_list)} items, {len(items_to_add)} new, {len(duplicates_skipped)} duplicates in {elapsed:.2f}s")
+        
+        if not equipment_list:
+            return jsonify({'success': False, 'error': 'Ingen utstyr funnet i filen. Sjekk at første rad har kolonneoverskrifter.'}), 400
+        
+        return jsonify({
+            'success': True,
+            'filename': filename,
+            'headers': headers,
+            'column_map': column_map,
+            'total_rows': len(equipment_list),
+            'items_to_add': items_to_add,
+            'duplicates_skipped': duplicates_skipped,
+            'extract_time': round(elapsed, 2)
+        })
+        
+    except Exception as e:
+        print(f"[XLSX EXTRACT] Error: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/approve-xlsx', methods=['POST'])
+@login_required
+def approve_xlsx():
+    """Add approved component items to components.json, grouping by each item's category."""
+    data = request.get_json()
+    if not data or 'items' not in data:
+        return jsonify({'success': False, 'error': 'Ingen komponenter å legge til'}), 400
+    
+    items = data['items']
+    
+    if not items:
+        return jsonify({'success': False, 'error': 'Listen er tom'}), 400
+    
+    try:
+        components_path = 'knowledge/components.json'
+        
+        # Load existing
+        if os.path.exists(components_path):
+            with open(components_path, 'r', encoding='utf-8') as f:
+                components_data = json.load(f)
+        else:
+            components_data = {
+                'version': '1.0',
+                'last_updated': '',
+                'description': 'Komponentoversikt for Makerspace HiØF',
+                'categories': {}
+            }
+        
+        # Group items by their category
+        by_category = {}
+        for item in items:
+            cat = item.get('category', 'other').lower().strip()
+            if not cat:
+                cat = 'other'
+            # Normalize category name (replace spaces with underscores)
+            cat = cat.replace(' ', '_')
+            if cat not in by_category:
+                by_category[cat] = []
+            # Clean item (remove internal fields)
+            clean = {k: v for k, v in item.items() if not k.startswith('_')}
+            by_category[cat].append(clean)
+        
+        # Add items to their respective categories
+        for cat, cat_items in by_category.items():
+            if cat not in components_data.get('categories', {}):
+                components_data['categories'][cat] = {
+                    'name_no': cat.replace('_', ' ').title(),
+                    'name_en': cat.replace('_', ' ').title(),
+                    'components': []
+                }
+            components_data['categories'][cat]['components'].extend(cat_items)
+        
+        components_data['last_updated'] = datetime.now().strftime('%Y-%m-%d')
+        
+        # Save
+        with open(components_path, 'w', encoding='utf-8') as f:
+            json.dump(components_data, f, indent=2, ensure_ascii=False)
+        
+        # Reload knowledge
+        load_json_knowledge()
+        
+        # Build summary of what was added
+        categories_added = list(by_category.keys())
+        total_added = len(items)
+        print(f"[XLSX APPROVE] Added {total_added} items to categories: {categories_added}")
+        
+        return jsonify({
+            'success': True,
+            'message': f'La til {total_added} komponenter i {len(categories_added)} kategori(er)',
+            'items_added': total_added,
+            'categories': categories_added
+        })
+        
+    except Exception as e:
+        print(f"[XLSX APPROVE] Error: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+# =============================================================================
+# Category Templates for Smart Import
+# =============================================================================
+CATEGORY_TEMPLATES = {
+    'utstyr': {
+        'file': 'knowledge/utstyr.json',
+        'type': 'json',
+        'prompt': '''Du skal lage en JSON-oppføring for et UTSTYR/VERKTØY i et Makerspace.
+
+EKSEMPEL PÅ ØNSKET OUTPUT:
+{{
+  "id": "prusa-mini",
+  "name": "Prusa Mini+",
+  "location": "D1-044",
+  "status": "active",
+  "access_level": "course_makerspace",
+  "difficulty": "beginner",
+  "materials": ["PLA", "PETG"],
+  "filament_diameter": "1.75mm",
+  "build_volume": "180x180x180mm",
+  "notes": "God for nybegynnere",
+  "keywords_no": ["3d print", "printer", "prusa"],
+  "keywords_en": ["3d print", "printer", "prusa"]
+}}
+
+TILGANGSNIVÅER (velg én):
+- course_makerspace: Krever MakerSpace-kurs (D1-044)
+- course_fablab: Krever FabLab HMS-kurs (D1-043)
+- certification_required: Krever sertifisering fra labingeniør
+- request_required: Må hentes fra labansvarlig
+- staff_only: Kun labingeniører/studentassistenter
+
+VANSKELIGHETSGRAD: beginner, intermediate, advanced
+
+DOKUMENTET:
+{text}
+
+KONTEKST: {context}
+
+OUTPUT (kun gyldig JSON, ingen forklaring):'''
+    },
+    'regler': {
+        'file': 'knowledge/regler.json',
+        'type': 'json',
+        'prompt': '''Du skal lage JSON-oppføringer for HMS/SIKKERHETSREGLER i et Makerspace.
+
+EKSEMPEL PÅ ØNSKET OUTPUT:
+[
+  {{
+    "id": "rule-laser-001",
+    "priority": "critical",
+    "rule_no": "Følg med på hele jobben - laseren kan starte brann",
+    "rule_en": "Monitor the entire job - laser can start fires",
+    "applies_to": "laser_cutting"
+  }},
+  {{
+    "id": "rule-laser-002",
+    "priority": "high",
+    "rule_no": "ALDRI kutt PVC eller vinyl - avgir giftig gass",
+    "rule_en": "NEVER cut PVC or vinyl - releases toxic fumes",
+    "applies_to": "laser_cutting"
+  }}
+]
+
+PRIORITET: critical (livstruende), high (alvorlig), medium (viktig), low (anbefalt)
+APPLIES_TO: all, 3d_printing, laser_cutting, cnc, electronics, woodworking
+
+DOKUMENTET:
+{text}
+
+KONTEKST: {context}
+
+OUTPUT (kun gyldig JSON-array, ingen forklaring):'''
+    },
+    'rom': {
+        'file': 'knowledge/rom.json',
+        'type': 'json',
+        'prompt': '''Du skal lage en JSON-oppføring for et ROM/LOKALE i et Makerspace.
+
+EKSEMPEL PÅ ØNSKET OUTPUT:
+{{
+  "id": "D1-044",
+  "name_no": "MakerSpace",
+  "name_en": "MakerSpace",
+  "building": "D",
+  "floor": 1,
+  "description_no": "Hovedrom for prototyping og elektronikk",
+  "description_en": "Main room for prototyping and electronics",
+  "equipment_categories": ["3d_printing", "electronics"],
+  "features": ["3D-printere", "Loddestasjoner", "Elektronikkarbeidsplasser"],
+  "access": {{
+    "requires_training": true,
+    "booking_required": false,
+    "open_hours": "Se booking-system"
+  }}
+}}
+
+DOKUMENTET:
+{text}
+
+KONTEKST: {context}
+
+OUTPUT (kun gyldig JSON, ingen forklaring):'''
+    },
+    'ressurser': {
+        'file': 'knowledge/ressurser.json',
+        'type': 'json',
+        'prompt': '''Du skal lage JSON-oppføringer for LÆRINGSRESSURSER/LENKER for et Makerspace.
+
+EKSEMPEL PÅ ØNSKET OUTPUT:
+[
+  {{
+    "title": "Prusa Knowledge Base",
+    "url": "https://help.prusa3d.com/",
+    "language": "en",
+    "level": "all",
+    "description_no": "Offisiell Prusa dokumentasjon",
+    "description_en": "Official Prusa documentation"
+  }},
+  {{
+    "title": "Arduino Getting Started",
+    "url": "https://www.arduino.cc/en/Guide",
+    "language": "en",
+    "level": "beginner",
+    "description_no": "Offisiell Arduino begynnerguide",
+    "description_en": "Official Arduino getting started guide"
+  }}
+]
+
+NIVÅER: beginner, intermediate, advanced, all
+SPRÅK: no, en
+
+DOKUMENTET:
+{text}
+
+KONTEKST: {context}
+
+OUTPUT (kun gyldig JSON-array, ingen forklaring):'''
+    },
+    'vault': {
+        'file': 'vault.txt',
+        'type': 'text',
+        'prompt': '''Du skal lage strukturert KUNNSKAPSINNHOLD for et Makerspace.
+
+FORMAT:
+--- NIVÅ: Tittel ---
+Innhold her...
+
+NIVÅER: NYBEGYNNER, INTERMEDIATE, AVANSERT, EKSPERT, FEILSØKING
+
+EKSEMPEL:
+--- NYBEGYNNER: Første 3D-print steg-for-steg ---
+1. Last ned en 3D-modell fra Printables.com
+2. Åpne PrusaSlicer og importer filen
+3. Velg riktig printer og materiale
+4. Klikk "Slice now" og eksporter G-code
+5. Sett kortet i printeren og start
+
+--- FEILSØKING: Print løsner fra platen ---
+Symptom: Hjørner løfter seg, warping
+Årsaker:
+- Skitten plate: Vask med isopropanol
+- Feil Z-offset: Juster ned i små steg
+- For lav bed-temp: Øk med 5-10°C
+
+DOKUMENTET:
+{text}
+
+KONTEKST: {context}
+
+OUTPUT (kun strukturert tekst, bruk norsk språk):'''
+    }
+}
+
+
 @app.route('/enhance-pdf', methods=['POST'])
 @login_required
 def enhance_pdf():
-    """Use LLM to structure/summarize extracted PDF text."""
+    """Use LLM to structure/summarize extracted PDF text based on category."""
     data = request.get_json()
     
     if not data or 'text' not in data:
         return jsonify({'success': False, 'error': 'Ingen tekst å behandle'}), 400
     
     pdf_text = data.get('text', '').strip()
+    doc_context = data.get('context', '').strip()
+    category = data.get('category', 'vault').strip()
     
     if len(pdf_text) < 50:
         return jsonify({'success': False, 'error': 'For lite tekst å behandle'}), 400
     
-    # Truncate if too long
-    max_chars = 12000
+    if category not in CATEGORY_TEMPLATES:
+        return jsonify({'success': False, 'error': f'Ukjent kategori: {category}'}), 400
+    
+    template = CATEGORY_TEMPLATES[category]
+    
+    # Larger limit for llama3 - it can handle more
+    max_chars = 8000
     truncated = False
     if len(pdf_text) > max_chars:
         pdf_text = pdf_text[:max_chars]
         truncated = True
         print(f"[ENHANCE] Truncated to {max_chars} chars")
     
-    print(f"[ENHANCE] Sending {len(pdf_text)} chars to LLM...")
+    print(f"[ENHANCE] Category: {category} | Context: '{doc_context}' | Sending {len(pdf_text)} chars to llama3...")
     
-    prompt = f"""Du er en ekspert på å lage strukturert dokumentasjon for et Makerspace.
-
-Les følgende dokumentasjon og lag strukturerte kunnskapsoppføringer.
-
-REGLER:
-1. Behold VIKTIG teknisk informasjon (innstillinger, prosedyrer, sikkerhet)
-2. Fjern unødvendig fyll og gjentakelser
-3. Skriv konsist og praktisk
-4. Bruk norsk språk (tekniske termer kan være på engelsk)
-5. Skill mellom ulike emner med tomme linjer
-
-DOKUMENTASJON:
-{pdf_text}
-
-STRUKTURERT OUTPUT:"""
+    # Build category-specific prompt
+    prompt = template['prompt'].format(text=pdf_text, context=doc_context)
 
     try:
         start_time = time.time()
+        # Use llama3 8B for better quality output
         response = ollama.chat(
             model='llama3',
             messages=[{'role': 'user', 'content': prompt}],
@@ -1773,13 +2445,28 @@ STRUKTURERT OUTPUT:"""
         elapsed = time.time() - start_time
         print(f"[ENHANCE] LLM done in {elapsed:.1f}s, generated {len(summary)} chars")
         
+        # Clean up JSON output if it's a JSON category
+        if template['type'] == 'json':
+            # Try to extract just the JSON part
+            summary = summary.strip()
+            if summary.startswith('```json'):
+                summary = summary[7:]
+            if summary.startswith('```'):
+                summary = summary[3:]
+            if summary.endswith('```'):
+                summary = summary[:-3]
+            summary = summary.strip()
+        
         return jsonify({
             'success': True,
             'enhanced_text': summary,
             'original_chars': len(pdf_text),
             'enhanced_chars': len(summary),
             'truncated': truncated,
-            'enhance_time': round(elapsed, 1)
+            'enhance_time': round(elapsed, 1),
+            'category': category,
+            'output_type': template['type'],
+            'target_file': template['file']
         })
     except Exception as e:
         print(f"[ENHANCE] LLM Error: {e}")
@@ -1889,34 +2576,179 @@ GENERER VAULT-OPPFØRINGER:"""
 @app.route('/approve-summary', methods=['POST'])
 @login_required  
 def approve_summary():
-    """Add approved LLM-generated summary to vault."""
+    """Add approved LLM-generated content to appropriate file based on category."""
     data = request.get_json()
     
     if not data or 'content' not in data:
         return jsonify({'success': False, 'error': 'Ingen innhold å legge til'}), 400
     
     content = data.get('content', '').strip()
+    category = data.get('category', 'vault').strip()
     
     if not content:
         return jsonify({'success': False, 'error': 'Tomt innhold'}), 400
     
+    if category not in CATEGORY_TEMPLATES:
+        return jsonify({'success': False, 'error': f'Ukjent kategori: {category}'}), 400
+    
+    template = CATEGORY_TEMPLATES[category]
+    target_file = template['file']
+    
     try:
-        # Append directly to vault (already formatted)
-        with open(VAULT_FILE, 'a', encoding='utf-8') as f:
-            f.write('\n\n')  # Separator
-            f.write(content)
-            f.write('\n')
-        
-        # Count approximate "chunks" added (sections)
-        sections = content.count('---')
+        if template['type'] == 'text':
+            # Append to vault.txt
+            with open(VAULT_FILE, 'a', encoding='utf-8') as f:
+                f.write('\n\n')
+                f.write(content)
+                f.write('\n')
+            
+            sections = content.count('---')
+            message = f'Lagt til ~{sections//2} seksjoner i vault.txt'
+            
+        else:
+            # Handle JSON categories
+            try:
+                new_data = json.loads(content)
+            except json.JSONDecodeError as je:
+                return jsonify({
+                    'success': False, 
+                    'error': f'Ugyldig JSON: {str(je)}. Prøv å strukturere på nytt.'
+                }), 400
+            
+            # Load existing JSON file
+            existing_data = {}
+            if os.path.exists(target_file):
+                with open(target_file, 'r', encoding='utf-8') as f:
+                    existing_data = json.load(f)
+            
+            # Merge strategy depends on category
+            if category == 'utstyr':
+                # Add to appropriate category
+                if 'categories' not in existing_data:
+                    existing_data['categories'] = {}
+                
+                # Try to determine category from the new data
+                if isinstance(new_data, dict):
+                    # Single equipment item - add to a generic category or detect from keywords
+                    eq_category = 'other'
+                    keywords = new_data.get('keywords_no', []) + new_data.get('keywords_en', [])
+                    for kw in keywords:
+                        if '3d' in kw.lower() or 'print' in kw.lower():
+                            eq_category = '3d_printing'
+                            break
+                        elif 'laser' in kw.lower():
+                            eq_category = 'laser_cutting'
+                            break
+                        elif 'cnc' in kw.lower():
+                            eq_category = 'cnc'
+                            break
+                        elif 'lodd' in kw.lower() or 'elektro' in kw.lower():
+                            eq_category = 'electronics'
+                            break
+                    
+                    if eq_category not in existing_data['categories']:
+                        existing_data['categories'][eq_category] = {
+                            'name_no': eq_category.replace('_', ' ').title(),
+                            'name_en': eq_category.replace('_', ' ').title(),
+                            'equipment': []
+                        }
+                    existing_data['categories'][eq_category]['equipment'].append(new_data)
+                    message = f"Lagt til utstyr '{new_data.get('name', 'ukjent')}' i {eq_category}"
+                elif isinstance(new_data, list):
+                    # Multiple items
+                    count = len(new_data)
+                    for item in new_data:
+                        eq_category = 'other'
+                        if eq_category not in existing_data['categories']:
+                            existing_data['categories'][eq_category] = {'equipment': []}
+                        existing_data['categories'][eq_category]['equipment'].append(item)
+                    message = f"Lagt til {count} utstyr"
+            
+            elif category == 'regler':
+                # Add rules to appropriate section
+                if 'equipment_specific' not in existing_data:
+                    existing_data['equipment_specific'] = {}
+                
+                if isinstance(new_data, list):
+                    for rule in new_data:
+                        applies_to = rule.get('applies_to', 'general')
+                        if applies_to == 'all':
+                            if 'general_rules' not in existing_data:
+                                existing_data['general_rules'] = {'rules': []}
+                            existing_data['general_rules']['rules'].append(rule)
+                        else:
+                            if applies_to not in existing_data['equipment_specific']:
+                                existing_data['equipment_specific'][applies_to] = {'rules': []}
+                            if 'rules' not in existing_data['equipment_specific'][applies_to]:
+                                existing_data['equipment_specific'][applies_to]['rules'] = []
+                            existing_data['equipment_specific'][applies_to]['rules'].append(rule)
+                    message = f"Lagt til {len(new_data)} regler"
+                elif isinstance(new_data, dict):
+                    existing_data['general_rules'] = existing_data.get('general_rules', {'rules': []})
+                    existing_data['general_rules']['rules'].append(new_data)
+                    message = "Lagt til 1 regel"
+            
+            elif category == 'rom':
+                # Add room
+                if 'rooms' not in existing_data:
+                    existing_data['rooms'] = {}
+                
+                if isinstance(new_data, dict):
+                    room_id = new_data.get('id', f"room-{len(existing_data['rooms']) + 1}")
+                    existing_data['rooms'][room_id] = new_data
+                    message = f"Lagt til rom '{new_data.get('name_no', room_id)}'"
+                else:
+                    message = "Lagt til rom"
+            
+            elif category == 'ressurser':
+                # Add resources
+                if 'resources' not in existing_data:
+                    existing_data['resources'] = {}
+                
+                if isinstance(new_data, list):
+                    # Try to categorize resources
+                    for res in new_data:
+                        res_category = 'general'
+                        title = res.get('title', '').lower()
+                        if '3d' in title or 'print' in title or 'prusa' in title:
+                            res_category = '3d_printing'
+                        elif 'laser' in title:
+                            res_category = 'laser_cutting'
+                        elif 'arduino' in title or 'electron' in title:
+                            res_category = 'electronics'
+                        
+                        if res_category not in existing_data['resources']:
+                            existing_data['resources'][res_category] = {'guides': []}
+                        if 'guides' not in existing_data['resources'][res_category]:
+                            existing_data['resources'][res_category]['guides'] = []
+                        existing_data['resources'][res_category]['guides'].append(res)
+                    message = f"Lagt til {len(new_data)} ressurser"
+                elif isinstance(new_data, dict):
+                    if 'general' not in existing_data['resources']:
+                        existing_data['resources']['general'] = {'guides': []}
+                    existing_data['resources']['general']['guides'].append(new_data)
+                    message = "Lagt til 1 ressurs"
+            
+            # Update metadata
+            existing_data['last_updated'] = datetime.now().strftime('%Y-%m-%d')
+            
+            # Write back to file
+            with open(target_file, 'w', encoding='utf-8') as f:
+                json.dump(existing_data, f, ensure_ascii=False, indent=2)
+            
+            # Reload JSON knowledge
+            load_json_knowledge()
         
         return jsonify({
             'success': True,
-            'message': f'Lagt til ~{sections//2} seksjoner i kunnskapsbasen',
+            'message': message,
+            'target_file': target_file,
             'stats': get_vault_stats()
         })
         
     except Exception as e:
+        print(f"[APPROVE] Error: {e}")
+        traceback.print_exc()
         return jsonify({'success': False, 'error': str(e)}), 500
 
 

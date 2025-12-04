@@ -300,6 +300,21 @@
         .file-item.error .file-status {
             color: #ff6464;
         }
+        
+        .quick-tag {
+            background: rgba(229, 161, 36, 0.2);
+            border: 1px solid rgba(229, 161, 36, 0.5);
+            color: var(--brand);
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        
+        .quick-tag:hover {
+            background: rgba(229, 161, 36, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -367,9 +382,39 @@
                     <span style="color: var(--brand);">📝 Ekstrahert tekst:</span>
                     <span id="extractInfo" style="color: #5a6c8a; font-size: 0.85rem;"></span>
                 </div>
-                <textarea id="extractContent" style="height: 300px; font-family: monospace; font-size: 0.85rem;"></textarea>
+                <textarea id="extractContent" style="height: 250px; font-family: monospace; font-size: 0.85rem;"></textarea>
+                
+                <!-- Context input for AI enhancement -->
+                <div style="margin-top: 15px; padding: 15px; background: rgba(229, 161, 36, 0.1); border-radius: 8px; border: 1px solid rgba(229, 161, 36, 0.3);">
+                    <label style="color: var(--brand); display: block; margin-bottom: 8px;">🎯 Hva handler dokumentet om? (for bedre AI-behandling)</label>
+                    <input type="text" id="docContext" placeholder="F.eks: 'Epilog laser bruksanvisning', 'HMS-regler for 3D-printing', 'Prusa MK3S feilsøking'" 
+                           style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #e0e0e0; font-size: 0.95rem;">
+                    <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        <span style="color: #8892b0; font-size: 0.85rem;">Hurtigvalg:</span>
+                        <button type="button" class="quick-tag" onclick="setDocContext('Utstyrsmanual')">📖 Manual</button>
+                        <button type="button" class="quick-tag" onclick="setDocContext('HMS og sikkerhet')">⚠️ HMS</button>
+                        <button type="button" class="quick-tag" onclick="setDocContext('Feilsøkingsguide')">🔧 Feilsøking</button>
+                        <button type="button" class="quick-tag" onclick="setDocContext('Materialinnstillinger')">⚙️ Innstillinger</button>
+                    </div>
+                    
+                    <!-- Category Selection -->
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <label style="color: var(--brand); display: block; margin-bottom: 8px;">📂 Hvor skal innholdet lagres?</label>
+                        <select id="docCategory" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #e0e0e0; font-size: 0.95rem;">
+                            <option value="vault">📚 Generell kunnskap (vault.txt) - Opplæring, feilsøking, guider</option>
+                            <option value="utstyr">🔧 Utstyr (utstyr.json) - Verktøy, maskiner, inventar</option>
+                            <option value="regler">⚠️ Regler (regler.json) - HMS, sikkerhet, prosedyrer</option>
+                            <option value="rom">🏠 Rom (rom.json) - Lokaler, fasiliteter, åpningstider</option>
+                            <option value="ressurser">🔗 Ressurser (ressurser.json) - Lenker, eksterne guider</option>
+                        </select>
+                        <p id="categoryHint" style="color: #5a6c8a; font-size: 0.8rem; margin-top: 8px;">
+                            💡 vault.txt: Strukturert tekst med seksjoner. JSON-filer: Strukturerte data som AI kan slå opp direkte.
+                        </p>
+                    </div>
+                </div>
+                
                 <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-                    <button class="btn" id="enhanceBtn">🤖 Strukturer med AI (valgfritt)</button>
+                    <button class="btn" id="enhanceBtn">🤖 Strukturer med AI</button>
                     <button class="btn" id="acceptRawBtn" style="background: #2e7d32;">✅ Godkjenn rå tekst</button>
                     <button class="btn" id="cancelExtractBtn" style="background: #444;">❌ Avbryt</button>
                 </div>
@@ -390,6 +435,61 @@
             </div>
             
             <div id="fastMessage" class="message"></div>
+        </div>
+        
+        <!-- XLSX Import for Equipment/Components -->
+        <div class="card" style="margin-bottom: 40px;">
+            <h2>📊 Excel Import (Komponentlister)</h2>
+            <p style="color: #8892b0; margin-bottom: 20px;">Last opp XLSX med komponenter/utstyr → Se forhåndsvisning → Duplikater filtreres automatisk → Godkjenn</p>
+            
+            <div class="drop-zone" id="xlsxDropZone" style="margin-bottom: 20px;">
+                <div class="icon">📊</div>
+                <p>Dra og slipp XLSX her for komponentimport</p>
+                <span class="formats">Kun .xlsx-filer. Første rad må ha kolonneoverskrifter (navn, lokasjon, etc.)</span>
+                <input type="file" id="xlsxFileInput" accept=".xlsx">
+            </div>
+            
+            <!-- XLSX Preview -->
+            <div id="xlsxPreview" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <span style="color: var(--brand);">📋 Funnet utstyr:</span>
+                    <span id="xlsxInfo" style="color: #5a6c8a; font-size: 0.85rem;"></span>
+                </div>
+                
+                <!-- Duplicate warning -->
+                <div id="xlsxDuplicateWarning" style="display: none; padding: 12px; background: rgba(255, 152, 0, 0.15); border: 1px solid rgba(255, 152, 0, 0.4); border-radius: 8px; margin-bottom: 15px;">
+                    <span style="color: #ffb74d;">⚠️ <span id="xlsxDuplicateCount">0</span> duplikater filtrert bort (samme ID, navn eller lokasjon)</span>
+                    <button type="button" onclick="toggleDuplicateDetails()" style="margin-left: 10px; padding: 4px 8px; background: rgba(255,255,255,0.1); border: none; border-radius: 4px; color: #ffb74d; cursor: pointer; font-size: 0.8rem;">Vis detaljer</button>
+                    <div id="xlsxDuplicateDetails" style="display: none; margin-top: 10px; max-height: 150px; overflow-y: auto; font-size: 0.8rem; color: #ccc;"></div>
+                </div>
+                
+                <!-- Items to add table -->
+                <div style="max-height: 300px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+                    <table id="xlsxTable" style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                        <thead style="position: sticky; top: 0; background: #1a1f2e;">
+                            <tr>
+                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--brand);">✓</th>
+                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--brand);">Navn</th>
+                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--brand);">Lokasjon</th>
+                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--brand);">Kategori</th>
+                            </tr>
+                        </thead>
+                        <tbody id="xlsxTableBody"></tbody>
+                    </table>
+                </div>
+                
+                <!-- Category info -->
+                <div id="xlsxCategoryInfo" style="margin-top: 15px; padding: 12px; background: rgba(100, 200, 100, 0.1); border: 1px solid rgba(100, 200, 100, 0.3); border-radius: 8px;">
+                    <span style="color: #8f8;">📂 Kategorier blir lest fra Excel-filen. Komponenter uten kategori havner i "other".</span>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                    <button class="btn" id="approveXlsxBtn" style="background: #2e7d32;">✅ Legg til <span id="xlsxAddCount">0</span> komponenter</button>
+                    <button class="btn" id="cancelXlsxBtn" style="background: #444;">❌ Avbryt</button>
+                </div>
+            </div>
+            
+            <div id="xlsxMessage" class="message"></div>
         </div>
         
         <div class="card recent-chunks">
@@ -679,6 +779,11 @@
         
         let currentFilename = '';
         
+        // Set document context from quick tags
+        function setDocContext(value) {
+            document.getElementById('docContext').value = value;
+        }
+        
         // Click to upload
         fastDropZone.addEventListener('click', () => fastFileInput.click());
         
@@ -719,6 +824,9 @@
             enhancedPreview.style.display = 'none';
             extractContent.value = '';
             enhancedContent.value = '';
+            document.getElementById('docContext').value = '';
+            document.getElementById('docCategory').value = 'vault';
+            currentCategory = 'vault';
             fastMessage.className = 'message';
             fastMessage.style.display = 'none';
             fastDropZone.innerHTML = `
@@ -774,40 +882,63 @@
         }
         
         // Enhance with AI button
+        let enhanceTimer = null;
+        let currentCategory = 'vault';
+        
         enhanceBtn.addEventListener('click', async () => {
             const rawText = extractContent.value.trim();
+            const docContext = document.getElementById('docContext').value.trim();
+            currentCategory = document.getElementById('docCategory').value;
+            
             if (!rawText) {
                 showFastMessage('Ingen tekst å behandle', 'error');
                 return;
             }
             
+            if (!docContext) {
+                showFastMessage('Beskriv hva dokumentet handler om for bedre AI-behandling', 'error');
+                document.getElementById('docContext').focus();
+                return;
+            }
+            
             enhanceBtn.disabled = true;
-            enhanceBtn.innerHTML = '<span class="loading"></span> AI strukturerer...';
+            let seconds = 0;
+            
+            // Show live timer so user knows it's working
+            enhanceTimer = setInterval(() => {
+                seconds++;
+                enhanceBtn.innerHTML = `<span class="loading"></span> AI jobber... ${seconds}s`;
+            }, 1000);
+            
+            enhanceBtn.innerHTML = '<span class="loading"></span> AI jobber... 0s';
             
             try {
                 const response = await fetch('/enhance-pdf', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: rawText })
+                    body: JSON.stringify({ text: rawText, context: docContext, category: currentCategory })
                 });
                 
+                clearInterval(enhanceTimer);
                 const data = await response.json();
                 
                 if (data.success) {
-                    enhanceInfo.textContent = `${data.original_chars} → ${data.enhanced_chars} tegn | ${data.enhance_time}s${data.truncated ? ' (trunkert)' : ''}`;
+                    const categoryLabel = currentCategory === 'vault' ? 'vault.txt' : `${currentCategory}.json`;
+                    enhanceInfo.textContent = `${data.original_chars} → ${data.enhanced_chars} tegn | ${data.enhance_time}s | → ${categoryLabel}${data.truncated ? ' (trunkert)' : ''}`;
                     enhancedContent.value = data.enhanced_text;
                     extractPreview.style.display = 'none';
                     enhancedPreview.style.display = 'block';
-                    showFastMessage('AI har strukturert teksten. Rediger ved behov og godkjenn.', 'success');
+                    showFastMessage(`AI har strukturert teksten for ${categoryLabel}. Rediger ved behov og godkjenn.`, 'success');
                 } else {
                     showFastMessage(data.error, 'error');
                 }
             } catch (error) {
+                clearInterval(enhanceTimer);
                 showFastMessage('Feil: ' + error.message, 'error');
             }
             
             enhanceBtn.disabled = false;
-            enhanceBtn.textContent = '🤖 Strukturer med AI (valgfritt)';
+            enhanceBtn.textContent = '🤖 Strukturer med AI';
         });
         
         // Accept raw text
@@ -817,6 +948,8 @@
                 showFastMessage('Ingen innhold å legge til', 'error');
                 return;
             }
+            // Set category from dropdown for raw text acceptance
+            currentCategory = document.getElementById('docCategory').value;
             await addToVault(content, acceptRawBtn);
         });
         
@@ -836,21 +969,28 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="loading"></span> Legger til...';
             
+            // Get category - if coming from raw accept, use dropdown; if from enhanced, use stored
+            const category = currentCategory || document.getElementById('docCategory').value;
+            
             try {
                 const response = await fetch('/approve-summary', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content })
+                    body: JSON.stringify({ content, category })
                 });
                 
                 const data = await response.json();
                 
                 if (data.success) {
-                    showFastMessage(data.message + ' - Husk å laste inn søkeindeks!', 'success');
+                    const targetInfo = data.target_file ? ` (${data.target_file})` : '';
+                    showFastMessage(data.message + targetInfo + ' - Husk å laste inn søkeindeks!', 'success');
                     extractPreview.style.display = 'none';
                     enhancedPreview.style.display = 'none';
                     updateStats(data.stats);
                     refreshRecentChunks();
+                    // Reset category
+                    currentCategory = 'vault';
+                    document.getElementById('docCategory').value = 'vault';
                 } else {
                     showFastMessage(data.error, 'error');
                 }
@@ -870,8 +1010,206 @@
         });
         
         // Cancel buttons
-        cancelExtractBtn.addEventListener('click', resetFastUI);
-        cancelEnhancedBtn.addEventListener('click', resetFastUI);
+        cancelExtractBtn.addEventListener('click', () => {
+            if (enhanceTimer) clearInterval(enhanceTimer);
+            resetFastUI();
+        });
+        cancelEnhancedBtn.addEventListener('click', () => {
+            if (enhanceTimer) clearInterval(enhanceTimer);
+            resetFastUI();
+        });
+        
+        // ===========================================
+        // XLSX Import (Component Lists)
+        // ===========================================
+        const xlsxDropZone = document.getElementById('xlsxDropZone');
+        const xlsxFileInput = document.getElementById('xlsxFileInput');
+        const xlsxPreview = document.getElementById('xlsxPreview');
+        const xlsxInfo = document.getElementById('xlsxInfo');
+        const xlsxTableBody = document.getElementById('xlsxTableBody');
+        const xlsxMessage = document.getElementById('xlsxMessage');
+        const approveXlsxBtn = document.getElementById('approveXlsxBtn');
+        const cancelXlsxBtn = document.getElementById('cancelXlsxBtn');
+        const xlsxAddCount = document.getElementById('xlsxAddCount');
+        const xlsxDuplicateWarning = document.getElementById('xlsxDuplicateWarning');
+        const xlsxDuplicateCount = document.getElementById('xlsxDuplicateCount');
+        const xlsxDuplicateDetails = document.getElementById('xlsxDuplicateDetails');
+        
+        let xlsxItemsToAdd = [];
+        let xlsxDuplicates = [];
+        
+        // Drop zone handlers
+        xlsxDropZone.addEventListener('click', () => xlsxFileInput.click());
+        xlsxDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            xlsxDropZone.classList.add('dragover');
+        });
+        xlsxDropZone.addEventListener('dragleave', () => {
+            xlsxDropZone.classList.remove('dragover');
+        });
+        xlsxDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            xlsxDropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) handleXlsxUpload(file);
+        });
+        xlsxFileInput.addEventListener('change', () => {
+            const file = xlsxFileInput.files[0];
+            if (file) handleXlsxUpload(file);
+        });
+        
+        function showXlsxMessage(msg, type) {
+            xlsxMessage.textContent = msg;
+            xlsxMessage.className = 'message ' + type;
+            xlsxMessage.style.display = 'block';
+        }
+        
+        function resetXlsxUI() {
+            xlsxPreview.style.display = 'none';
+            xlsxMessage.style.display = 'none';
+            xlsxDropZone.innerHTML = `
+                <div class="icon">📊</div>
+                <p>Dra og slipp XLSX her for komponentimport</p>
+                <span class="formats">Kun .xlsx-filer. Første rad må ha kolonneoverskrifter (navn, lokasjon, etc.)</span>
+                <input type="file" id="xlsxFileInput" accept=".xlsx">
+            `;
+            // Re-bind input
+            document.getElementById('xlsxFileInput').addEventListener('change', () => {
+                const file = document.getElementById('xlsxFileInput').files[0];
+                if (file) handleXlsxUpload(file);
+            });
+            xlsxItemsToAdd = [];
+            xlsxDuplicates = [];
+        }
+        
+        async function handleXlsxUpload(file) {
+            if (!file.name.toLowerCase().endsWith('.xlsx')) {
+                showXlsxMessage('Kun .xlsx-filer støttes', 'error');
+                return;
+            }
+            
+            xlsxDropZone.innerHTML = '<span class="loading"></span> Parser Excel-fil...';
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/extract-xlsx', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    xlsxItemsToAdd = data.items_to_add;
+                    xlsxDuplicates = data.duplicates_skipped;
+                    
+                    // Update info
+                    xlsxInfo.textContent = `${data.filename} - ${data.total_rows} rader, ${xlsxItemsToAdd.length} nye, ${xlsxDuplicates.length} duplikater`;
+                    
+                    // Show duplicate warning if any
+                    if (xlsxDuplicates.length > 0) {
+                        xlsxDuplicateWarning.style.display = 'block';
+                        xlsxDuplicateCount.textContent = xlsxDuplicates.length;
+                        xlsxDuplicateDetails.innerHTML = xlsxDuplicates.map(d => 
+                            `<div style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                ${escapeHtml(d.name)} @ ${escapeHtml(d.location || 'ukjent')}
+                                ${d._duplicate_reason ? `<span style="color: #888;"> - ${escapeHtml(d._duplicate_reason)}</span>` : ''}
+                            </div>`
+                        ).join('');
+                    } else {
+                        xlsxDuplicateWarning.style.display = 'none';
+                    }
+                    
+                    // Populate table
+                    xlsxTableBody.innerHTML = xlsxItemsToAdd.map((item, idx) => `
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 8px;"><input type="checkbox" checked data-idx="${idx}" class="xlsx-item-check"></td>
+                            <td style="padding: 8px; color: #e0e0e0;">${escapeHtml(item.name)}</td>
+                            <td style="padding: 8px; color: #8892b0;">${escapeHtml(item.location || '-')}</td>
+                            <td style="padding: 8px; color: #5a6c8a;">${escapeHtml(item.category || 'other')}</td>
+                        </tr>
+                    `).join('');
+                    
+                    // Update button count
+                    updateXlsxAddCount();
+                    
+                    // Add checkbox listeners
+                    document.querySelectorAll('.xlsx-item-check').forEach(cb => {
+                        cb.addEventListener('change', updateXlsxAddCount);
+                    });
+                    
+                    xlsxPreview.style.display = 'block';
+                    xlsxDropZone.innerHTML = `
+                        <div class="icon">✅</div>
+                        <p>Fil lastet: ${escapeHtml(file.name)}</p>
+                        <span class="formats">Dra ny fil for å erstatte</span>
+                        <input type="file" id="xlsxFileInput" accept=".xlsx">
+                    `;
+                    document.getElementById('xlsxFileInput').addEventListener('change', () => {
+                        const newFile = document.getElementById('xlsxFileInput').files[0];
+                        if (newFile) handleXlsxUpload(newFile);
+                    });
+                } else {
+                    showXlsxMessage(data.error, 'error');
+                    resetXlsxUI();
+                }
+            } catch (error) {
+                showXlsxMessage('Feil: ' + error.message, 'error');
+                resetXlsxUI();
+            }
+        }
+        
+        function updateXlsxAddCount() {
+            const checked = document.querySelectorAll('.xlsx-item-check:checked').length;
+            xlsxAddCount.textContent = checked;
+            approveXlsxBtn.disabled = checked === 0;
+        }
+        
+        function toggleDuplicateDetails() {
+            const details = document.getElementById('xlsxDuplicateDetails');
+            details.style.display = details.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Approve XLSX
+        approveXlsxBtn.addEventListener('click', async () => {
+            const checkedIdxs = Array.from(document.querySelectorAll('.xlsx-item-check:checked')).map(cb => parseInt(cb.dataset.idx));
+            const itemsToSend = checkedIdxs.map(idx => xlsxItemsToAdd[idx]);
+            
+            if (itemsToSend.length === 0) {
+                showXlsxMessage('Ingen komponenter valgt', 'error');
+                return;
+            }
+            
+            approveXlsxBtn.disabled = true;
+            approveXlsxBtn.textContent = '⏳ Lagrer...';
+            
+            try {
+                const response = await fetch('/approve-xlsx', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: itemsToSend })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showXlsxMessage(`✅ ${data.message} - Husk å laste inn søkeindeks!`, 'success');
+                    resetXlsxUI();
+                } else {
+                    showXlsxMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showXlsxMessage('Feil: ' + error.message, 'error');
+            }
+            
+            approveXlsxBtn.disabled = false;
+            approveXlsxBtn.textContent = `✅ Legg til ${xlsxAddCount.textContent} komponenter`;
+        });
+        
+        // Cancel XLSX
+        cancelXlsxBtn.addEventListener('click', resetXlsxUI);
     </script>
 </body>
 </html>

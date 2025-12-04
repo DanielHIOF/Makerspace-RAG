@@ -17,7 +17,14 @@ numpy>=1.24.0
 # Document Processing - PDF (in order of preference)
 pymupdf4llm>=0.0.5      # Best for RAG - extracts markdown, handles tables
 pdfplumber>=0.10.0      # Fallback - good table extraction
-PyPDF2>=3.0.0           # Last resort - basic extraction
+PyPDF2>=3.0.0           # Basic extraction
+
+# OCR for scanned/image-based PDFs
+easyocr>=1.7.0          # Pure Python OCR - no Tesseract needed
+pdf2image>=1.16.0       # PDF to image conversion
+
+# Excel/XLSX processing
+openpyxl>=3.1.0         # Read/write Excel files
 
 # Optional: For semantic embeddings (simple_rag.py)
 # torch>=2.0.0
