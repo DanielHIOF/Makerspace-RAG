@@ -1,0 +1,92 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-04",
+  "description": "Prosessflyt-definisjoner for makerspace-prosesser",
+  
+  "processes": {
+    "3d_printing": {
+      "name_no": "3D-printing prosess",
+      "name_en": "3D Printing Process",
+      "levels": {
+        "beginner": {
+          "steps": [
+            {"id": "design", "name": "Design i CAD", "description": "Lag 3D-modell i Tinkercad, Fusion 360 eller annet CAD-program"},
+            {"id": "export", "name": "Eksporter STL", "description": "Eksporter modellen som STL-fil"},
+            {"id": "import", "name": "Importer i PrusaSlicer", "description": "Åpne PrusaSlicer og importer STL-filen"},
+            {"id": "slice", "name": "Slice til G-code", "description": "Klikk 'Slice now' for å generere G-code"},
+            {"id": "load", "name": "Last til printer", "description": "Kopier G-code til SD-kort og sett i printeren"},
+            {"id": "print", "name": "Start print", "description": "Velg filen på printeren og start printing"},
+            {"id": "monitor", "name": "Følg med på første lag", "description": "Sjekk at første lag fester seg til byggeplaten"},
+            {"id": "finish", "name": "Fjern print", "description": "Når printen er ferdig, fjern den fra byggeplaten"}
+          ],
+          "decisions": [
+            {"id": "first_layer", "step": "monitor", "condition": "Første lag fester seg?", "yes": "finish", "no": "troubleshoot"}
+          ]
+        },
+        "normal": {
+          "steps": [
+            {"id": "design", "name": "Design i CAD", "description": "Lag 3D-modell med hensyn til printbarhet"},
+            {"id": "export", "name": "Eksporter STL", "description": "Eksporter med riktig enheter og orientering"},
+            {"id": "import", "name": "Importer i PrusaSlicer", "description": "Velg riktig printer-profil"},
+            {"id": "settings", "name": "Juster innstillinger", "description": "Layer height, infill, supports hvis nødvendig"},
+            {"id": "slice", "name": "Slice til G-code", "description": "Generer G-code og sjekk for advarsler"},
+            {"id": "load", "name": "Last til printer", "description": "Kopier til SD-kort eller send via USB"},
+            {"id": "print", "name": "Start print", "description": "Start printing og følg med på første lag"},
+            {"id": "monitor", "name": "Monitor print", "description": "Sjekk jevnlig at printen går som forventet"},
+            {"id": "finish", "name": "Fjern og post-process", "description": "Fjern support-materiale og gjør eventuell etterbehandling"}
+          ],
+          "decisions": [
+            {"id": "first_layer_ok", "step": "monitor", "condition": "Første lag ser bra ut?", "yes": "finish", "no": "troubleshoot"},
+            {"id": "needs_support", "step": "settings", "condition": "Trenger support?", "yes": "enable_support", "no": "slice"}
+          ]
+        }
+      },
+      "mermaid_diagram": {
+        "beginner": "flowchart TD\n    A[Design i CAD] --> B[Eksporter STL]\n    B --> C[Importer i PrusaSlicer]\n    C --> D[Slice til G-code]\n    D --> E[Last til printer]\n    E --> F[Start print]\n    F --> G{Første lag OK?}\n    G -->|Ja| H[Fjern print]\n    G -->|Nei| I[Feilsøk]\n    I --> C\n    style A fill:#E5A124\n    style H fill:#4CAF50\n    style I fill:#f44336",
+        "normal": "flowchart TD\n    A[Design i CAD] --> B[Eksporter STL]\n    B --> C[Importer i PrusaSlicer]\n    C --> D{Trenger support?}\n    D -->|Ja| E[Aktiver support]\n    D -->|Nei| F[Juster innstillinger]\n    E --> F\n    F --> G[Slice til G-code]\n    G --> H[Last til printer]\n    H --> I[Start print]\n    I --> J{Første lag OK?}\n    J -->|Ja| K[Monitor print]\n    J -->|Nei| L[Feilsøk]\n    K --> M[Fjern og post-process]\n    L --> C\n    style A fill:#E5A124\n    style M fill:#4CAF50\n    style L fill:#f44336"
+      }
+    },
+    
+    "laser_cutting": {
+      "name_no": "Laserkutting prosess",
+      "name_en": "Laser Cutting Process",
+      "levels": {
+        "beginner": {
+          "steps": [
+            {"id": "design", "name": "Design i Inkscape", "description": "Lag vektorgrafikk med riktige strektykkelser"},
+            {"id": "prepare", "name": "Forbered materiale", "description": "Sjekk at materialet er trygt å kutte"},
+            {"id": "focus", "name": "Still inn fokus", "description": "Bruk fokusverktøyet til å justere høyden"},
+            {"id": "cut", "name": "Start kutting", "description": "Start jobben og følg med hele tiden"},
+            {"id": "finish", "name": "Fjern materiale", "description": "Vent til materialet er avkjølt før du fjerner det"}
+          ],
+          "decisions": []
+        }
+      },
+      "mermaid_diagram": {
+        "beginner": "flowchart TD\n    A[Design i Inkscape] --> B[Forbered materiale]\n    B --> C{Sikkert materiale?}\n    C -->|Nei| D[Velg annet materiale]\n    C -->|Ja| E[Still inn fokus]\n    D --> B\n    E --> F[Start kutting]\n    F --> G[Følg med hele tiden]\n    G --> H{Alt OK?}\n    H -->|Nei| I[Trykk nødstopp]\n    H -->|Ja| J[Vent på avkjøling]\n    J --> K[Fjern materiale]\n    I --> L[Feilsøk]\n    L --> E\n    style A fill:#E5A124\n    style K fill:#4CAF50\n    style I fill:#f44336"
+      }
+    },
+    
+    "troubleshooting_3d": {
+      "name_no": "Feilsøking 3D-printer",
+      "name_en": "3D Printer Troubleshooting",
+      "levels": {
+        "beginner": {
+          "steps": [
+            {"id": "identify", "name": "Identifiser problem", "description": "Hva er feilen? Løsner printen? Stringing? Warping?"},
+            {"id": "first_layer", "name": "Sjekk første lag", "description": "Løsner første lag? Juster byggeplate-temperatur eller bruk lim"},
+            {"id": "settings", "name": "Juster innstillinger", "description": "Prøv å endre layer height, temperatur eller hastighet"},
+            {"id": "retry", "name": "Prøv igjen", "description": "Print på nytt med nye innstillinger"}
+          ],
+          "decisions": [
+            {"id": "problem_solved", "step": "retry", "condition": "Problemet løst?", "yes": "success", "no": "identify"}
+          ]
+        }
+      },
+      "mermaid_diagram": {
+        "beginner": "flowchart TD\n    A[Identifiser problem] --> B{Løsner første lag?}\n    B -->|Ja| C[Justér byggeplate-temp]\n    B -->|Nei| D{Stringing?}\n    C --> E[Prøv igjen]\n    D -->|Ja| F[Reduser temperatur]\n    D -->|Nei| G{Warping?}\n    F --> E\n    G -->|Ja| H[Bruk brim/raft]\n    G -->|Nei| I[Andre innstillinger]\n    H --> E\n    I --> E\n    E --> J{Problemet løst?}\n    J -->|Ja| K[Suksess!]\n    J -->|Nei| A\n    style A fill:#E5A124\n    style K fill:#4CAF50"
+      }
+    }
+  }
+}
+

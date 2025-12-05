@@ -1,0 +1,155 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-04",
+  "description": "Kodeeksempler med pin-koblinger og visualiseringer for Arduino og ESP32",
+  
+  "sensors": {
+    "hc-sr04": {
+      "name": "HC-SR04 Ultralydsensor",
+      "name_no": "HC-SR04 Ultralydsensor",
+      "name_en": "HC-SR04 Ultrasonic Sensor",
+      "pins": {
+        "arduino": {
+          "trig": 9,
+          "echo": 10,
+          "vcc": "5V",
+          "gnd": "GND"
+        },
+        "esp32": {
+          "trig": 5,
+          "echo": 18,
+          "vcc": "3.3V",
+          "gnd": "GND"
+        }
+      },
+      "libraries": ["NewPing"],
+      "code_example": {
+        "arduino": "// HC-SR04 Ultralydsensor med Arduino\nconst int trigPin = 9;\nconst int echoPin = 10;\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(trigPin, OUTPUT);\n  pinMode(echoPin, INPUT);\n}\n\nvoid loop() {\n  // Send trigger pulse\n  digitalWrite(trigPin, LOW);\n  delayMicroseconds(2);\n  digitalWrite(trigPin, HIGH);\n  delayMicroseconds(10);\n  digitalWrite(trigPin, LOW);\n  \n  // Read echo\n  long duration = pulseIn(echoPin, HIGH);\n  float distance = duration * 0.034 / 2; // cm\n  \n  Serial.print(\"Distance: \");\n  Serial.print(distance);\n  Serial.println(\" cm\");\n  delay(100);\n}",
+        "esp32": "// HC-SR04 Ultralydsensor med ESP32\nconst int trigPin = 5;\nconst int echoPin = 18;\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(trigPin, OUTPUT);\n  pinMode(echoPin, INPUT);\n}\n\nvoid loop() {\n  digitalWrite(trigPin, LOW);\n  delayMicroseconds(2);\n  digitalWrite(trigPin, HIGH);\n  delayMicroseconds(10);\n  digitalWrite(trigPin, LOW);\n  \n  long duration = pulseIn(echoPin, HIGH);\n  float distance = duration * 0.034 / 2;\n  \n  Serial.printf(\"Distance: %.2f cm\\n\", distance);\n  delay(100);\n}"
+      },
+      "wiring_diagram": {
+        "arduino": "graph LR\n    A[Arduino UNO] -->|Pin 9 TRIG| B[HC-SR04]\n    A -->|Pin 10 ECHO| B\n    A -->|5V VCC| B\n    A -->|GND| B\n    style A fill:#E5A124\n    style B fill:#4CAF50",
+        "esp32": "graph LR\n    A[ESP32] -->|Pin 5 TRIG| B[HC-SR04]\n    A -->|Pin 18 ECHO| B\n    A -->|3.3V VCC| B\n    A -->|GND| B\n    style A fill:#E5A124\n    style B fill:#4CAF50"
+      },
+      "description_no": "Måler avstand ved hjelp av ultralyd. Vanlig brukt for robotnavigasjon og avstandsmåling.",
+      "description_en": "Measures distance using ultrasound. Commonly used for robot navigation and distance measurement."
+    },
+    
+    "dht11": {
+      "name": "DHT11 Temperatur- og fuktighetssensor",
+      "name_no": "DHT11 Temperatur- og fuktighetssensor",
+      "name_en": "DHT11 Temperature and Humidity Sensor",
+      "pins": {
+        "arduino": {
+          "data": 2,
+          "vcc": "5V",
+          "gnd": "GND"
+        },
+        "esp32": {
+          "data": 4,
+          "vcc": "3.3V",
+          "gnd": "GND"
+        }
+      },
+      "libraries": ["DHT"],
+      "code_example": {
+        "arduino": "#include <DHT.h>\n\n#define DHTPIN 2\n#define DHTTYPE DHT11\n\nDHT dht(DHTPIN, DHTTYPE);\n\nvoid setup() {\n  Serial.begin(9600);\n  dht.begin();\n}\n\nvoid loop() {\n  float humidity = dht.readHumidity();\n  float temperature = dht.readTemperature();\n  \n  if (isnan(humidity) || isnan(temperature)) {\n    Serial.println(\"Feil ved lesing av sensor!\");\n    return;\n  }\n  \n  Serial.print(\"Fuktighet: \");\n  Serial.print(humidity);\n  Serial.print(\"%\\t\");\n  Serial.print(\"Temperatur: \");\n  Serial.print(temperature);\n  Serial.println(\"°C\");\n  \n  delay(2000);\n}",
+        "esp32": "#include <DHT.h>\n\n#define DHTPIN 4\n#define DHTTYPE DHT11\n\nDHT dht(DHTPIN, DHTTYPE);\n\nvoid setup() {\n  Serial.begin(115200);\n  dht.begin();\n}\n\nvoid loop() {\n  float humidity = dht.readHumidity();\n  float temperature = dht.readTemperature();\n  \n  if (isnan(humidity) || isnan(temperature)) {\n    Serial.println(\"Feil ved lesing av sensor!\");\n    return;\n  }\n  \n  Serial.printf(\"Fuktighet: %.1f%%\\tTemperatur: %.1f°C\\n\", humidity, temperature);\n  delay(2000);\n}"
+      },
+      "wiring_diagram": {
+        "arduino": "graph LR\n    A[Arduino UNO] -->|Pin 2 DATA| B[DHT11]\n    A -->|5V VCC| B\n    A -->|GND| B\n    style A fill:#E5A124\n    style B fill:#2196F3",
+        "esp32": "graph LR\n    A[ESP32] -->|Pin 4 DATA| B[DHT11]\n    A -->|3.3V VCC| B\n    A -->|GND| B\n    style A fill:#E5A124\n    style B fill:#2196F3"
+      },
+      "description_no": "Måler både temperatur og luftfuktighet. Enkel å bruke med DHT-biblioteket.",
+      "description_en": "Measures both temperature and humidity. Easy to use with DHT library."
+    },
+    
+    "pir": {
+      "name": "PIR Bevegelsessensor",
+      "name_no": "PIR Bevegelsessensor",
+      "name_en": "PIR Motion Sensor",
+      "pins": {
+        "arduino": {
+          "out": 7,
+          "vcc": "5V",
+          "gnd": "GND"
+        },
+        "esp32": {
+          "out": 2,
+          "vcc": "3.3V",
+          "gnd": "GND"
+        }
+      },
+      "libraries": [],
+      "code_example": {
+        "arduino": "// PIR Bevegelsessensor\nconst int pirPin = 7;\nconst int ledPin = 13;\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(pirPin, INPUT);\n  pinMode(ledPin, OUTPUT);\n  delay(10000); // Venter på kalibrering\n  Serial.println(\"Sensor klar\");\n}\n\nvoid loop() {\n  int motion = digitalRead(pirPin);\n  \n  if (motion == HIGH) {\n    digitalWrite(ledPin, HIGH);\n    Serial.println(\"Bevegelse detektert!\");\n  } else {\n    digitalWrite(ledPin, LOW);\n  }\n  \n  delay(100);\n}",
+        "esp32": "// PIR Bevegelsessensor med ESP32\nconst int pirPin = 2;\nconst int ledPin = 2; // Built-in LED\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(pirPin, INPUT);\n  pinMode(ledPin, OUTPUT);\n  delay(10000);\n  Serial.println(\"Sensor klar\");\n}\n\nvoid loop() {\n  int motion = digitalRead(pirPin);\n  \n  if (motion == HIGH) {\n    digitalWrite(ledPin, HIGH);\n    Serial.println(\"Bevegelse detektert!\");\n  } else {\n    digitalWrite(ledPin, LOW);\n  }\n  \n  delay(100);\n}"
+      },
+      "wiring_diagram": {
+        "arduino": "graph LR\n    A[Arduino UNO] -->|Pin 7 OUT| B[PIR Sensor]\n    A -->|5V VCC| B\n    A -->|GND| B\n    style A fill:#E5A124\n    style B fill:#FF9800",
+        "esp32": "graph LR\n    A[ESP32] -->|Pin 2 OUT| B[PIR Sensor]\n    A -->|3.3V VCC| B\n    A -->|GND| B\n    style A fill:#E5A124\n    style B fill:#FF9800"
+      },
+      "description_no": "Detekterer bevegelse ved hjelp av infrarød stråling. Vanlig brukt i alarmsystemer og automatisk belysning.",
+      "description_en": "Detects motion using infrared radiation. Commonly used in alarm systems and automatic lighting."
+    },
+    
+    "servo": {
+      "name": "Servo Motor",
+      "name_no": "Servo Motor",
+      "name_en": "Servo Motor",
+      "pins": {
+        "arduino": {
+          "signal": 9,
+          "vcc": "5V",
+          "gnd": "GND"
+        },
+        "esp32": {
+          "signal": 4,
+          "vcc": "5V",
+          "gnd": "GND"
+        }
+      },
+      "libraries": ["Servo"],
+      "code_example": {
+        "arduino": "#include <Servo.h>\n\nServo myservo;\nconst int servoPin = 9;\n\nvoid setup() {\n  myservo.attach(servoPin);\n  myservo.write(90); // Startposisjon\n}\n\nvoid loop() {\n  // Roter fra 0 til 180 grader\n  for (int pos = 0; pos <= 180; pos += 1) {\n    myservo.write(pos);\n    delay(15);\n  }\n  \n  // Roter tilbake\n  for (int pos = 180; pos >= 0; pos -= 1) {\n    myservo.write(pos);\n    delay(15);\n  }\n}",
+        "esp32": "#include <ESP32Servo.h>\n\nServo myservo;\nconst int servoPin = 4;\n\nvoid setup() {\n  myservo.setPeriodHertz(50);\n  myservo.attach(servoPin, 500, 2400);\n  myservo.write(90);\n}\n\nvoid loop() {\n  for (int pos = 0; pos <= 180; pos += 1) {\n    myservo.write(pos);\n    delay(15);\n  }\n  \n  for (int pos = 180; pos >= 0; pos -= 1) {\n    myservo.write(pos);\n    delay(15);\n  }\n}"
+      },
+      "wiring_diagram": {
+        "arduino": "graph LR\n    A[Arduino UNO] -->|Pin 9 SIGNAL| B[Servo Motor]\n    A -->|5V VCC| B\n    A -->|GND| B\n    style A fill:#E5A124\n    style B fill:#9C27B0",
+        "esp32": "graph LR\n    A[ESP32] -->|Pin 4 SIGNAL| B[Servo Motor]\n    A -->|5V VCC| B\n    A -->|GND| B\n    style A fill:#E5A124\n    style B fill:#9C27B0"
+      },
+      "description_no": "Presis posisjonskontrollert motor. Kan rotere til spesifikke vinkler (typisk 0-180 grader).",
+      "description_en": "Precise position-controlled motor. Can rotate to specific angles (typically 0-180 degrees)."
+    },
+    
+    "ldr": {
+      "name": "LDR (Lysavhengig motstand)",
+      "name_no": "LDR (Lysavhengig motstand)",
+      "name_en": "LDR (Light Dependent Resistor)",
+      "pins": {
+        "arduino": {
+          "analog": "A0",
+          "vcc": "5V",
+          "gnd": "GND"
+        },
+        "esp32": {
+          "analog": 34,
+          "vcc": "3.3V",
+          "gnd": "GND"
+        }
+      },
+      "libraries": [],
+      "code_example": {
+        "arduino": "// LDR med voltage divider\nconst int ldrPin = A0;\nconst int ledPin = 13;\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(ledPin, OUTPUT);\n}\n\nvoid loop() {\n  int ldrValue = analogRead(ldrPin);\n  \n  Serial.print(\"Lysverdi: \");\n  Serial.println(ldrValue);\n  \n  // Aktiver LED hvis mørkt (lav verdi)\n  if (ldrValue < 500) {\n    digitalWrite(ledPin, HIGH);\n  } else {\n    digitalWrite(ledPin, LOW);\n  }\n  \n  delay(100);\n}",
+        "esp32": "// LDR med ESP32\nconst int ldrPin = 34;\nconst int ledPin = 2;\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(ledPin, OUTPUT);\n}\n\nvoid loop() {\n  int ldrValue = analogRead(ldrPin);\n  \n  Serial.printf(\"Lysverdi: %d\\n\", ldrValue);\n  \n  if (ldrValue < 2000) {\n    digitalWrite(ledPin, HIGH);\n  } else {\n    digitalWrite(ledPin, LOW);\n  }\n  \n  delay(100);\n}"
+      },
+      "wiring_diagram": {
+        "arduino": "graph LR\n    A[Arduino UNO] -->|A0 ANALOG| B[LDR + 10kΩ]\n    A -->|5V| B\n    A -->|GND| B\n    style A fill:#E5A124\n    style B fill:#FFC107",
+        "esp32": "graph LR\n    A[ESP32] -->|Pin 34 ANALOG| B[LDR + 10kΩ]\n    A -->|3.3V| B\n    A -->|GND| B\n    style A fill:#E5A124\n    style B fill:#FFC107"
+      },
+      "description_no": "Motstand som endrer verdi basert på lys. Brukes ofte med voltage divider for automatisk belysning.",
+      "description_en": "Resistor that changes value based on light. Often used with voltage divider for automatic lighting."
+    }
+  }
+}
+

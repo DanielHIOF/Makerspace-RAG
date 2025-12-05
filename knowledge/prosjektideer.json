@@ -1,0 +1,92 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-04",
+  "description": "Prosjektideer med relasjoner mellom teknologier",
+  
+  "ideas": {
+    "arduino": {
+      "name_no": "Arduino Prosjekter",
+      "name_en": "Arduino Projects",
+      "categories": {
+        "sensorer": {
+          "name": "Sensorer",
+          "ideas": [
+            {"name": "Temperatursensor", "difficulty": "beginner", "sensors": ["DHT11", "DHT22"]},
+            {"name": "Bevegelsessensor", "difficulty": "beginner", "sensors": ["PIR"]},
+            {"name": "Lyssensor", "difficulty": "beginner", "sensors": ["LDR"]},
+            {"name": "Ultralydsensor", "difficulty": "beginner", "sensors": ["HC-SR04"]}
+          ]
+        },
+        "aktuatorer": {
+          "name": "Aktuatorer",
+          "ideas": [
+            {"name": "Servo motor", "difficulty": "beginner", "actuators": ["Servo"]},
+            {"name": "DC motor", "difficulty": "intermediate", "actuators": ["DC Motor", "L298N"]},
+            {"name": "Stepper motor", "difficulty": "intermediate", "actuators": ["Stepper", "A4988"]},
+            {"name": "LED-strip", "difficulty": "beginner", "actuators": ["NeoPixel", "WS2812B"]}
+          ]
+        },
+        "kombinert": {
+          "name": "Kombinerte prosjekter",
+          "ideas": [
+            {"name": "Værsstasjon", "difficulty": "intermediate", "sensors": ["DHT11", "DHT22"], "displays": ["LCD", "OLED"]},
+            {"name": "Robot", "difficulty": "advanced", "sensors": ["HC-SR04", "PIR"], "actuators": ["Servo", "DC Motor"]},
+            {"name": "Automatisk plantevanner", "difficulty": "intermediate", "sensors": ["Soil Moisture"], "actuators": ["Pump", "Relay"]},
+            {"name": "Nattlys", "difficulty": "beginner", "sensors": ["LDR"], "actuators": ["LED"]}
+          ]
+        }
+      },
+      "mermaid_diagram": "mindmap\n  root((Arduino Prosjekter))\n    Sensorer\n      Temperatur\n      Bevegelse\n      Lys\n      Ultralyd\n    Aktuatorer\n      Servo\n      Motor\n      LED\n    Kombinert\n      Værsstasjon\n      Robot\n      Automasjon"
+    },
+    
+    "3d_printing": {
+      "name_no": "3D-printing Prosjekter",
+      "name_en": "3D Printing Projects",
+      "categories": {
+        "nybegynner": {
+          "name": "Nybegynner",
+          "ideas": [
+            {"name": "Telefonholder", "difficulty": "beginner", "materials": ["PLA"]},
+            {"name": "Kabelholder", "difficulty": "beginner", "materials": ["PLA"]},
+            {"name": "Nøkkelring", "difficulty": "beginner", "materials": ["PLA"]},
+            {"name": "Coasters", "difficulty": "beginner", "materials": ["PLA"]}
+          ]
+        },
+        "intermediate": {
+          "name": "Mellomvanskelig",
+          "ideas": [
+            {"name": "Gir", "difficulty": "intermediate", "materials": ["PLA", "PETG"]},
+            {"name": "Snap-fit boks", "difficulty": "intermediate", "materials": ["PLA"]},
+            {"name": "Threads", "difficulty": "intermediate", "materials": ["PETG"]}
+          ]
+        }
+      },
+      "mermaid_diagram": "mindmap\n  root((3D-Printing Prosjekter))\n    Nybegynner\n      Telefonholder\n      Kabelholder\n      Nøkkelring\n    Mellomvanskelig\n      Gir\n      Snap-fit\n      Threads"
+    },
+    
+    "laser_cutting": {
+      "name_no": "Laserkutting Prosjekter",
+      "name_en": "Laser Cutting Projects",
+      "categories": {
+        "nybegynner": {
+          "name": "Nybegynner",
+          "ideas": [
+            {"name": "Navneskilt", "difficulty": "beginner", "materials": ["Wood", "Acrylic"]},
+            {"name": "Coasters", "difficulty": "beginner", "materials": ["Wood"]},
+            {"name": "Enkel boks", "difficulty": "beginner", "materials": ["Wood", "Acrylic"]}
+          ]
+        },
+        "intermediate": {
+          "name": "Mellomvanskelig",
+          "ideas": [
+            {"name": "Living hinge", "difficulty": "intermediate", "materials": ["Wood"]},
+            {"name": "Inlay", "difficulty": "intermediate", "materials": ["Wood", "Acrylic"]},
+            {"name": "Lagdelt kunst", "difficulty": "intermediate", "materials": ["Acrylic"]}
+          ]
+        }
+      },
+      "mermaid_diagram": "mindmap\n  root((Laserkutting Prosjekter))\n    Nybegynner\n      Navneskilt\n      Coasters\n      Enkel boks\n    Mellomvanskelig\n      Living hinge\n      Inlay\n      Lagdelt"
+    }
+  }
+}
+

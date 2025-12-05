@@ -11,6 +11,53 @@
 
 ## Recent Changes
 
+### ✅ 2025-12-05: SQLite Database Integration (COMPLETE)
+**Problem:** Static JSON files can't be updated in real-time - staff has to restart server for location changes
+**Løsning:** SQLite database with Flask-SQLAlchemy for live component/location tracking
+
+**Status:** COMPLETE - Database, Admin UI, and Chat integration all working
+
+**New Files:**
+- `models.py` - Database models (Component) + helper functions
+- `migrate_to_db.py` - Migration script (imports from components.json)
+- `makerspace.db` - SQLite database (484 components imported)
+- `templates/components.html` - Admin UI for component management
+
+**Database Schema (SIMPLE):**
+```
+components
+├── id            (int, primary key)
+├── name          (string)
+├── hylleplass    (string, auto-uppercase)
+├── forbruksvare  (bool)
+├── restock       (bool)
+└── antall        (int)
+```
+
+**API Endpoints:**
+- `GET /components` - Admin page
+- `GET /api/components` - List all (with search via ?q=)
+- `POST /api/components` - Add new
+- `PUT /api/components/<id>` - Update
+- `DELETE /api/components/<id>` - Delete
+- `GET /api/hylleplasser` - List unique locations
+
+**Chat Integration:**
+- `search_components()` now queries database (not JSON)
+- `get_all_components_summary()` now queries database
+- Changes in admin panel instantly visible in chat responses
+
+**Admin UI Features:**
+- Search by name or hylleplass
+- Add/Edit/Delete components
+- Inline editing with modal
+- Auto-uppercase hylleplass
+- Stats dashboard (total, locations, restock count)
+
+**Access:**
+- Admin panel → "Komponenter" link in header
+- Or directly: http://localhost:5000/components
+
 ### ✅ 2025-12-04: Simplified PDF Extraction (OCR-only)
 **Problem:** Kompleks PDF-pipeline med 4 metoder (pymupdf4llm → pdfplumber → PyPDF2 → OCR) var overkill
 **Løsning:** Fjernet alle andre metoder, kun OCR (EasyOCR) beholdt
@@ -1044,4 +1091,4 @@ except:
 ---
 
 *Document Created: 2025-06-02*  
-*Last Updated: 2025-12-04 - Norwegian default, natural component responses, formatting rules*
+*Last Updated: 2025-12-05 - SQLite database integration for live component tracking*

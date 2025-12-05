@@ -19,6 +19,10 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 import PyPDF2
 
+# Database imports
+from models import db, Component, search_components_db, get_all_hylleplasser
+from db_config import DATABASE_URI
+
 
 # =============================================================================
 # Text Chunking
@@ -75,12 +79,34 @@ app.secret_key = os.environ.get('SECRET_KEY', 'makerspace-secret-key-change-in-p
 # =============================================================================
 UPLOAD_FOLDER = 'uploads'
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'json', 'md', 'csv', 'html', 'htm'}
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'json', 'md', 'csv', 'html', 'htm', 'xlsx'}
 VAULT_FILE = 'vault.txt'
 CHUNK_SIZE = 1000
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
+
+# Database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_pre_ping': True,  # Check connection before using (auto-reconnect)
+    'pool_recycle': 300,    # Recycle connections after 5 minutes
+    'pool_size': 5,         # Number of connections to keep
+    'max_overflow': 10,     # Allow up to 10 extra connections when busy
+}
+db.init_app(app)
+
+# Initialize database tables on app startup (always runs)
+with app.app_context():
+    try:
+        db.create_all()
+        # Test the connection
+        db.session.execute(db.text('SELECT 1'))
+        print("  [DB] MariaDB connected and tables ready")
+    except Exception as e:
+        print(f"  [DB] ERROR: {e}")
+        print("  [DB] Make sure MariaDB is running: net start MariaDB")
 
 # Admin credentials - use environment variables in production
 ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
@@ -123,11 +149,15 @@ knowledge_regler = {}
 knowledge_rom = {}
 knowledge_ressurser = {}
 knowledge_components = {}
+knowledge_kodeeksempler = {}
+knowledge_prosessflyt = {}
+knowledge_prosjektskalering = {}
+knowledge_prosjektideer = {}
 
 
 def load_json_knowledge():
     """Load structured knowledge from JSON files."""
-    global knowledge_utstyr, knowledge_regler, knowledge_rom, knowledge_ressurser, knowledge_components
+    global knowledge_utstyr, knowledge_regler, knowledge_rom, knowledge_ressurser, knowledge_components, knowledge_kodeeksempler, knowledge_prosessflyt, knowledge_prosjektskalering, knowledge_prosjektideer
     
     knowledge_dir = 'knowledge'
     
@@ -170,6 +200,38 @@ def load_json_knowledge():
     except Exception as e:
         print(f"  Warning: Could not load components.json: {e}")
         knowledge_components = {}
+    
+    try:
+        with open(os.path.join(knowledge_dir, 'kodeeksempler.json'), 'r', encoding='utf-8') as f:
+            knowledge_kodeeksempler = json.load(f)
+        print(f"  Loaded kodeeksempler.json")
+    except Exception as e:
+        print(f"  Warning: Could not load kodeeksempler.json: {e}")
+        knowledge_kodeeksempler = {}
+    
+    try:
+        with open(os.path.join(knowledge_dir, 'prosessflyt.json'), 'r', encoding='utf-8') as f:
+            knowledge_prosessflyt = json.load(f)
+        print(f"  Loaded prosessflyt.json")
+    except Exception as e:
+        print(f"  Warning: Could not load prosessflyt.json: {e}")
+        knowledge_prosessflyt = {}
+    
+    try:
+        with open(os.path.join(knowledge_dir, 'prosjektskalering.json'), 'r', encoding='utf-8') as f:
+            knowledge_prosjektskalering = json.load(f)
+        print(f"  Loaded prosjektskalering.json")
+    except Exception as e:
+        print(f"  Warning: Could not load prosjektskalering.json: {e}")
+        knowledge_prosjektskalering = {}
+    
+    try:
+        with open(os.path.join(knowledge_dir, 'prosjektideer.json'), 'r', encoding='utf-8') as f:
+            knowledge_prosjektideer = json.load(f)
+        print(f"  Loaded prosjektideer.json")
+    except Exception as e:
+        print(f"  Warning: Could not load prosjektideer.json: {e}")
+        knowledge_prosjektideer = {}
 
 
 def get_equipment_context(tool_type):
@@ -269,104 +331,57 @@ def get_all_equipment_by_access():
 
 
 def search_components(query):
-    """Search for components by name, category, or location."""
-    if not knowledge_components:
-        return ""
-
-    # Handle both structures: with 'categories' key or categories at root
-    categories = knowledge_components.get('categories', knowledge_components)
-
-    query_lower = query.lower()
+    """Search for components by name or location - NOW USES DATABASE."""
+    results = search_components_db(query, limit=20)
     
-    # Extract search terms from query
-    search_terms = []
-    for term in ['motstand', 'resistor', 'kondensator', 'capacitor', 'led', 'diode', 
-                 'transistor', 'arduino', 'esp32', 'sensor', 'fotocelle', 'photodiode',
-                 'motor', 'servo', 'relay', 'relé', 'skrue', 'mutter', 'bolt']:
-        if term in query_lower:
-            search_terms.append(term)
-    
-    # If no specific terms found, use the whole query
-    if not search_terms:
-        search_terms = [query_lower]
-    
-    matches = []
-
-    for cat_key, cat_data in categories.items():
-        # Skip non-category keys like 'last_updated'
-        if not isinstance(cat_data, dict) or 'components' not in cat_data:
-            continue
-        for comp in cat_data.get('components', []):
-            # Check if query matches name, location, or keywords
-            name = comp.get('name', '').lower()
-            location = comp.get('location', '').lower()
-            keywords = comp.get('keywords_no', []) + comp.get('keywords_en', [])
-            keywords_str = ' '.join(keywords).lower()
-            
-            # Check each search term
-            for term in search_terms:
-                if term in name or term in keywords_str:
-                    matches.append({
-                        'name': comp.get('name', 'Ukjent'),
-                        'location': comp.get('location', '-'),
-                        'category': cat_data.get('name_no', cat_key),
-                        'notes': comp.get('notes', ''),
-                        'matched_term': term
-                    })
-                    break  # Don't add same component twice
-    
-    if not matches:
+    if not results:
         return ""
     
-    # Build context string - group by matched term for clarity
-    lines = [f"KOMPONENTER FUNNET ({len(matches)} treff):"]
+    lines = [f"KOMPONENTER FUNNET ({len(results)} treff):"]
     lines.append("VIKTIG: List DISSE komponentene, ikke andre!")
     lines.append("")
     
-    for m in matches[:15]:  # Limit to 15 results
-        line = f"- {m['name']} @ {m['location']} ({m['category']})"
-        if m['notes']:
-            line += f" - {m['notes']}"
+    for comp in results[:15]:
+        line = f"- {comp.name} @ {comp.hylleplass}"
+        if comp.antall and comp.antall > 0:
+            line += f" ({comp.antall} stk)"
+        if comp.restock:
+            line += " [TRENGER RESTOCK]"
         lines.append(line)
     
-    if len(matches) > 15:
-        lines.append(f"... og {len(matches) - 15} flere")
+    if len(results) > 15:
+        lines.append(f"... og {len(results) - 15} flere")
     
     return "\n".join(lines)
 
 
 def get_all_components_summary():
-    """Get a summary of all available components - for 'what components do you have' questions."""
-    if not knowledge_components:
+    """Get a summary of all available components - NOW USES DATABASE."""
+    total = Component.query.count()
+    
+    if total == 0:
         return "Ingen komponenter registrert ennå."
-
-    # Handle both structures: with 'categories' key or categories at root
-    categories = knowledge_components.get('categories', knowledge_components)
-
+    
     lines = ["TILGJENGELIGE KOMPONENTER VED MAKERSPACE HiØF:", ""]
-
-    total_count = 0
-    for cat_key, cat_data in categories.items():
-        # Skip non-category keys like 'last_updated'
-        if not isinstance(cat_data, dict) or 'components' not in cat_data:
-            continue
-        components = cat_data.get('components', [])
-        if components:
-            cat_name = cat_data.get('name_no', cat_key)
-            lines.append(f"{cat_name}:")
-            for comp in components[:10]:  # Show first 10 per category
-                name = comp.get('name', 'Ukjent')
-                loc = comp.get('location', '-')
-                lines.append(f"  - {name} @ {loc}")
-                total_count += 1
-            if len(components) > 10:
-                lines.append(f"  ... og {len(components) - 10} flere")
+    
+    # Group by hylleplass
+    locations = db.session.query(Component.hylleplass).distinct().order_by(Component.hylleplass).all()
+    
+    shown = 0
+    for loc in locations[:10]:  # Show first 10 locations
+        loc_name = loc[0]
+        comps = Component.query.filter(Component.hylleplass == loc_name).limit(5).all()
+        if comps:
+            lines.append(f"{loc_name}:")
+            for comp in comps:
+                lines.append(f"  - {comp.name}")
+                shown += 1
+            count = Component.query.filter(Component.hylleplass == loc_name).count()
+            if count > 5:
+                lines.append(f"  ... og {count - 5} flere")
             lines.append("")
     
-    if total_count == 0:
-        return "Ingen komponenter registrert ennå."
-    
-    lines.append(f"Totalt: {total_count}+ komponenter tilgjengelig.")
+    lines.append(f"Totalt: {total} komponenter på {len(locations)} hylleplasser.")
     lines.append("Spør om spesifikke komponenter for mer info!")
     
     return "\n".join(lines)
@@ -491,7 +506,34 @@ def get_tool_filter_keywords(tool):
 
 
 def expand_query(query):
-    """Expand Norwegian query with English synonyms for better TF-IDF matching."""
+    """Expand Norwegian query with English synonyms and equipment names for better TF-IDF matching."""
+    # First, add equipment-specific keywords from JSON
+    equipment_keywords = []
+    if knowledge_utstyr and 'categories' in knowledge_utstyr:
+        query_lower = query.lower()
+        for category_name, category_data in knowledge_utstyr['categories'].items():
+            for equipment in category_data.get('equipment', []):
+                equipment_name = equipment.get('name', '').lower()
+                equipment_id = equipment.get('id', '').lower()
+                keywords = equipment.get('keywords_no', []) + equipment.get('keywords_en', [])
+                
+                # If query mentions this equipment, boost with all its keywords
+                if (equipment_name in query_lower or 
+                    equipment_id in query_lower or
+                    any(kw.lower() in query_lower for kw in keywords)):
+                    equipment_keywords.extend(keywords)
+                    # Add equipment name variations
+                    if 'prusa' in equipment_name:
+                        equipment_keywords.extend(['prusa', 'prusa3d', 'prusaslicer'])
+                    if 'mini' in equipment_name:
+                        equipment_keywords.append('mini')
+                    if 'mk3' in equipment_name or 'mk3s' in equipment_name:
+                        equipment_keywords.extend(['mk3', 'mk3s', 'mk3s+'])
+                    if 'ultimaker' in equipment_name:
+                        equipment_keywords.extend(['ultimaker', 'cura'])
+                    if 'voron' in equipment_name:
+                        equipment_keywords.extend(['voron', 'corexy'])
+    
     expansions = {
         # Lodding / Soldering
         'lodd': 'solder soldering',
@@ -504,10 +546,11 @@ def expand_query(query):
         'fluss': 'flux rosin',
         'loddetinn': 'solder wire',
         
-        # 3D printing
-        'printer': 'printer printing 3d print',
-        '3d': '3d print printer printing',
-        'printe': 'print printing 3d',
+        # 3D printing - enhanced with Prusa-specific terms
+        'prusa': 'prusa prusa3d prusaslicer prusa mini prusa mk3 prusa mk3s prusa i3',
+        'printer': 'printer printing 3d print prusa ultimaker voron',
+        '3d': '3d print printer printing prusa prusaslicer',
+        'printe': 'print printing 3d prusa',
         'skrive ut': 'print printing',
         'byggeplate': 'bed build plate adhesion first layer',
         'dyse': 'nozzle hotend extruder clog',
@@ -520,7 +563,8 @@ def expand_query(query):
         'tett': 'clogged clog jam nozzle',
         'varme': 'temperature heat bed nozzle',
         'temp': 'temperature heat',
-        'slicer': 'slicer slicing cura prusaslicer',
+        'slicer': 'slicer slicing cura prusaslicer prusa slicer',
+        'prusaslicer': 'prusaslicer prusa slicer slicing',
         'stl': 'stl file model',
         'infill': 'infill density fill',
         'support': 'support supports overhang',
@@ -591,6 +635,11 @@ def expand_query(query):
     expanded = query
     query_lower = query.lower()
     
+    # Add equipment keywords first (high priority)
+    if equipment_keywords:
+        expanded += ' ' + ' '.join(set(equipment_keywords))
+    
+    # Then add general expansions
     for no_term, en_terms in expansions.items():
         if no_term in query_lower:
             expanded += ' ' + en_terms
@@ -614,6 +663,37 @@ def search_vault(query, top_k=3, max_chunk_chars=600, max_total_chars=1800, tool
     
     # Calculate cosine similarity
     similarities = cosine_similarity(query_vector, tfidf_matrix).flatten()
+    
+    # Boost chunks that contain specific equipment names
+    if knowledge_utstyr and 'categories' in knowledge_utstyr:
+        query_lower = query.lower()
+        equipment_boost_terms = []
+        
+        # Extract equipment names from query
+        for category_name, category_data in knowledge_utstyr['categories'].items():
+            for equipment in category_data.get('equipment', []):
+                equipment_name = equipment.get('name', '').lower()
+                equipment_id = equipment.get('id', '').lower()
+                
+                # Check if query mentions this equipment
+                if (equipment_name in query_lower or 
+                    equipment_id in query_lower or
+                    any(kw.lower() in query_lower for kw in equipment.get('keywords_no', []) + equipment.get('keywords_en', []))):
+                    # Add equipment name and variations to boost terms
+                    equipment_boost_terms.append(equipment_name)
+                    equipment_boost_terms.append(equipment_id)
+                    # Add name parts (e.g., "prusa mini" -> boost "prusa" and "mini")
+                    equipment_boost_terms.extend(equipment_name.split())
+        
+        # Boost similarity scores for chunks containing equipment terms
+        if equipment_boost_terms:
+            for i in range(len(similarities)):
+                chunk_lower = vault_content[i].lower()
+                boost_count = sum(1 for term in equipment_boost_terms if term in chunk_lower)
+                if boost_count > 0:
+                    # Boost by up to 0.3 (30%) based on number of matching terms
+                    boost = min(0.3, boost_count * 0.1)
+                    similarities[i] += boost
     
     # Get indices sorted by similarity
     sorted_indices = np.argsort(similarities)[::-1]
@@ -670,6 +750,50 @@ def detect_level(query):
             return level, instruction
     
     return 'normal', "NORMAL - Bruk klare, praktiske forklaringer. Balanse mellom enkelhet og presisjon. Forklar faguttrykk kort hvis du bruker dem."
+
+
+def detect_category_mode(query):
+    """Detect category mode from slash commands (/prusa, /cnc, /laser, etc.)."""
+    query_lower = query.lower()
+    
+    category_modes = {
+        '/prusa': {
+            'tool_filter': '3d_printer',
+            'instruction': 'FOKUS PÅ PRUSA: Brukeren spør om Prusa-printere spesifikt. Prioriter informasjon om Prusa Mini+, Prusa MK3s, PrusaSlicer, og Prusa-spesifikke innstillinger. Ignorer informasjon om andre printermerker med mindre det er direkte relevant.',
+            'boost_keywords': ['prusa', 'prusaslicer', 'prusa mini', 'prusa mk3', 'prusa mk3s']
+        },
+        '/3d': {
+            'tool_filter': '3d_printer',
+            'instruction': 'FOKUS PÅ 3D-PRINTING: Brukeren spør om 3D-printing generelt. Inkluder informasjon om alle typer 3D-printere, filament, slicer-programmer, og 3D-printing prosesser.',
+            'boost_keywords': ['3d', 'print', 'printer', 'filament', 'slicer']
+        },
+        '/laser': {
+            'tool_filter': 'laserkutter',
+            'instruction': 'FOKUS PÅ LASERKUTTING: Brukeren spør om laserkutting. Prioriter informasjon om Epilog, Glowforge, laserkutting-prosesser, materialer, og laserkutting-innstillinger.',
+            'boost_keywords': ['laser', 'kutt', 'graver', 'epilog', 'glowforge']
+        },
+        '/cnc': {
+            'tool_filter': 'cnc',
+            'instruction': 'FOKUS PÅ CNC-FRESING: Brukeren spør om CNC-fresing. Prioriter informasjon om Wegstr CNC, Avid CNC, CNC-fresing prosesser, og CNC-innstillinger.',
+            'boost_keywords': ['cnc', 'fres', 'wegstr', 'avid', 'mill', 'router']
+        },
+        '/elektronikk': {
+            'tool_filter': 'elektronikk',
+            'instruction': 'FOKUS PÅ ELEKTRONIKK: Brukeren spør om elektronikk. Prioriter informasjon om Arduino, Raspberry Pi, komponenter, kretser, og elektronikk-prosjekter.',
+            'boost_keywords': ['arduino', 'raspberry', 'elektronikk', 'krets', 'komponent']
+        },
+        '/lodding': {
+            'tool_filter': 'lodding',
+            'instruction': 'FOKUS PÅ LODDING: Brukeren spør om lodding. Prioriter informasjon om loddeutstyr, loddeteknikker, flux, og lodding-prosesser.',
+            'boost_keywords': ['lodd', 'solder', 'loddekolbe', 'flux']
+        }
+    }
+    
+    for cmd, config in category_modes.items():
+        if cmd in query_lower:
+            return config
+    
+    return None
 
 
 def detect_language(query):
@@ -807,6 +931,649 @@ def is_component_query(query):
     return any(p in query_lower for p in component_patterns)
 
 
+def detect_code_example_query(query):
+    """Detect if user wants code example."""
+    query_lower = query.lower()
+    
+    code_patterns = [
+        r'kode.*eksempel', r'code.*example',
+        r'hvordan.*koble', r'how.*connect',
+        r'pin.*kobling', r'pin.*connection',
+        r'arduino.*kode', r'esp32.*kode',
+        r'vis.*kode', r'show.*code',
+        r'koblingsskjema', r'wiring.*diagram',
+        r'koblingsdiagram', r'wiring.*diagram',
+        r'hvordan.*bruke', r'how.*use',
+        r'eksempel.*kode', r'example.*code',
+        r'vis.*diagram', r'show.*diagram',
+        r'koble.*til', r'connect.*to'
+    ]
+    
+    return any(re.search(p, query_lower, re.IGNORECASE) for p in code_patterns)
+
+
+def generate_visualization_with_submodel(prompt, visualization_type='wiring_diagram'):
+    """Generate visualization using sub-model (llama3.2:1b for speed) with concrete examples.
+    Returns Mermaid diagram code or None if generation fails.
+    """
+    try:
+        # Konkrete eksempler for hver diagramtype
+        examples = {
+            'wiring_diagram': """Eksempel på korrekt Mermaid wiring diagram:
+graph LR
+    A[Arduino Pin 9] -->|TRIG| B[HC-SR04]
+    C[Arduino Pin 10] -->|ECHO| B
+    D[5V] -->|VCC| B
+    E[GND] -->|GND| B
+
+Regler:
+- Start med "graph LR" eller "graph TD"
+- Bruk [tekst] for noder
+- Bruk -->|label| for piler med tekst
+- Hver linje skal være en kobling eller node-definisjon""",
+
+            'process_flow': """Eksempel på korrekt Mermaid flowchart:
+flowchart TD
+    A[Design i CAD] --> B[Eksporter STL]
+    B --> C[Importer i PrusaSlicer]
+    C --> D{Forste lag OK?}
+    D -->|Ja| E[Start print]
+    D -->|Nei| F[Justér innstillinger]
+    F --> C
+    E --> G[Fjern print]
+    style A fill:#E5A124
+    style G fill:#4CAF50
+
+Regler:
+- Start med "flowchart TD" (top-down)
+- Bruk [tekst] for prosesser
+- Bruk {tekst} for beslutningspunkter
+- Bruk -->|label| for piler med tekst
+- Hver linje skal være en kobling eller node-definisjon""",
+
+            'scaling_diagram': """Eksempel på korrekt Mermaid scaling diagram:
+flowchart TD
+    A[Prototype: 3D-print] --> B{Antall stk?}
+    B -->|1-10| C[3D-print flere]
+    B -->|10-100| D[Silikonform + resin]
+    B -->|100+| E[Injeksjonsstøping]
+    C --> F[Kostnad: Lav<br/>Tid: Rask]
+    D --> G[Kostnad: Medium<br/>Tid: Medium]
+    E --> H[Kostnad: Høy oppstart<br/>Tid: Lang oppstart]
+
+Regler:
+- Start med "flowchart TD"
+- Bruk {tekst} for beslutningspunkter basert på antall
+- Bruk -->|label| for piler med betingelser
+- Hver linje skal være en kobling eller node-definisjon""",
+
+            'printer_comparison': """Eksempel på korrekt Mermaid printer comparison:
+graph LR
+    A[Prusa Mini+<br/>Volume: 18x18x18cm<br/>Materials: PLA, PETG<br/>Level: Beginner]
+    B[Prusa MK3s+<br/>Volume: 25x21x21cm<br/>Materials: PLA, PETG, TPU<br/>Level: Intermediate]
+    A -.->|Sammenligning| B
+
+Regler:
+- Start med "graph LR" (left-right)
+- Bruk [tekst<br/>tekst] for multi-line noder
+- Bruk -.-> for sammenligningspiler
+- Hver linje skal være en node eller kobling""",
+
+            'mindmap': """Eksempel på korrekt Mermaid mindmap:
+mindmap
+  root((Arduino Prosjekter))
+    Sensorer
+      Temperatur
+      Bevegelse
+      Lys
+    Aktuatorer
+      Servo
+      Motor
+      LED
+    Kombinert
+      Værsstasjon
+      Robot
+
+Regler:
+- Start med "mindmap"
+- Bruk root((tekst)) for rot-node
+- Bruk innrykk (2 spaces) for underkategorier
+- Hver linje skal være en node eller underkategori"""
+        }
+        
+        # Hent eksempel for denne diagramtypen
+        example = examples.get(visualization_type, examples['wiring_diagram'])
+        
+        system_prompt = f"""Du er en ekspert på å generere Mermaid-diagrammer for makerspace-prosjekter.
+
+VIKTIG: Du skal KUN returnere Mermaid-diagram kode, ingen forklaring eller annen tekst.
+
+Her er et eksempel på korrekt syntaks for {visualization_type}:
+
+{example}
+
+VIKTIGE REGLER:
+1. Start direkte med diagram-typen (graph, flowchart, mindmap) - INGEN markdown code blocks
+2. Ikke inkluder ```mermaid eller ``` i responsen
+3. Følg eksemplet nøyaktig når det gjelder syntaks
+4. Hver linje skal være en node-definisjon eller kobling
+5. Bruk norske navn hvor relevant
+
+Returner KUN diagram-koden, start direkte med diagram-typen."""
+
+        response = ollama.chat(
+            model='llama3.2:1b',  # Fast small model for visualizations
+            messages=[
+                {'role': 'system', 'content': system_prompt},
+                {'role': 'user', 'content': prompt}
+            ],
+            options={'temperature': 0.2, 'num_predict': 400}  # Lower temperature for more consistent output
+        )
+        
+        diagram_code = response['message']['content'].strip()
+        
+        # Clean up - remove markdown code blocks if present
+        diagram_code = re.sub(r'```mermaid\s*\n?', '', diagram_code)
+        diagram_code = re.sub(r'```\s*$', '', diagram_code)
+        diagram_code = diagram_code.strip()
+        
+        # Remove any leading/trailing whitespace or newlines
+        diagram_code = diagram_code.strip()
+        
+        return diagram_code
+    except Exception as e:
+        print(f"  [WARN] Sub-model visualization generation failed: {e}")
+        return None
+
+
+def search_code_examples(query):
+    """Search for components/sensors that match the query - searches in components.json."""
+    if not knowledge_components:
+        return None
+    
+    query_lower = query.lower()
+    
+    # Search in components.json for sensors/modules
+    if 'categories' in knowledge_components:
+        # Check sensors category
+        sensors_cat = knowledge_components.get('categories', {}).get('sensorer', {})
+        sensors_list = sensors_cat.get('components', [])
+        
+        for sensor in sensors_list:
+            name = sensor.get('name', '').lower()
+            keywords = [k.lower() for k in sensor.get('keywords_no', []) + sensor.get('keywords_en', [])]
+            
+            if (name in query_lower or 
+                any(kw in query_lower for kw in keywords) or
+                any(kw in query_lower for kw in name.split())):
+                return sensor.get('id'), sensor
+        
+        # Check modules category
+        modules_cat = knowledge_components.get('categories', {}).get('moduler', {})
+        modules_list = modules_cat.get('components', [])
+        
+        for module in modules_list:
+            name = module.get('name', '').lower()
+            keywords = [k.lower() for k in module.get('keywords_no', []) + module.get('keywords_en', [])]
+            
+            if (name in query_lower or 
+                any(kw in query_lower for kw in keywords) or
+                any(kw in query_lower for kw in name.split())):
+                return module.get('id'), module
+    
+    return None
+
+
+def generate_code_example_with_diagram(sensor_data, board_type='arduino', query=""):
+    """Generate code example with wiring diagram using LLM sub-model.
+    sensor_data: Component data from components.json
+    board_type: 'arduino' or 'esp32'
+    query: Original user query for context
+    """
+    if not sensor_data:
+        return None
+    
+    sensor_name = sensor_data.get('name', 'sensor')
+    sensor_location = sensor_data.get('location', '')
+    
+    # Build context for LLM
+    context = f"""Komponent: {sensor_name}
+Lokasjon: {sensor_location}
+Brukerens spørsmål: {query}
+Board type: {board_type.upper()}
+
+Generer:
+1. Et komplett Arduino/ESP32 kodeeksempel for å bruke denne sensoren
+2. Et Mermaid-diagram som viser koblingsskjemaet (wiring diagram)
+3. Liste over nødvendige biblioteker
+4. Pin-koblinger
+
+Format:
+- Kodeeksempel skal være komplett og fungerende
+- Mermaid-diagram skal vise fysisk kobling mellom board og sensor
+- Bruk norsk for kommentarer og beskrivelser"""
+
+    try:
+        # Use main LLM to generate code example and get component info
+        code_prompt = f"""Du er en ekspert på Arduino/ESP32 programmering.
+
+Komponent: {sensor_name}
+Board: {board_type.upper()}
+
+Generer et komplett, fungerende kodeeksempel for å bruke denne sensoren.
+Inkluder:
+- Nødvendige includes/biblioteker
+- Pin-definisjoner
+- Setup() funksjon
+- Loop() funksjon med sensor-avlesning
+- Kommentarer på norsk
+
+Returner KUN koden, ingen forklaring."""
+
+        code_response = ollama.chat(
+            model='llama3',
+            messages=[{'role': 'user', 'content': code_prompt}],
+            options={'temperature': 0.5, 'num_predict': 500}
+        )
+        code = code_response['message']['content'].strip()
+        
+        # Clean code - remove markdown if present
+        code = re.sub(r'```\w*\n?', '', code)
+        code = re.sub(r'```\s*$', '', code)
+        code = code.strip()
+        
+        # Generate wiring diagram with sub-model
+        diagram_prompt = f"""Lag et Mermaid-diagram som viser koblingsskjemaet for:
+- {sensor_name} sensor
+- {board_type.upper()} mikrokontroller
+
+Diagrammet skal vise:
+- Fysisk kobling mellom {board_type.upper()} og sensoren
+- Pin-koblinger (DATA, VCC, GND)
+- Retning på signaler
+
+Bruk graph LR (left-right) format med labels på koblingene."""
+
+        diagram = generate_visualization_with_submodel(diagram_prompt, 'wiring_diagram')
+        
+        # Build response
+        response_parts = []
+        response_parts.append(f"Her er kodeeksempel og koblingsskjema for {sensor_name}:")
+        response_parts.append("")
+        
+        # Wiring diagram
+        if diagram:
+            response_parts.append("**Koblingsskjema:**")
+            response_parts.append("")
+            response_parts.append("```mermaid")
+            # Split diagram on \n to ensure proper line breaks for Mermaid
+            diagram_lines = diagram.split('\n')
+            response_parts.extend(diagram_lines)
+            response_parts.append("```")
+            response_parts.append("")
+        
+        # Code example
+        if code:
+            response_parts.append("**Kodeeksempel:**")
+            response_parts.append("")
+            response_parts.append(f"```{board_type}")
+            response_parts.append(code)
+            response_parts.append("```")
+            response_parts.append("")
+        
+        # Add location info
+        if sensor_location:
+            response_parts.append(f"**Lokasjon:** {sensor_location}")
+        
+        return "\n".join(response_parts)
+        
+    except Exception as e:
+        print(f"  [ERROR] Failed to generate code example: {e}")
+        return None
+
+
+def detect_process_flow_query(query):
+    """Detect if user wants process flow visualization."""
+    query_lower = query.lower()
+    
+    process_patterns = [
+        r'prosess.*flyt', r'process.*flow',
+        r'steg.*for.*steg', r'step.*by.*step',
+        r'hvordan.*prosess', r'how.*process',
+        r'prosess.*3d', r'process.*3d',
+        r'prosess.*laser', r'process.*laser',
+        r'feils.*k', r'troubleshoot',
+        r'hva.*er.*stegene', r'what.*are.*steps'
+    ]
+    
+    return any(re.search(p, query_lower, re.IGNORECASE) for p in process_patterns)
+
+
+def generate_process_flow(process_type, level='beginner', query=""):
+    """Generate process flow diagram using LLM sub-model."""
+    process_names = {
+        '3d_printing': '3D-printing',
+        'laser_cutting': 'Laserkutting',
+        'troubleshooting_3d': 'Feilsøking 3D-printer'
+    }
+    
+    process_name = process_names.get(process_type, process_type)
+    
+    # Build prompt for LLM
+    prompt = f"""Lag et Mermaid flowchart-diagram som viser prosessflyt for {process_name}.
+
+Nivå: {level}
+
+Prosessflytet skal vise:
+- Alle hovedsteg i prosessen
+- Beslutningspunkter (diamant-form)
+- Returløkker hvis noe går galt
+- Start og slutt-punkter
+
+Bruk flowchart TD (top-down) format.
+For {process_type}:
+"""
+    
+    if process_type == '3d_printing':
+        prompt += """- Design i CAD
+- Eksporter STL
+- Importer i PrusaSlicer
+- Slice til G-code
+- Last til printer
+- Start print
+- Monitor første lag
+- Fjern print"""
+    elif process_type == 'laser_cutting':
+        prompt += """- Design i Inkscape
+- Forbered materiale
+- Still inn fokus
+- Start kutting
+- Følg med hele tiden
+- Fjern materiale"""
+    elif process_type == 'troubleshooting_3d':
+        prompt += """- Identifiser problem
+- Sjekk første lag
+- Juster innstillinger
+- Prøv igjen"""
+    
+    try:
+        diagram = generate_visualization_with_submodel(prompt, 'process_flow')
+        
+        if not diagram:
+            return None
+        
+        # Build response
+        response_parts = []
+        response_parts.append(f"**Prosessflyt for {process_name}:**")
+        response_parts.append("")
+        
+        # Process flow diagram
+        response_parts.append("**Prosessflyt:**")
+        response_parts.append("")
+        response_parts.append("```mermaid")
+        diagram_lines = diagram.split('\n')
+        response_parts.extend(diagram_lines)
+        response_parts.append("```")
+        
+        return "\n".join(response_parts)
+        
+    except Exception as e:
+        print(f"  [ERROR] Failed to generate process flow: {e}")
+        return None
+
+
+def detect_scaling_query(query):
+    """Detect if user asks about project scaling."""
+    query_lower = query.lower()
+    
+    scaling_patterns = [
+        r'skalere.*prosjekt', r'scale.*project',
+        r'prototype.*produksjon', r'prototype.*production',
+        r'hvordan.*skalere', r'how.*scale',
+        r'fra.*til.*stk', r'from.*to.*pcs',
+        r'masseproduksjon', r'mass.*production',
+        r'produksjon.*metode', r'production.*method'
+    ]
+    
+    return any(re.search(p, query_lower, re.IGNORECASE) for p in scaling_patterns)
+
+
+def generate_scaling_diagram(project_type, target_quantity=None, query=""):
+    """Generate scaling diagram using LLM sub-model."""
+    project_names = {
+        '3d_printing': '3D-printing',
+        'laser_cutting': 'Laserkutting'
+    }
+    
+    project_name = project_names.get(project_type, project_type)
+    
+    # Build prompt for LLM
+    prompt = f"""Lag et Mermaid flowchart-diagram som viser skaleringsveier fra prototype til produksjon for {project_name}.
+
+Diagrammet skal vise:
+- Startpunkt: Prototype (3D-print eller laserkutting)
+- Beslutningspunkt basert på antall stk
+- Forskjellige skaleringsveier:
+  * 1-10 stk: Fortsett med samme metode
+  * 10-100 stk: Medium-skala produksjon (silikonform, CNC, etc.)
+  * 100+ stk: Masseproduksjon (injeksjonsstøping, stansing, etc.)
+- Kostnad og tidsestimater for hver vei
+
+Bruk flowchart TD (top-down) format med beslutningsdiamanter."""
+
+    if target_quantity:
+        prompt += f"\n\nBrukeren trenger {target_quantity} stk - hvilken vei anbefaler du?"
+    
+    try:
+        diagram = generate_visualization_with_submodel(prompt, 'scaling_diagram')
+        
+        if not diagram:
+            return None
+        
+        # Build response
+        response_parts = []
+        response_parts.append(f"**Skaleringsveier for {project_name}:**")
+        response_parts.append("")
+        
+        # Scaling diagram
+        response_parts.append("**Skaleringsveier:**")
+        response_parts.append("")
+        response_parts.append("```mermaid")
+        diagram_lines = diagram.split('\n')
+        response_parts.extend(diagram_lines)
+        response_parts.append("```")
+        response_parts.append("")
+        
+        # Add recommendation if quantity specified
+        if target_quantity:
+            try:
+                qty = int(target_quantity)
+                if qty <= 10:
+                    recommendation = "Fortsett med samme metode (3D-print/laserkutting)"
+                elif qty <= 100:
+                    recommendation = "Vurder medium-skala produksjon (silikonform/CNC)"
+                else:
+                    recommendation = "Vurder masseproduksjon (injeksjonsstøping/stansing)"
+                
+                response_parts.append(f"**Anbefaling for {target_quantity} stk:**")
+                response_parts.append(f"{recommendation}")
+            except:
+                pass
+        
+        return "\n".join(response_parts)
+        
+    except Exception as e:
+        print(f"  [ERROR] Failed to generate scaling diagram: {e}")
+        return None
+
+
+def detect_printer_comparison_query(query):
+    """Detect if user wants printer comparison."""
+    query_lower = query.lower()
+    
+    comparison_patterns = [
+        r'sammenlign.*printer', r'compare.*printer',
+        r'forskjell.*printer', r'difference.*printer',
+        r'hvilken.*printer', r'which.*printer',
+        r'printer.*vs', r'printer.*versus',
+        r'best.*printer', r'best.*for'
+    ]
+    
+    return any(re.search(p, query_lower, re.IGNORECASE) for p in comparison_patterns)
+
+
+def generate_printer_comparison(printer_ids, query=""):
+    """Generate comparison diagram using LLM sub-model."""
+    if not knowledge_utstyr or 'categories' not in knowledge_utstyr:
+        return None
+    
+    printers = []
+    category = knowledge_utstyr.get('categories', {}).get('3d_printing', {})
+    equipment_list = category.get('equipment', [])
+    
+    # Find printers by ID
+    for printer_id in printer_ids:
+        for eq in equipment_list:
+            if eq.get('id') == printer_id:
+                printers.append(eq)
+                break
+    
+    if len(printers) < 2:
+        return None
+    
+    printer_names = [p.get('name', '') for p in printers]
+    
+    # Build context for LLM
+    printer_info = []
+    for printer in printers:
+        info = f"{printer.get('name', '')}: Build volume {printer.get('build_volume', 'N/A')}, Materialer: {', '.join(printer.get('materials', []))}, Vanskelighetsnivå: {printer.get('difficulty', 'N/A')}"
+        printer_info.append(info)
+    
+    prompt = f"""Lag et Mermaid-diagram som sammenligner disse 3D-printerne:
+
+{chr(10).join(printer_info)}
+
+Diagrammet skal vise:
+- Forskjeller i build volume
+- Material-kompatibilitet
+- Vanskelighetsnivå
+- Anbefaling basert på bruksområde
+
+Bruk graph LR (left-right) format med noder for hver printer."""
+
+    try:
+        diagram = generate_visualization_with_submodel(prompt, 'printer_comparison')
+        
+        if not diagram:
+            return None
+        
+        # Build response
+        response_parts = []
+        response_parts.append(f"**Sammenligning: {' vs '.join(printer_names)}**")
+        response_parts.append("")
+        
+        # Comparison diagram
+        response_parts.append("**Sammenligning:**")
+        response_parts.append("")
+        response_parts.append("```mermaid")
+        diagram_lines = diagram.split('\n')
+        response_parts.extend(diagram_lines)
+        response_parts.append("```")
+        response_parts.append("")
+        
+        # Detailed comparison
+        response_parts.append("**Detaljert sammenligning:**")
+        for printer in printers:
+            name = printer.get('name', '')
+            response_parts.append(f"**{name}:**")
+            response_parts.append(f"- Build volume: {printer.get('build_volume', 'N/A')}")
+            response_parts.append(f"- Materialer: {', '.join(printer.get('materials', []))}")
+            response_parts.append(f"- Vanskelighetsnivå: {printer.get('difficulty', 'N/A')}")
+            response_parts.append(f"- Tilgangsnivå: {printer.get('access_level', 'N/A')}")
+            if printer.get('notes'):
+                response_parts.append(f"- Notater: {printer.get('notes')}")
+            response_parts.append("")
+        
+        # Recommendation
+        response_parts.append("**Anbefaling:**")
+        beginner_printers = [p for p in printers if p.get('difficulty') == 'beginner']
+        if beginner_printers:
+            response_parts.append(f"For nybegynnere: **{beginner_printers[0].get('name', '')}**")
+        elif printers:
+            response_parts.append(f"For avanserte brukere: **{printers[0].get('name', '')}**")
+        
+        return "\n".join(response_parts)
+        
+    except Exception as e:
+        print(f"  [ERROR] Failed to generate printer comparison: {e}")
+        return None
+
+
+def detect_idea_query(query):
+    """Detect if user asks for project ideas."""
+    query_lower = query.lower()
+    
+    idea_patterns = [
+        r'ide.*prosjekt', r'project.*idea',
+        r'hva.*kan.*lage', r'what.*can.*make',
+        r'prosjekt.*ide', r'idea.*for',
+        r'forslag.*prosjekt', r'suggest.*project',
+        r'idemyldring', r'brainstorm'
+    ]
+    
+    return any(re.search(p, query_lower, re.IGNORECASE) for p in idea_patterns)
+
+
+def generate_idea_mindmap(technology, difficulty_level=None, query=""):
+    """Generate mind map diagram using LLM sub-model."""
+    tech_names = {
+        'arduino': 'Arduino',
+        '3d_printing': '3D-printing',
+        'laser_cutting': 'Laserkutting'
+    }
+    
+    tech_name = tech_names.get(technology, technology)
+    
+    # Build prompt for LLM
+    prompt = f"""Lag et Mermaid mind map-diagram med prosjektideer for {tech_name}.
+
+Mind mapet skal vise:
+- Sentralt tema: {tech_name} Prosjekter
+- Kategorier av ideer (sensorer, aktuatorer, kombinert, etc.)
+- Spesifikke prosjekt-ideer under hver kategori
+- Vanskelighetsnivå hvor relevant
+
+Bruk mindmap format med root node og underkategorier."""
+
+    if difficulty_level:
+        prompt += f"\n\nFokuser på {difficulty_level} nivå prosjekter."
+    
+    try:
+        diagram = generate_visualization_with_submodel(prompt, 'mindmap')
+        
+        if not diagram:
+            return None
+        
+        # Build response
+        response_parts = []
+        response_parts.append(f"**Prosjektideer for {tech_name}:**")
+        response_parts.append("")
+        
+        # Mind map diagram
+        response_parts.append("**Prosjektideer:**")
+        response_parts.append("")
+        response_parts.append("```mermaid")
+        diagram_lines = diagram.split('\n')
+        response_parts.extend(diagram_lines)
+        response_parts.append("```")
+        
+        return "\n".join(response_parts)
+        
+    except Exception as e:
+        print(f"  [ERROR] Failed to generate idea mindmap: {e}")
+        return None
+
+
 # =============================================================================
 # Conversation Compression
 # =============================================================================
@@ -856,9 +1623,15 @@ def ask_llm(query, context, is_inventory=False, conversation_history=None, exist
     """
     level, level_instruction = detect_level(query)
     language, language_instruction = detect_language(query)
+    category_mode = detect_category_mode(query)
     
     # Clean query of all command prefixes
-    clean_query = re.sub(r'/(nybegynner|beginner|ekspert|expert|norsk|no|english|en)\s*', '', query, flags=re.IGNORECASE).strip()
+    clean_query = re.sub(r'/(nybegynner|beginner|ekspert|expert|norsk|no|english|en|prusa|3d|laser|cnc|elektronikk|lodding)\s*', '', query, flags=re.IGNORECASE).strip()
+    
+    # Add category mode instruction if present
+    category_instruction = ""
+    if category_mode:
+        category_instruction = category_mode.get('instruction', '')
     
     # Classify the query
     query_category = classify_query(clean_query)
@@ -896,6 +1669,8 @@ REGLER FOR SVAR:
 - Avslutt med: "Vil du vite mer om noe av dette?"
 - VIKTIG: Husk samtalehistorikken"""
     else:
+        category_section = f"\n\nKATEGORI-MODUS:\n{category_instruction}" if category_instruction else ""
+        
         system_prompt = f"""{base_role}{tool_hint}
 
 RELEVANT INFORMASJON:
@@ -903,7 +1678,7 @@ RELEVANT INFORMASJON:
 
 FERDIGHETSNIVÅ: {level_instruction}
 
-SPRÅK: {language_instruction}
+SPRÅK: {language_instruction}{category_section}
 
 KRITISK FOR KOMPONENTER:
 - Bruk informasjonen fra "KOMPONENTER FUNNET" men SKRIV NATURLIG
@@ -1443,11 +2218,29 @@ Du kan også besøke siden direkte: https://www.vg.no"""
         combined_context = ' '.join(recent_messages) + ' ' + message
         print(f"  [CONTEXT] Kombinerer med historikk for bedre verktøydeteksjon")
     
+    # Detect category mode from slash commands (e.g., /prusa, /cnc)
+    category_mode = detect_category_mode(message)
+    category_instruction = ""
+    if category_mode:
+        # Override detected_tool with category mode tool_filter
+        detected_tool_from_category = category_mode.get('tool_filter')
+        category_instruction = category_mode.get('instruction', '')
+        print(f"  [CATEGORY] Kategori-modus aktivert: {detected_tool_from_category}")
+    
     # Classify the query (use combined context for better detection)
     query_category = classify_query(combined_context)
-    detected_tool = detect_tool(combined_context)
+    if not category_mode:  # Only auto-detect tool if no category mode set
+        detected_tool = detect_tool(combined_context)
+    else:
+        detected_tool = detected_tool_from_category
+    
     inventory_query = is_inventory_query(message)  # Keep this on current message only
     component_query = is_component_query(message)  # Check for component questions
+    code_example_query = detect_code_example_query(message)  # Check for code example requests
+    process_flow_query = detect_process_flow_query(message)  # Check for process flow requests
+    scaling_query = detect_scaling_query(message)  # Check for scaling requests
+    printer_comparison_query = detect_printer_comparison_query(message)  # Check for printer comparison
+    idea_query = detect_idea_query(message)  # Check for project ideas
     
     print(f"  Kategori: {query_category}")
     if detected_tool:
@@ -1456,6 +2249,16 @@ Du kan også besøke siden direkte: https://www.vg.no"""
         print(f"  Type: INVENTAR-SPØRSMÅL (bruker kun JSON)")
     if component_query:
         print(f"  Type: KOMPONENT-SPØRSMÅL (søker i components.json)")
+    if code_example_query:
+        print(f"  Type: KODEEKSEMPEL-SPØRSMÅL (søker i components.json, genererer med LLM)")
+    if process_flow_query:
+        print(f"  Type: PROSESSFLYT-SPØRSMÅL (søker i prosessflyt.json)")
+    if scaling_query:
+        print(f"  Type: PROSJEKTSKALERING-SPØRSMÅL (søker i prosjektskalering.json)")
+    if printer_comparison_query:
+        print(f"  Type: PRINTER-SAMMENLIGNING (søker i utstyr.json)")
+    if idea_query:
+        print(f"  Type: PROSJEKTIDEER-SPØRSMÅL (søker i prosjektideer.json)")
     
     # Build context from multiple sources
     context_parts = []
@@ -1507,8 +2310,16 @@ Du kan også besøke siden direkte: https://www.vg.no"""
         print(f"\n[{timestamp}] [SEARCH] Soker i kunnskapsbasen...")
         if detected_tool:
             print(f"  [FILTER] Filtrerer pa verktoy: {detected_tool}")
+        if category_mode:
+            print(f"  [BOOST] Bruker kategori-boost keywords: {category_mode.get('boost_keywords', [])}")
         search_start = time.time()
-        relevant_chunks = search_vault(message, tool_filter=detected_tool)
+        # If category mode is active, boost search with category keywords
+        if category_mode and category_mode.get('boost_keywords'):
+            # Add boost keywords to query for better matching
+            boosted_query = message + ' ' + ' '.join(category_mode.get('boost_keywords', []))
+            relevant_chunks = search_vault(boosted_query, tool_filter=detected_tool)
+        else:
+            relevant_chunks = search_vault(message, tool_filter=detected_tool)
         search_time = time.time() - search_start
         print(f"  [OK] Fant {len(relevant_chunks)} relevante biter ({search_time:.2f}s)")
         
@@ -1517,6 +2328,171 @@ Du kan også besøke siden direkte: https://www.vg.no"""
                 preview = chunk[:80].replace('\n', ' ')
                 print(f"    {i+1}. {preview}...")
             context_parts.append("DOKUMENTASJON:\n" + "\n\n".join(relevant_chunks))
+    
+    # Check for code example request - return directly if found
+    if code_example_query:
+        code_result = search_code_examples(message)
+        if code_result:
+            sensor_id, sensor_data = code_result
+            # Detect board type from query
+            board_type = 'esp32' if 'esp32' in message.lower() else 'arduino'
+            print(f"  [CODE] Genererer kodeeksempel med LLM for {sensor_id} ({board_type})")
+            code_response = generate_code_example_with_diagram(sensor_data, board_type, message)
+            if code_response:
+                print(f"  [CODE] Returnerer kodeeksempel for {sensor_id} ({board_type})")
+                return jsonify({
+                    'response': code_response,
+                    'summary': existing_summary
+                })
+        else:
+            # If no specific sensor found but user asked for wiring diagram, generate generic one
+            if 'koblingsdiagram' in message.lower() or 'koblingsskjema' in message.lower() or 'wiring' in message.lower():
+                print(f"  [CODE] Ingen spesifikk sensor funnet, genererer generisk koblingsdiagram")
+                # Try to extract sensor name from query
+                query_lower = message.lower()
+                sensor_name = "sensor"
+                if 'hc-sr04' in query_lower or 'ultralyd' in query_lower:
+                    sensor_name = "HC-SR04 Ultralydsensor"
+                elif 'dht11' in query_lower or 'temperatur' in query_lower:
+                    sensor_name = "DHT11 Temperatursensor"
+                elif 'pir' in query_lower or 'bevegelse' in query_lower:
+                    sensor_name = "PIR Bevegelsessensor"
+                
+                board_type = 'esp32' if 'esp32' in query_lower else 'arduino'
+                
+                # Generate just the wiring diagram
+                diagram_prompt = f"""Lag et Mermaid-diagram som viser koblingsskjemaet for:
+- {sensor_name}
+- {board_type.upper()} mikrokontroller
+
+Diagrammet skal vise:
+- Fysisk kobling mellom {board_type.upper()} og sensoren
+- Pin-koblinger (DATA, VCC, GND)
+- Retning på signaler
+
+Bruk graph LR (left-right) format med labels på koblingene."""
+                
+                diagram = generate_visualization_with_submodel(diagram_prompt, 'wiring_diagram')
+                if diagram:
+                    response_text = f"Her er koblingsskjema for {sensor_name} til {board_type.upper()}:\n\n"
+                    response_text += "**Koblingsskjema:**\n\n"
+                    response_text += "```mermaid\n"
+                    response_text += diagram
+                    response_text += "\n```"
+                    print(f"  [CODE] Returnerer generisk koblingsdiagram")
+                    return jsonify({
+                        'response': response_text,
+                        'summary': existing_summary
+                    })
+    
+    # Check for process flow request - return directly if found
+    if process_flow_query:
+        # Detect process type from query
+        process_type = None
+        query_lower = message.lower()
+        if '3d' in query_lower or 'print' in query_lower:
+            process_type = '3d_printing'
+        elif 'laser' in query_lower or 'kutt' in query_lower:
+            process_type = 'laser_cutting'
+        elif 'feils' in query_lower or 'troubleshoot' in query_lower or 'problem' in query_lower:
+            process_type = 'troubleshooting_3d'
+        
+        if process_type:
+            # Detect level from query
+            level = 'beginner' if 'nybegynner' in query_lower or 'beginner' in query_lower else 'normal'
+            process_response = generate_process_flow(process_type, level, message)
+            if process_response:
+                print(f"  [PROCESS] Returnerer prosessflyt for {process_type} ({level})")
+                return jsonify({
+                    'response': process_response,
+                    'summary': existing_summary
+                })
+    
+    # Check for scaling request - return directly if found
+    if scaling_query:
+        # Detect project type from query
+        project_type = None
+        query_lower = message.lower()
+        if '3d' in query_lower or 'print' in query_lower:
+            project_type = '3d_printing'
+        elif 'laser' in query_lower or 'kutt' in query_lower:
+            project_type = 'laser_cutting'
+        
+        if project_type:
+            # Try to extract target quantity from query
+            qty_match = re.search(r'(\d+)\s*(stk|pcs|enheter|units)', query_lower)
+            target_quantity = qty_match.group(1) if qty_match else None
+            
+            scaling_response = generate_scaling_diagram(project_type, target_quantity, message)
+            if scaling_response:
+                print(f"  [SCALING] Returnerer skaleringsdiagram for {project_type}")
+                return jsonify({
+                    'response': scaling_response,
+                    'summary': existing_summary
+                })
+    
+    # Check for printer comparison request - return directly if found
+    if printer_comparison_query:
+        query_lower = message.lower()
+        printer_ids = []
+        
+        # Try to extract printer names/IDs from query
+        if 'mini' in query_lower or 'prusa-mini' in query_lower:
+            printer_ids.append('prusa-mini')
+        if 'mk3' in query_lower or 'prusa-mk3s' in query_lower:
+            printer_ids.append('prusa-mk3s')
+        if 'ultimaker' in query_lower:
+            printer_ids.append('ultimaker-3-extended')
+        if 'voron' in query_lower:
+            if '0.1' in query_lower or '0' in query_lower:
+                printer_ids.append('voron-0.1')
+            else:
+                printer_ids.append('voron-2.4r2')
+        
+        # If no specific printers mentioned, compare common ones
+        if not printer_ids:
+            printer_ids = ['prusa-mini', 'prusa-mk3s']
+        
+        if len(printer_ids) >= 2:
+            comparison_response = generate_printer_comparison(printer_ids[:3], message)  # Max 3 printers
+            if comparison_response:
+                print(f"  [COMPARISON] Returnerer sammenligning for {printer_ids}")
+                return jsonify({
+                    'response': comparison_response,
+                    'summary': existing_summary
+                })
+    
+    # Check for project ideas request - return directly if found
+    if idea_query:
+        query_lower = message.lower()
+        technology = None
+        
+        # Detect technology from query
+        if 'arduino' in query_lower or 'elektronikk' in query_lower or 'sensor' in query_lower:
+            technology = 'arduino'
+        elif '3d' in query_lower or 'print' in query_lower:
+            technology = '3d_printing'
+        elif 'laser' in query_lower or 'kutt' in query_lower:
+            technology = 'laser_cutting'
+        
+        # Default to arduino if no specific technology
+        if not technology:
+            technology = 'arduino'
+        
+        # Detect difficulty level
+        difficulty = None
+        if 'nybegynner' in query_lower or 'beginner' in query_lower:
+            difficulty = 'beginner'
+        elif 'ekspert' in query_lower or 'advanced' in query_lower:
+            difficulty = 'advanced'
+        
+        idea_response = generate_idea_mindmap(technology, difficulty, message)
+        if idea_response:
+            print(f"  [IDEAS] Returnerer prosjektideer for {technology}")
+            return jsonify({
+                'response': idea_response,
+                'summary': existing_summary
+            })
     
     context = "\n\n".join(context_parts) if context_parts else "Ingen relevant informasjon funnet."
     
@@ -1687,7 +2663,26 @@ def upload_file():
             file.save(file_path)
             
             ext = filename.rsplit('.', 1)[1].lower()
-            text = process_file(file_path, ext)
+            
+            # Auto-detect file type and handle accordingly
+            if ext == 'xlsx':
+                # XLSX files should use the extract-xlsx endpoint, not generic upload
+                # For now, skip them here - they'll be handled by the frontend
+                errors.append(f'{filename}: XLSX files should be uploaded via the Excel import section')
+                os.remove(file_path)
+                continue
+            elif ext == 'pdf':
+                # PDF files can be processed here or via extract-pdf endpoint
+                # For generic upload, extract text and chunk it
+                text = process_file(file_path, ext)
+            else:
+                # Other file types (txt, json, md, etc.)
+                text = process_file(file_path, ext)
+            
+            if not text:
+                os.remove(file_path)
+                errors.append(f'{filename}: no text extracted')
+                continue
             
             chunks = text_to_chunks_improved(text)
             
@@ -2753,6 +3748,164 @@ def approve_summary():
 
 
 # =============================================================================
+# Components Database API
+# =============================================================================
+
+@app.route('/components')
+@login_required
+def components_page():
+    """Admin page for component management."""
+    try:
+        rendered = render_template('components.html')
+        # Log if body is suspiciously short
+        if len(rendered) < 1000:
+            app.logger.warning(f"Rendered template is very short: {len(rendered)} chars")
+            app.logger.warning(f"First 500 chars: {rendered[:500]}")
+        
+        # Create response and set headers to allow iframe embedding
+        from flask import make_response
+        response = make_response(rendered)
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'  # Allow same-origin iframes
+        response.headers['Content-Security-Policy'] = "frame-ancestors 'self'"
+        return response
+    except Exception as e:
+        app.logger.error(f"Error rendering components.html: {e}")
+        import traceback
+        app.logger.error(traceback.format_exc())
+        error_html = f"<html><body><h1>Error</h1><pre>{str(e)}</pre><pre>{traceback.format_exc()}</pre></body></html>"
+        from flask import make_response
+        response = make_response(error_html, 500)
+        response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+        return response
+
+
+@app.route('/api/db-status', methods=['GET'])
+def api_db_status():
+    """Check database connection status."""
+    try:
+        db.session.execute(db.text('SELECT 1'))
+        return jsonify({'status': 'connected', 'database': 'MariaDB'})
+    except Exception as e:
+        return jsonify({'status': 'disconnected', 'error': str(e)}), 503
+
+
+@app.route('/api/components', methods=['GET'])
+@login_required
+def api_get_components():
+    """Get all components with stats."""
+    try:
+        query = request.args.get('q', '')
+
+        if query:
+            components = search_components_db(query, limit=100)
+        else:
+            components = Component.query.order_by(Component.hylleplass, Component.name).all()
+
+        # Get stats
+        total = Component.query.count()
+        locations = db.session.query(Component.hylleplass).distinct().count()
+        restock_count = Component.query.filter(Component.restock == True).count()
+
+        return jsonify({
+            'components': [c.to_dict() for c in components],
+            'total': total,
+            'locations': locations,
+            'restock_needed': restock_count
+        })
+    except Exception as e:
+        error_msg = str(e)
+        if 'Connection refused' in error_msg or 'Can\'t connect' in error_msg:
+            return jsonify({'error': 'Database ikke tilgjengelig. Start MariaDB: net start MariaDB'}), 503
+        return jsonify({'error': error_msg}), 500
+
+
+@app.route('/api/components', methods=['POST'])
+@login_required
+def api_add_component():
+    """Add a new component."""
+    try:
+        data = request.get_json()
+        
+        if not data.get('name') or not data.get('hylleplass'):
+            return jsonify({'error': 'Navn og hylleplass er paakrevd'}), 400
+        
+        component = Component(
+            name=data['name'],
+            hylleplass=data['hylleplass'].upper(),
+            antall=data.get('antall', 0),
+            forbruksvare=data.get('forbruksvare', False),
+            restock=data.get('restock', False)
+        )
+        
+        db.session.add(component)
+        db.session.commit()
+        
+        return jsonify({'success': True, 'component': component.to_dict()})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/components/<int:component_id>', methods=['PUT'])
+@login_required
+def api_update_component(component_id):
+    """Update a component."""
+    try:
+        component = Component.query.get(component_id)
+        if not component:
+            return jsonify({'error': 'Komponent ikke funnet'}), 404
+        
+        data = request.get_json()
+        
+        if 'name' in data:
+            component.name = data['name']
+        if 'hylleplass' in data:
+            component.hylleplass = data['hylleplass'].upper()
+        if 'antall' in data:
+            component.antall = data['antall']
+        if 'forbruksvare' in data:
+            component.forbruksvare = data['forbruksvare']
+        if 'restock' in data:
+            component.restock = data['restock']
+        
+        db.session.commit()
+        
+        return jsonify({'success': True, 'component': component.to_dict()})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/components/<int:component_id>', methods=['DELETE'])
+@login_required
+def api_delete_component(component_id):
+    """Delete a component."""
+    try:
+        component = Component.query.get(component_id)
+        if not component:
+            return jsonify({'error': 'Komponent ikke funnet'}), 404
+        
+        db.session.delete(component)
+        db.session.commit()
+        
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/hylleplasser', methods=['GET'])
+@login_required
+def api_get_hylleplasser():
+    """Get all unique hylleplass values."""
+    try:
+        locations = get_all_hylleplasser()
+        return jsonify({'hylleplasser': locations})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# =============================================================================
 # Main
 # =============================================================================
 if __name__ == '__main__':
@@ -2766,9 +3919,9 @@ if __name__ == '__main__':
     print(f"  Admin:   http://localhost:5000/admin")
     print(f"  Login:   admin / makerspace2024")
     print("=" * 60 + "\n")
-    
+
     # Load embeddings on startup
     load_json_knowledge()
     load_vault()
-    
+
     app.run(debug=True, host='0.0.0.0', port=5000)

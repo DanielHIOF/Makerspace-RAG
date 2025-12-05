@@ -4,7 +4,12 @@
 # Web Framework
 flask>=2.3.0
 flask-login>=0.6.0
+flask-sqlalchemy>=3.1.0  # Database ORM
 werkzeug>=2.3.0
+
+# Database
+pymysql>=1.1.0           # MariaDB/MySQL driver
+cryptography>=42.0.0     # For MySQL auth
 
 # LLM Integration
 ollama>=0.1.0

@@ -5,149 +5,304 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Makerspace - Admin</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         :root {
             --brand: #E5A124;
             --brand-dark: #c98b1d;
             --brand-light: #f5b835;
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6c757d;
+            --border: rgba(0,0,0,0.1);
+            --shadow: rgba(0,0,0,0.08);
         }
-        
+
+        [data-theme="dark"] {
+            --bg-primary: #0d0d12;
+            --bg-secondary: #16161d;
+            --bg-tertiary: #1e1e28;
+            --text-primary: #f1f1f1;
+            --text-secondary: #9ca3af;
+            --border: rgba(255,255,255,0.1);
+            --shadow: rgba(0,0,0,0.3);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0d0d12;
+            background: var(--bg-primary);
             min-height: 100vh;
-            color: #e0e0e0;
-            padding: 20px;
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.3s;
         }
-        
+
+        .header {
+            padding: 12px 24px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .logo-sub {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn:hover {
+            background: var(--brand);
+            border-color: var(--brand);
+            color: #1a1a2e;
+        }
+
+        .icon-btn.danger:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        .theme-icon.dark { display: none; }
+        [data-theme="dark"] .theme-icon.light { display: none; }
+        [data-theme="dark"] .theme-icon.dark { display: inline; }
+
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px 40px;
         }
-        
-        header {
+
+        .page-title {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
-        
-        h1 {
+
+        .page-title h1 {
             color: var(--brand);
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
         }
-        
-        .subtitle {
-            color: #8892b0;
+
+        .page-title .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+            background: var(--bg-secondary);
+            border-radius: 12px 12px 0 0;
+            padding: 0 20px;
+        }
+
+        .tab {
+            padding: 16px 32px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
             font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+            position: relative;
         }
-        
+
+        .tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .tab.active {
+            color: var(--brand);
+            border-bottom-color: var(--brand);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--bg-secondary);
+            border-radius: 0 0 12px 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px var(--shadow);
+            border: 1px solid var(--border);
+            border-top: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Stats */
         .stats-bar {
             display: flex;
             gap: 20px;
             justify-content: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
         }
-        
+
         .stat-card {
-            background: #16161d;
+            background: var(--bg-secondary);
             padding: 20px 30px;
             border-radius: 12px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow);
         }
-        
+
         .stat-value {
             font-size: 2rem;
             font-weight: bold;
             color: var(--brand);
         }
-        
+
         .stat-label {
-            color: #8892b0;
+            color: var(--text-secondary);
             font-size: 0.9rem;
             margin-top: 5px;
         }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        
-        @media (max-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .card {
-            background: #16161d;
-            border-radius: 16px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .card h2 {
-            color: var(--brand);
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-        }
-        
-        .drop-zone {
+
+        /* Upload Zone */
+        .upload-zone {
             border: 2px dashed var(--brand);
-            border-radius: 12px;
-            padding: 40px;
+            border-radius: 16px;
+            padding: 60px 40px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             background: rgba(229, 161, 36, 0.05);
+            margin-bottom: 30px;
         }
-        
-        .drop-zone:hover, .drop-zone.dragover {
+
+        .upload-zone:hover, .upload-zone.dragover {
             border-color: var(--brand-light);
             background: rgba(229, 161, 36, 0.1);
+            transform: translateY(-2px);
         }
-        
-        .drop-zone p {
-            color: #8892b0;
+
+        .upload-zone .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .upload-zone p {
+            color: var(--text-primary);
+            font-size: 1.1rem;
             margin-bottom: 10px;
+            font-weight: 500;
         }
-        
-        .drop-zone .formats {
-            font-size: 0.85rem;
-            color: #5a6c8a;
+
+        .upload-zone .formats {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
-        
+
         input[type="file"] {
             display: none;
         }
-        
-        textarea {
-            width: 100%;
-            height: 200px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        .file-list {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
             border-radius: 8px;
-            color: #e0e0e0;
-            padding: 15px;
-            font-family: inherit;
-            font-size: 0.95rem;
-            resize: vertical;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
         }
-        
-        textarea:focus {
-            outline: none;
-            border-color: var(--brand);
+
+        .file-item .file-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-        
+
+        .file-item .file-status {
+            margin-left: 10px;
+            font-size: 0.85rem;
+        }
+
+        .file-item.pending .file-status { color: var(--text-secondary); }
+        .file-item.processing .file-status { color: var(--brand); }
+        .file-item.success .file-status { color: #00c864; }
+        .file-item.error .file-status { color: #ff6464; }
+
+        .message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: rgba(0, 200, 100, 0.15);
+            border: 1px solid rgba(0, 200, 100, 0.3);
+            color: #00c864;
+            display: block;
+        }
+
+        .message.error {
+            background: rgba(255, 100, 100, 0.15);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            color: #ff6464;
+            display: block;
+        }
+
         .btn {
             background: var(--brand);
             color: #1a1a2e;
@@ -159,85 +314,19 @@
             font-size: 0.95rem;
             transition: all 0.3s ease;
         }
-        
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(229, 161, 36, 0.3);
             background: var(--brand-light);
         }
-        
+
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
-        
-        .message {
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none;
-        }
-        
-        .message.success {
-            background: rgba(0, 200, 100, 0.2);
-            border: 1px solid rgba(0, 200, 100, 0.5);
-            color: #00c864;
-            display: block;
-        }
-        
-        .message.error {
-            background: rgba(255, 100, 100, 0.2);
-            border: 1px solid rgba(255, 100, 100, 0.5);
-            color: #ff6464;
-            display: block;
-        }
-        
-        .recent-chunks {
-            margin-top: 40px;
-        }
-        
-        .chunk {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            border-left: 3px solid var(--brand);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .chunk:hover {
-            background: rgba(0, 0, 0, 0.4);
-            border-left-color: var(--brand-light);
-        }
-        
-        .chunk-content {
-            max-height: 60px;
-            overflow: hidden;
-            position: relative;
-            transition: max-height 0.3s ease;
-        }
-        
-        .chunk-content.expanded {
-            max-height: none;
-        }
-        
-        .chunk-toggle {
-            color: var(--brand);
-            font-size: 0.8rem;
-            margin-top: 8px;
-            display: block;
-        }
-        
-        .chunk-index {
-            color: #5a6c8a;
-            font-size: 0.75rem;
-            margin-bottom: 6px;
-        }
-        
+
         .loading {
             display: inline-block;
             width: 20px;
@@ -248,85 +337,255 @@
             animation: spin 1s linear infinite;
             margin-right: 10px;
         }
-        
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
-        .icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
+
+        /* Text input */
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            padding: 15px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            margin-bottom: 15px;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        
-        .file-list {
-            margin-top: 15px;
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(229, 161, 36, 0.2);
         }
-        
-        .file-item {
+
+        /* Preview sections */
+        .preview-section {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .preview-section.active {
+            display: block;
+        }
+
+        .preview-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 10px 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        
-        .file-item .file-name {
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        .file-item .file-status {
-            margin-left: 10px;
-            font-size: 0.85rem;
-        }
-        
-        .file-item.pending .file-status {
-            color: #8892b0;
-        }
-        
-        .file-item.processing .file-status {
+
+        .preview-header h3 {
             color: var(--brand);
+            font-size: 1.1rem;
         }
-        
-        .file-item.success .file-status {
-            color: #00c864;
+
+        .preview-info {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
         }
-        
-        .file-item.error .file-status {
-            color: #ff6464;
+
+        .preview-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
-        
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-primary);
+        }
+
+        .btn-success {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1b5e20;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--brand);
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
         .quick-tag {
             background: rgba(229, 161, 36, 0.2);
             border: 1px solid rgba(229, 161, 36, 0.5);
             color: var(--brand);
-            padding: 4px 10px;
-            border-radius: 4px;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             transition: all 0.2s;
+            border: none;
         }
-        
+
         .quick-tag:hover {
             background: rgba(229, 161, 36, 0.4);
+        }
+
+        .tag-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .context-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(229, 161, 36, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(229, 161, 36, 0.3);
+        }
+
+        .context-box label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--brand);
+            font-weight: 500;
+        }
+
+        .hint-text {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        .section-divider {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Table styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .data-table th {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--border);
+            color: var(--brand);
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .info-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .info-box.warning {
+            background: rgba(255, 152, 0, 0.15);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            color: #ffb74d;
+        }
+
+        .info-box.success {
+            background: rgba(100, 200, 100, 0.1);
+            border: 1px solid rgba(100, 200, 100, 0.3);
+            color: #8f8;
+        }
+
+        /* Components iframe */
+        .components-frame {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 12px;
+            background: var(--bg-secondary);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>MAKERSPACE Admin</h1>
-            <p class="subtitle">Administrer kunnskapsbasen</p>
-            <div style="margin-top: 15px;">
-                <a href="{{ url_for('index') }}" style="color: #8892b0; text-decoration: none; margin-right: 20px;">← Tilbake til chat</a>
-                <a href="{{ url_for('logout') }}" style="color: #ff6464; text-decoration: none;">🚪 Logg ut</a>
+    <header class="header">
+        <div class="logo">
+            <img src="/static/makerspace-logo.png" alt="Makerspace" class="logo-img">
+            <div>
+                <div class="logo-text">MAKERSPACE</div>
+                <div class="logo-sub">Admin Panel</div>
             </div>
-        </header>
+        </div>
+        <div class="header-actions">
+            <a href="{{ url_for('index') }}" class="icon-btn" title="Tilbake til chat">💬</a>
+            <button class="icon-btn" id="themeToggle" title="Bytt tema">
+                <span class="theme-icon light">☀️</span>
+                <span class="theme-icon dark">🌙</span>
+            </button>
+            <a href="{{ url_for('logout') }}" class="icon-btn danger" title="Logg ut">🚪</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>Administrer kunnskapsbasen</h1>
+            <p class="subtitle">Last opp filer og administrer komponenter</p>
+        </div>
         
         <div class="stats-bar">
             <div class="stat-card">
@@ -342,509 +601,263 @@
                 <div class="stat-label" id="reloadStatus">Klikk etter å ha lagt til innhold</div>
             </div>
         </div>
-        
-        <div class="grid">
-            <div class="card">
-                <h2>📁 Last opp filer (chunking)</h2>
-                <div class="drop-zone" id="dropZone">
-                    <div class="icon">📄</div>
-                    <p>Dra og slipp filer her eller klikk for å velge</p>
-                    <span class="formats">Støtter: PDF, TXT, JSON, MD (flere filer tillatt)</span>
-                    <input type="file" id="fileInput" accept=".pdf,.txt,.json,.md" multiple>
-                </div>
-                <div id="fileList" class="file-list"></div>
-                <div id="uploadMessage" class="message"></div>
-            </div>
-            
-            <div class="card">
-                <h2>✍️ Legg til tekst direkte</h2>
-                <textarea id="textInput" placeholder="Lim inn eller skriv tekst her. Den blir automatisk delt opp i biter for kunnskapsbasen..."></textarea>
-                <button class="btn" id="addTextBtn">Legg til i kunnskapsbasen</button>
-                <div id="textMessage" class="message"></div>
-            </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('uploads', this)">📁 Uploads</button>
+            <button class="tab" onclick="switchTab('components', this)">📦 Komponenter</button>
         </div>
-        
-        <!-- Fast PDF Import Section -->
-        <div class="card" style="margin-bottom: 40px;">
-            <h2>📄 PDF Import (Rask Ekstrahering)</h2>
-            <p style="color: #8892b0; margin-bottom: 20px;">Last opp PDF → Se innholdet med en gang → Valgfritt: La AI strukturere det → Godkjenn eller avvis</p>
-            
-            <div class="drop-zone" id="fastDropZone" style="margin-bottom: 20px;">
-                <div class="icon">⚡</div>
-                <p>Dra og slipp PDF her for rask ekstrahering</p>
-                <span class="formats">Kun PDF-filer. Tekst vises umiddelbart.</span>
-                <input type="file" id="fastFileInput" accept=".pdf">
+
+        <!-- Uploads Tab -->
+        <div id="tabUploads" class="tab-content active">
+            <!-- Unified Upload Zone -->
+            <div class="upload-zone" id="uploadZone">
+                <div class="icon">📄</div>
+                <p>Dra og slipp filer her eller klikk for å velge</p>
+                <span class="formats">Støtter: PDF, XLSX (auto-detektert)</span>
+                <input type="file" id="fileInput" accept=".pdf,.xlsx" multiple>
             </div>
-            
-            <!-- Step 1: Raw extraction preview -->
-            <div id="extractPreview" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
-                    <span style="color: var(--brand);">📝 Ekstrahert tekst:</span>
-                    <span id="extractInfo" style="color: #5a6c8a; font-size: 0.85rem;"></span>
+
+            <div id="fileList" class="file-list"></div>
+            <div id="uploadMessage" class="message"></div>
+
+            <!-- PDF Preview Section -->
+            <div id="pdfPreview" class="preview-section">
+                <div class="preview-header">
+                    <h3>📄 PDF Ekstrahering</h3>
+                    <span id="pdfInfo" class="preview-info"></span>
                 </div>
-                <textarea id="extractContent" style="height: 250px; font-family: monospace; font-size: 0.85rem;"></textarea>
+                <textarea id="pdfContent" style="height: 300px; font-family: monospace; font-size: 0.85rem;"></textarea>
                 
-                <!-- Context input for AI enhancement -->
-                <div style="margin-top: 15px; padding: 15px; background: rgba(229, 161, 36, 0.1); border-radius: 8px; border: 1px solid rgba(229, 161, 36, 0.3);">
-                    <label style="color: var(--brand); display: block; margin-bottom: 8px;">🎯 Hva handler dokumentet om? (for bedre AI-behandling)</label>
-                    <input type="text" id="docContext" placeholder="F.eks: 'Epilog laser bruksanvisning', 'HMS-regler for 3D-printing', 'Prusa MK3S feilsøking'" 
-                           style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #e0e0e0; font-size: 0.95rem;">
-                    <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
-                        <span style="color: #8892b0; font-size: 0.85rem;">Hurtigvalg:</span>
+                <div class="context-box">
+                    <label>🎯 Hva handler dokumentet om?</label>
+                    <input type="text" id="docContext" class="input-field" placeholder="F.eks: 'Epilog laser bruksanvisning', 'HMS-regler for 3D-printing'">
+                    <div class="tag-row">
                         <button type="button" class="quick-tag" onclick="setDocContext('Utstyrsmanual')">📖 Manual</button>
                         <button type="button" class="quick-tag" onclick="setDocContext('HMS og sikkerhet')">⚠️ HMS</button>
                         <button type="button" class="quick-tag" onclick="setDocContext('Feilsøkingsguide')">🔧 Feilsøking</button>
                         <button type="button" class="quick-tag" onclick="setDocContext('Materialinnstillinger')">⚙️ Innstillinger</button>
                     </div>
-                    
-                    <!-- Category Selection -->
-                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
-                        <label style="color: var(--brand); display: block; margin-bottom: 8px;">📂 Hvor skal innholdet lagres?</label>
-                        <select id="docCategory" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #e0e0e0; font-size: 0.95rem;">
-                            <option value="vault">📚 Generell kunnskap (vault.txt) - Opplæring, feilsøking, guider</option>
-                            <option value="utstyr">🔧 Utstyr (utstyr.json) - Verktøy, maskiner, inventar</option>
-                            <option value="regler">⚠️ Regler (regler.json) - HMS, sikkerhet, prosedyrer</option>
-                            <option value="rom">🏠 Rom (rom.json) - Lokaler, fasiliteter, åpningstider</option>
-                            <option value="ressurser">🔗 Ressurser (ressurser.json) - Lenker, eksterne guider</option>
+
+                    <div class="section-divider">
+                        <label>📂 Hvor skal innholdet lagres?</label>
+                        <select id="docCategory" class="select-field">
+                            <option value="vault">📚 Generell kunnskap (vault.txt)</option>
+                            <option value="utstyr">🔧 Utstyr (utstyr.json)</option>
+                            <option value="regler">⚠️ Regler (regler.json)</option>
+                            <option value="rom">🏠 Rom (rom.json)</option>
+                            <option value="ressurser">🔗 Ressurser (ressurser.json)</option>
                         </select>
-                        <p id="categoryHint" style="color: #5a6c8a; font-size: 0.8rem; margin-top: 8px;">
-                            💡 vault.txt: Strukturert tekst med seksjoner. JSON-filer: Strukturerte data som AI kan slå opp direkte.
-                        </p>
                     </div>
                 </div>
-                
-                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+
+                <div class="preview-actions">
                     <button class="btn" id="enhanceBtn">🤖 Strukturer med AI</button>
-                    <button class="btn" id="acceptRawBtn" style="background: #2e7d32;">✅ Godkjenn rå tekst</button>
-                    <button class="btn" id="cancelExtractBtn" style="background: #444;">❌ Avbryt</button>
+                    <button class="btn btn-success" id="acceptRawBtn">✅ Godkjenn rå tekst</button>
+                    <button class="btn btn-secondary" id="cancelPdfBtn">❌ Avbryt</button>
                 </div>
             </div>
-            
-            <!-- Step 2: AI enhanced preview -->
-            <div id="enhancedPreview" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
-                    <span style="color: var(--brand);">🤖 AI-strukturert tekst (rediger ved behov):</span>
-                    <span id="enhanceInfo" style="color: #5a6c8a; font-size: 0.85rem;"></span>
+
+            <!-- Enhanced Preview -->
+            <div id="enhancedPreview" class="preview-section">
+                <div class="preview-header">
+                    <h3>🤖 AI-strukturert tekst</h3>
+                    <span id="enhanceInfo" class="preview-info"></span>
                 </div>
                 <textarea id="enhancedContent" style="height: 350px; font-family: monospace; font-size: 0.85rem;"></textarea>
-                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-                    <button class="btn" id="acceptEnhancedBtn" style="background: #2e7d32;">✅ Godkjenn</button>
-                    <button class="btn" id="backToRawBtn" style="background: #555;">⬅️ Tilbake til rå tekst</button>
-                    <button class="btn" id="cancelEnhancedBtn" style="background: #444;">❌ Avbryt</button>
+                <div class="preview-actions">
+                    <button class="btn btn-success" id="acceptEnhancedBtn">✅ Godkjenn</button>
+                    <button class="btn btn-secondary" id="backToRawBtn">⬅️ Tilbake til rå tekst</button>
+                    <button class="btn btn-secondary" id="cancelEnhancedBtn">❌ Avbryt</button>
                 </div>
             </div>
-            
-            <div id="fastMessage" class="message"></div>
-        </div>
-        
-        <!-- XLSX Import for Equipment/Components -->
-        <div class="card" style="margin-bottom: 40px;">
-            <h2>📊 Excel Import (Komponentlister)</h2>
-            <p style="color: #8892b0; margin-bottom: 20px;">Last opp XLSX med komponenter/utstyr → Se forhåndsvisning → Duplikater filtreres automatisk → Godkjenn</p>
-            
-            <div class="drop-zone" id="xlsxDropZone" style="margin-bottom: 20px;">
-                <div class="icon">📊</div>
-                <p>Dra og slipp XLSX her for komponentimport</p>
-                <span class="formats">Kun .xlsx-filer. Første rad må ha kolonneoverskrifter (navn, lokasjon, etc.)</span>
-                <input type="file" id="xlsxFileInput" accept=".xlsx">
-            </div>
-            
-            <!-- XLSX Preview -->
-            <div id="xlsxPreview" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                    <span style="color: var(--brand);">📋 Funnet utstyr:</span>
-                    <span id="xlsxInfo" style="color: #5a6c8a; font-size: 0.85rem;"></span>
+
+            <!-- XLSX Preview Section -->
+            <div id="xlsxPreview" class="preview-section">
+                <div class="preview-header">
+                    <h3>📊 Excel Import</h3>
+                    <span id="xlsxInfo" class="preview-info"></span>
                 </div>
-                
-                <!-- Duplicate warning -->
-                <div id="xlsxDuplicateWarning" style="display: none; padding: 12px; background: rgba(255, 152, 0, 0.15); border: 1px solid rgba(255, 152, 0, 0.4); border-radius: 8px; margin-bottom: 15px;">
-                    <span style="color: #ffb74d;">⚠️ <span id="xlsxDuplicateCount">0</span> duplikater filtrert bort (samme ID, navn eller lokasjon)</span>
-                    <button type="button" onclick="toggleDuplicateDetails()" style="margin-left: 10px; padding: 4px 8px; background: rgba(255,255,255,0.1); border: none; border-radius: 4px; color: #ffb74d; cursor: pointer; font-size: 0.8rem;">Vis detaljer</button>
-                    <div id="xlsxDuplicateDetails" style="display: none; margin-top: 10px; max-height: 150px; overflow-y: auto; font-size: 0.8rem; color: #ccc;"></div>
+
+                <div id="xlsxDuplicateWarning" class="info-box warning" style="display: none;">
+                    <span>⚠️ <span id="xlsxDuplicateCount">0</span> duplikater filtrert bort</span>
+                    <button type="button" onclick="toggleDuplicateDetails()" class="quick-tag" style="margin-left: 10px;">Vis detaljer</button>
+                    <div id="xlsxDuplicateDetails" style="display: none; margin-top: 10px; max-height: 150px; overflow-y: auto; font-size: 0.85rem;"></div>
                 </div>
-                
-                <!-- Items to add table -->
-                <div style="max-height: 300px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
-                    <table id="xlsxTable" style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
-                        <thead style="position: sticky; top: 0; background: #1a1f2e;">
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
                             <tr>
-                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--brand);">✓</th>
-                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--brand);">Navn</th>
-                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--brand);">Lokasjon</th>
-                                <th style="padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2); color: var(--brand);">Kategori</th>
+                                <th>✓</th>
+                                <th>Navn</th>
+                                <th>Lokasjon</th>
+                                <th>Kategori</th>
                             </tr>
                         </thead>
                         <tbody id="xlsxTableBody"></tbody>
                     </table>
                 </div>
-                
-                <!-- Category info -->
-                <div id="xlsxCategoryInfo" style="margin-top: 15px; padding: 12px; background: rgba(100, 200, 100, 0.1); border: 1px solid rgba(100, 200, 100, 0.3); border-radius: 8px;">
-                    <span style="color: #8f8;">📂 Kategorier blir lest fra Excel-filen. Komponenter uten kategori havner i "other".</span>
-                </div>
-                
-                <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-                    <button class="btn" id="approveXlsxBtn" style="background: #2e7d32;">✅ Legg til <span id="xlsxAddCount">0</span> komponenter</button>
-                    <button class="btn" id="cancelXlsxBtn" style="background: #444;">❌ Avbryt</button>
+
+                <div class="preview-actions">
+                    <button class="btn btn-success" id="approveXlsxBtn">✅ Legg til <span id="xlsxAddCount">0</span> komponenter</button>
+                    <button class="btn btn-secondary" id="cancelXlsxBtn">❌ Avbryt</button>
                 </div>
             </div>
-            
-            <div id="xlsxMessage" class="message"></div>
+
+            <!-- Text Input -->
+            <div style="margin-top: 30px;">
+                <h3 style="color: var(--brand); margin-bottom: 15px;">✍️ Legg til tekst direkte</h3>
+                <textarea id="textInput" placeholder="Lim inn eller skriv tekst her. Den blir automatisk delt opp i biter for kunnskapsbasen..."></textarea>
+                <button class="btn" id="addTextBtn">Legg til i kunnskapsbasen</button>
+                <div id="textMessage" class="message"></div>
+            </div>
+        </div>
+
+        <!-- Components Tab -->
+        <div id="tabComponents" class="tab-content">
+            <div id="componentsLoading" style="padding: 20px; text-align: center;">
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">Loading components...</p>
+            </div>
+            <iframe id="componentsIframe" src="/components" class="components-frame" 
+                    sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+                    style="display: none;"></iframe>
         </div>
         
-        <div class="card recent-chunks">
-            <h2>📚 Nylige kunnskapsbiter (siste 5)</h2>
-            <p style="color: #5a6c8a; font-size: 0.85rem; margin-bottom: 15px;">Klikk på en bit for å utvide/skjule</p>
-            <div id="recentChunks">
-                {% for chunk in recent_chunks %}
-                <div class="chunk" onclick="this.querySelector('.chunk-content').classList.toggle('expanded')">
-                    <div class="chunk-index">#{{ loop.index }}</div>
-                    <div class="chunk-content">{{ chunk }}</div>
-                    <span class="chunk-toggle">Klikk for å vise mer/mindre</span>
-                </div>
-                {% endfor %}
-                {% if not recent_chunks %}
-                <p style="color: #8892b0;">Ingen biter i databasen ennå. Last opp en fil eller legg til tekst for å komme i gang!</p>
-                {% endif %}
-            </div>
-        </div>
+        <script>
+            // Handle components iframe loading
+            document.getElementById('componentsIframe').addEventListener('load', function() {
+                const iframe = this;
+                const loadingDiv = document.getElementById('componentsLoading');
+                console.log('Components iframe loaded');
+                
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const body = iframeDoc ? iframeDoc.body : null;
+                    
+                    if (body) {
+                        console.log('Iframe body content length:', body.innerHTML.length);
+                        if (body.innerHTML.trim().length > 0) {
+                            iframe.style.display = 'block';
+                            loadingDiv.style.display = 'none';
+                        } else {
+                            console.error('Iframe body is empty!');
+                            loadingDiv.innerHTML = '<p style="color: #ff6464;">Error: Components page loaded but body is empty. Check server logs.</p>';
+                        }
+                    } else {
+                        console.warn('Cannot access iframe document (might be CORS)');
+                        iframe.style.display = 'block';
+                        loadingDiv.style.display = 'none';
+                    }
+                } catch (e) {
+                    console.error('Error accessing iframe content:', e);
+                    // Show iframe anyway - might work despite CORS
+                    iframe.style.display = 'block';
+                    loadingDiv.style.display = 'none';
+                }
+            });
+        </script>
     </div>
     
     <script>
-        const dropZone = document.getElementById('dropZone');
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+
+        // Tab switching
+        function switchTab(tab, buttonElement) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            if (buttonElement) buttonElement.classList.add('active');
+            
+            if (tab === 'uploads') {
+                document.getElementById('tabUploads').classList.add('active');
+            } else if (tab === 'components') {
+                document.getElementById('tabComponents').classList.add('active');
+            }
+        }
+
+        // File upload handling
+        const uploadZone = document.getElementById('uploadZone');
         const fileInput = document.getElementById('fileInput');
         const uploadMessage = document.getElementById('uploadMessage');
         const fileList = document.getElementById('fileList');
-        const textInput = document.getElementById('textInput');
-        const addTextBtn = document.getElementById('addTextBtn');
-        const textMessage = document.getElementById('textMessage');
         
-        // Drop zone click
-        dropZone.addEventListener('click', () => fileInput.click());
+        uploadZone.addEventListener('click', () => fileInput.click());
         
-        // Drag and drop events
-        dropZone.addEventListener('dragover', (e) => {
+        uploadZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropZone.classList.add('dragover');
+            uploadZone.classList.add('dragover');
         });
         
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('dragover');
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
         });
         
-        dropZone.addEventListener('drop', (e) => {
+        uploadZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropZone.classList.remove('dragover');
+            uploadZone.classList.remove('dragover');
             const files = Array.from(e.dataTransfer.files);
-            if (files.length) handleMultipleFileUpload(files);
+            if (files.length) handleFileUpload(files);
         });
         
-        // File input change
         fileInput.addEventListener('change', () => {
             const files = Array.from(fileInput.files);
-            if (files.length) handleMultipleFileUpload(files);
+            if (files.length) handleFileUpload(files);
         });
         
-        // Handle multiple file upload
-        async function handleMultipleFileUpload(files) {
+        async function handleFileUpload(files) {
+            // Hide all previews
+            document.querySelectorAll('.preview-section').forEach(s => s.classList.remove('active'));
+            
             // Show file list
             fileList.innerHTML = files.map((f, i) => `
                 <div class="file-item pending" id="file-${i}">
                     <span class="file-name">📄 ${escapeHtml(f.name)}</span>
-                    <span class="file-status">Venter</span>
+                    <span class="file-status">Venter...</span>
                 </div>
             `).join('');
             
-            dropZone.innerHTML = '<span class="loading"></span> Laster opp ' + files.length + ' fil(er)...';
+            uploadZone.innerHTML = '<span class="loading"></span> Behandler filer...';
             uploadMessage.className = 'message';
             uploadMessage.style.display = 'none';
             
-            const formData = new FormData();
-            files.forEach(file => formData.append('file', file));
-            
-            // Update all to processing
-            files.forEach((_, i) => {
-                const item = document.getElementById(`file-${i}`);
-                if (item) {
-                    item.className = 'file-item processing';
-                    item.querySelector('.file-status').textContent = 'Behandler...';
+            // Process each file
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileItem = document.getElementById(`file-${i}`);
+                
+                if (fileItem) {
+                    fileItem.className = 'file-item processing';
+                    fileItem.querySelector('.file-status').textContent = 'Behandler...';
                 }
-            });
-            
-            try {
-                const response = await fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                });
                 
-                const data = await response.json();
+                const ext = file.name.toLowerCase().split('.').pop();
                 
-                if (data.success) {
-                    uploadMessage.className = 'message success';
-                    uploadMessage.textContent = data.message;
-                    
-                    // Update file items based on results
-                    if (data.files_processed) {
-                        data.files_processed.forEach(result => {
-                            const fileName = result.split(':')[0];
-                            files.forEach((f, i) => {
-                                if (f.name === fileName) {
-                                    const item = document.getElementById(`file-${i}`);
-                                    if (item) {
-                                        item.className = 'file-item success';
-                                        item.querySelector('.file-status').textContent = '✓ ' + result.split(':')[1];
-                                    }
-                                }
-                            });
-                        });
-                    }
-                    
-                    if (data.errors) {
-                        data.errors.forEach(error => {
-                            const fileName = error.split(':')[0];
-                            files.forEach((f, i) => {
-                                if (f.name === fileName) {
-                                    const item = document.getElementById(`file-${i}`);
-                                    if (item) {
-                                        item.className = 'file-item error';
-                                        item.querySelector('.file-status').textContent = '✗ ' + error.split(':')[1];
-                                    }
-                                }
-                            });
-                        });
-                    }
-                    
-                    updateStats(data.stats);
-                    refreshRecentChunks();
+                if (ext === 'pdf') {
+                    await handlePDFFile(file, i);
+                } else if (ext === 'xlsx') {
+                    await handleXLSXFile(file, i);
                 } else {
-                    uploadMessage.className = 'message error';
-                    uploadMessage.textContent = data.error;
-                    
-                    files.forEach((_, i) => {
-                        const item = document.getElementById(`file-${i}`);
-                        if (item) {
-                            item.className = 'file-item error';
-                            item.querySelector('.file-status').textContent = '✗ Feilet';
-                        }
-                    });
+                    // Generic upload for other file types
+                    await handleGenericUpload(file, i);
                 }
-            } catch (error) {
-                uploadMessage.className = 'message error';
-                uploadMessage.textContent = 'Opplasting feilet: ' + error.message;
-                
-                files.forEach((_, i) => {
-                    const item = document.getElementById(`file-${i}`);
-                    if (item) {
-                        item.className = 'file-item error';
-                        item.querySelector('.file-status').textContent = '✗ Feil';
-                    }
-                });
             }
             
-            // Reset drop zone
-            dropZone.innerHTML = `
-                <div class="icon">📄</div>
-                <p>Dra og slipp filer her eller klikk for å velge</p>
-                <span class="formats">Støtter: PDF, TXT, JSON, MD (flere filer tillatt)</span>
-            `;
-            fileInput.value = '';
+            resetUploadZone();
         }
         
-        // Add text button
-        addTextBtn.addEventListener('click', async () => {
-            const text = textInput.value.trim();
-            if (!text) {
-                textMessage.className = 'message error';
-                textMessage.textContent = 'Vennligst skriv inn tekst';
-                return;
-            }
-            
-            addTextBtn.disabled = true;
-            addTextBtn.innerHTML = '<span class="loading"></span> Legger til...';
-            textMessage.className = 'message';
-            textMessage.style.display = 'none';
-            
-            try {
-                const response = await fetch('/add-text', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    textMessage.className = 'message success';
-                    textMessage.textContent = data.message;
-                    textInput.value = '';
-                    updateStats(data.stats);
-                    refreshRecentChunks();
-                } else {
-                    textMessage.className = 'message error';
-                    textMessage.textContent = data.error;
-                }
-            } catch (error) {
-                textMessage.className = 'message error';
-                textMessage.textContent = 'Feilet: ' + error.message;
-            }
-            
-            addTextBtn.disabled = false;
-            addTextBtn.textContent = 'Legg til i kunnskapsbasen';
-        });
-        
-        // Update stats display
-        function updateStats(stats) {
-            document.getElementById('chunk-count').textContent = stats.chunks;
-            document.getElementById('vault-size').textContent = stats.size_kb + ' KB';
-        }
-        
-        // Refresh recent chunks
-        async function refreshRecentChunks() {
-            try {
-                const response = await fetch('/recent?n=5');
-                const data = await response.json();
-                
-                const container = document.getElementById('recentChunks');
-                if (data.chunks.length) {
-                    container.innerHTML = data.chunks.map((chunk, i) => `
-                        <div class="chunk" onclick="this.querySelector('.chunk-content').classList.toggle('expanded')">
-                            <div class="chunk-index">#${i + 1}</div>
-                            <div class="chunk-content">${escapeHtml(chunk)}</div>
-                            <span class="chunk-toggle">Klikk for å vise mer/mindre</span>
-                        </div>
-                    `).join('');
-                } else {
-                    container.innerHTML = '<p style="color: #8892b0;">Ingen biter i databasen ennå.</p>';
-                }
-            } catch (error) {
-                console.error('Kunne ikke oppdatere biter:', error);
-            }
-        }
-        
-        // Escape HTML to prevent XSS
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        // Reload embeddings button
-        const reloadBtn = document.getElementById('reloadBtn');
-        const reloadStatus = document.getElementById('reloadStatus');
-        
-        reloadBtn.addEventListener('click', async () => {
-            reloadBtn.disabled = true;
-            reloadBtn.innerHTML = '<span class="loading"></span>';
-            reloadStatus.textContent = 'Laster inn...';
-            
-            try {
-                const response = await fetch('/reload', { method: 'POST' });
-                const data = await response.json();
-                
-                if (data.success) {
-                    reloadStatus.textContent = `Lastet ${data.chunks} biter`;
-                    reloadStatus.style.color = '#E5A124';
-                } else {
-                    reloadStatus.textContent = 'Innlasting feilet';
-                    reloadStatus.style.color = '#ff6464';
-                }
-            } catch (error) {
-                reloadStatus.textContent = 'Feil: ' + error.message;
-                reloadStatus.style.color = '#ff6464';
-            }
-            
-            reloadBtn.disabled = false;
-            reloadBtn.textContent = '🔄 Last inn embeddings';
-        });
-        
-        // ===========================================
-        // Fast PDF Import (Quick extraction + optional AI)
-        // ===========================================
-        const fastDropZone = document.getElementById('fastDropZone');
-        const fastFileInput = document.getElementById('fastFileInput');
-        const extractPreview = document.getElementById('extractPreview');
-        const extractContent = document.getElementById('extractContent');
-        const extractInfo = document.getElementById('extractInfo');
-        const enhancedPreview = document.getElementById('enhancedPreview');
-        const enhancedContent = document.getElementById('enhancedContent');
-        const enhanceInfo = document.getElementById('enhanceInfo');
-        const fastMessage = document.getElementById('fastMessage');
-        
-        const enhanceBtn = document.getElementById('enhanceBtn');
-        const acceptRawBtn = document.getElementById('acceptRawBtn');
-        const cancelExtractBtn = document.getElementById('cancelExtractBtn');
-        const acceptEnhancedBtn = document.getElementById('acceptEnhancedBtn');
-        const backToRawBtn = document.getElementById('backToRawBtn');
-        const cancelEnhancedBtn = document.getElementById('cancelEnhancedBtn');
-        
-        let currentFilename = '';
-        
-        // Set document context from quick tags
-        function setDocContext(value) {
-            document.getElementById('docContext').value = value;
-        }
-        
-        // Click to upload
-        fastDropZone.addEventListener('click', () => fastFileInput.click());
-        
-        // Drag and drop
-        fastDropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            fastDropZone.classList.add('dragover');
-        });
-        
-        fastDropZone.addEventListener('dragleave', () => {
-            fastDropZone.classList.remove('dragover');
-        });
-        
-        fastDropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            fastDropZone.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            if (files.length && files[0].name.toLowerCase().endsWith('.pdf')) {
-                handleFastExtract(files[0]);
-            } else {
-                showFastMessage('Kun PDF-filer støttes', 'error');
-            }
-        });
-        
-        fastFileInput.addEventListener('change', () => {
-            if (fastFileInput.files.length) {
-                handleFastExtract(fastFileInput.files[0]);
-            }
-        });
-        
-        function showFastMessage(msg, type) {
-            fastMessage.className = 'message ' + type;
-            fastMessage.textContent = msg;
-        }
-        
-        function resetFastUI() {
-            extractPreview.style.display = 'none';
-            enhancedPreview.style.display = 'none';
-            extractContent.value = '';
-            enhancedContent.value = '';
-            document.getElementById('docContext').value = '';
-            document.getElementById('docCategory').value = 'vault';
-            currentCategory = 'vault';
-            fastMessage.className = 'message';
-            fastMessage.style.display = 'none';
-            fastDropZone.innerHTML = `
-                <div class="icon">⚡</div>
-                <p>Dra og slipp PDF her for rask ekstrahering</p>
-                <span class="formats">Kun PDF-filer. Tekst vises umiddelbart.</span>
-            `;
-            fastFileInput.value = '';
-        }
-        
-        // Fast extraction handler
-        async function handleFastExtract(file) {
-            fastDropZone.innerHTML = '<span class="loading"></span> Ekstraherer tekst...';
-            fastMessage.className = 'message';
-            fastMessage.style.display = 'none';
-            extractPreview.style.display = 'none';
-            enhancedPreview.style.display = 'none';
-            
+        async function handlePDFFile(file, index) {
             const formData = new FormData();
             formData.append('file', file);
             
@@ -857,239 +870,28 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    currentFilename = data.filename;
-                    extractInfo.textContent = `${data.filename} | ${data.page_count} sider | ${data.char_count} tegn | ${data.extract_time}s`;
-                    extractContent.value = data.text;
-                    extractPreview.style.display = 'block';
-                    showFastMessage(`Ekstrahert ${data.char_count} tegn på ${data.extract_time}s. Rediger ved behov.`, 'success');
+                    document.getElementById('pdfInfo').textContent = `${data.filename} | ${data.page_count} sider | ${data.char_count} tegn`;
+                    document.getElementById('pdfContent').value = data.text;
+                    document.getElementById('pdfPreview').classList.add('active');
+                    
+                    const fileItem = document.getElementById(`file-${index}`);
+                    if (fileItem) {
+                        fileItem.className = 'file-item success';
+                        fileItem.querySelector('.file-status').textContent = '✓ Ekstrahert';
+                    }
                 } else {
-                    showFastMessage(data.error, 'error');
+                    throw new Error(data.error);
                 }
             } catch (error) {
-                showFastMessage('Feil: ' + error.message, 'error');
-            }
-            
-            resetDropZone();
-        }
-        
-        function resetDropZone() {
-            fastDropZone.innerHTML = `
-                <div class="icon">⚡</div>
-                <p>Dra og slipp PDF her for rask ekstrahering</p>
-                <span class="formats">Kun PDF-filer. Tekst vises umiddelbart.</span>
-            `;
-            fastFileInput.value = '';
-        }
-        
-        // Enhance with AI button
-        let enhanceTimer = null;
-        let currentCategory = 'vault';
-        
-        enhanceBtn.addEventListener('click', async () => {
-            const rawText = extractContent.value.trim();
-            const docContext = document.getElementById('docContext').value.trim();
-            currentCategory = document.getElementById('docCategory').value;
-            
-            if (!rawText) {
-                showFastMessage('Ingen tekst å behandle', 'error');
-                return;
-            }
-            
-            if (!docContext) {
-                showFastMessage('Beskriv hva dokumentet handler om for bedre AI-behandling', 'error');
-                document.getElementById('docContext').focus();
-                return;
-            }
-            
-            enhanceBtn.disabled = true;
-            let seconds = 0;
-            
-            // Show live timer so user knows it's working
-            enhanceTimer = setInterval(() => {
-                seconds++;
-                enhanceBtn.innerHTML = `<span class="loading"></span> AI jobber... ${seconds}s`;
-            }, 1000);
-            
-            enhanceBtn.innerHTML = '<span class="loading"></span> AI jobber... 0s';
-            
-            try {
-                const response = await fetch('/enhance-pdf', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: rawText, context: docContext, category: currentCategory })
-                });
-                
-                clearInterval(enhanceTimer);
-                const data = await response.json();
-                
-                if (data.success) {
-                    const categoryLabel = currentCategory === 'vault' ? 'vault.txt' : `${currentCategory}.json`;
-                    enhanceInfo.textContent = `${data.original_chars} → ${data.enhanced_chars} tegn | ${data.enhance_time}s | → ${categoryLabel}${data.truncated ? ' (trunkert)' : ''}`;
-                    enhancedContent.value = data.enhanced_text;
-                    extractPreview.style.display = 'none';
-                    enhancedPreview.style.display = 'block';
-                    showFastMessage(`AI har strukturert teksten for ${categoryLabel}. Rediger ved behov og godkjenn.`, 'success');
-                } else {
-                    showFastMessage(data.error, 'error');
+                const fileItem = document.getElementById(`file-${index}`);
+                if (fileItem) {
+                    fileItem.className = 'file-item error';
+                    fileItem.querySelector('.file-status').textContent = '✗ Feil: ' + error.message;
                 }
-            } catch (error) {
-                clearInterval(enhanceTimer);
-                showFastMessage('Feil: ' + error.message, 'error');
             }
-            
-            enhanceBtn.disabled = false;
-            enhanceBtn.textContent = '🤖 Strukturer med AI';
-        });
-        
-        // Accept raw text
-        acceptRawBtn.addEventListener('click', async () => {
-            const content = extractContent.value.trim();
-            if (!content) {
-                showFastMessage('Ingen innhold å legge til', 'error');
-                return;
-            }
-            // Set category from dropdown for raw text acceptance
-            currentCategory = document.getElementById('docCategory').value;
-            await addToVault(content, acceptRawBtn);
-        });
-        
-        // Accept enhanced text
-        acceptEnhancedBtn.addEventListener('click', async () => {
-            const content = enhancedContent.value.trim();
-            if (!content) {
-                showFastMessage('Ingen innhold å legge til', 'error');
-                return;
-            }
-            await addToVault(content, acceptEnhancedBtn);
-        });
-        
-        // Add content to vault
-        async function addToVault(content, btn) {
-            const originalText = btn.textContent;
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading"></span> Legger til...';
-            
-            // Get category - if coming from raw accept, use dropdown; if from enhanced, use stored
-            const category = currentCategory || document.getElementById('docCategory').value;
-            
-            try {
-                const response = await fetch('/approve-summary', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content, category })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    const targetInfo = data.target_file ? ` (${data.target_file})` : '';
-                    showFastMessage(data.message + targetInfo + ' - Husk å laste inn søkeindeks!', 'success');
-                    extractPreview.style.display = 'none';
-                    enhancedPreview.style.display = 'none';
-                    updateStats(data.stats);
-                    refreshRecentChunks();
-                    // Reset category
-                    currentCategory = 'vault';
-                    document.getElementById('docCategory').value = 'vault';
-                } else {
-                    showFastMessage(data.error, 'error');
-                }
-            } catch (error) {
-                showFastMessage('Feil: ' + error.message, 'error');
-            }
-            
-            btn.disabled = false;
-            btn.textContent = originalText;
         }
         
-        // Back to raw text
-        backToRawBtn.addEventListener('click', () => {
-            enhancedPreview.style.display = 'none';
-            extractPreview.style.display = 'block';
-            showFastMessage('Tilbake til rå tekst. Du kan redigere og godkjenne.', 'success');
-        });
-        
-        // Cancel buttons
-        cancelExtractBtn.addEventListener('click', () => {
-            if (enhanceTimer) clearInterval(enhanceTimer);
-            resetFastUI();
-        });
-        cancelEnhancedBtn.addEventListener('click', () => {
-            if (enhanceTimer) clearInterval(enhanceTimer);
-            resetFastUI();
-        });
-        
-        // ===========================================
-        // XLSX Import (Component Lists)
-        // ===========================================
-        const xlsxDropZone = document.getElementById('xlsxDropZone');
-        const xlsxFileInput = document.getElementById('xlsxFileInput');
-        const xlsxPreview = document.getElementById('xlsxPreview');
-        const xlsxInfo = document.getElementById('xlsxInfo');
-        const xlsxTableBody = document.getElementById('xlsxTableBody');
-        const xlsxMessage = document.getElementById('xlsxMessage');
-        const approveXlsxBtn = document.getElementById('approveXlsxBtn');
-        const cancelXlsxBtn = document.getElementById('cancelXlsxBtn');
-        const xlsxAddCount = document.getElementById('xlsxAddCount');
-        const xlsxDuplicateWarning = document.getElementById('xlsxDuplicateWarning');
-        const xlsxDuplicateCount = document.getElementById('xlsxDuplicateCount');
-        const xlsxDuplicateDetails = document.getElementById('xlsxDuplicateDetails');
-        
-        let xlsxItemsToAdd = [];
-        let xlsxDuplicates = [];
-        
-        // Drop zone handlers
-        xlsxDropZone.addEventListener('click', () => xlsxFileInput.click());
-        xlsxDropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            xlsxDropZone.classList.add('dragover');
-        });
-        xlsxDropZone.addEventListener('dragleave', () => {
-            xlsxDropZone.classList.remove('dragover');
-        });
-        xlsxDropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            xlsxDropZone.classList.remove('dragover');
-            const file = e.dataTransfer.files[0];
-            if (file) handleXlsxUpload(file);
-        });
-        xlsxFileInput.addEventListener('change', () => {
-            const file = xlsxFileInput.files[0];
-            if (file) handleXlsxUpload(file);
-        });
-        
-        function showXlsxMessage(msg, type) {
-            xlsxMessage.textContent = msg;
-            xlsxMessage.className = 'message ' + type;
-            xlsxMessage.style.display = 'block';
-        }
-        
-        function resetXlsxUI() {
-            xlsxPreview.style.display = 'none';
-            xlsxMessage.style.display = 'none';
-            xlsxDropZone.innerHTML = `
-                <div class="icon">📊</div>
-                <p>Dra og slipp XLSX her for komponentimport</p>
-                <span class="formats">Kun .xlsx-filer. Første rad må ha kolonneoverskrifter (navn, lokasjon, etc.)</span>
-                <input type="file" id="xlsxFileInput" accept=".xlsx">
-            `;
-            // Re-bind input
-            document.getElementById('xlsxFileInput').addEventListener('change', () => {
-                const file = document.getElementById('xlsxFileInput').files[0];
-                if (file) handleXlsxUpload(file);
-            });
-            xlsxItemsToAdd = [];
-            xlsxDuplicates = [];
-        }
-        
-        async function handleXlsxUpload(file) {
-            if (!file.name.toLowerCase().endsWith('.xlsx')) {
-                showXlsxMessage('Kun .xlsx-filer støttes', 'error');
-                return;
-            }
-            
-            xlsxDropZone.innerHTML = '<span class="loading"></span> Parser Excel-fil...';
-            
+        async function handleXLSXFile(file, index) {
             const formData = new FormData();
             formData.append('file', file);
             
@@ -1102,88 +904,250 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    xlsxItemsToAdd = data.items_to_add;
-                    xlsxDuplicates = data.duplicates_skipped;
+                    xlsxItemsToAdd = data.items_to_add || [];
+                    xlsxDuplicates = data.duplicates_skipped || [];
                     
-                    // Update info
-                    xlsxInfo.textContent = `${data.filename} - ${data.total_rows} rader, ${xlsxItemsToAdd.length} nye, ${xlsxDuplicates.length} duplikater`;
+                    document.getElementById('xlsxInfo').textContent = `${data.filename} - ${data.total_rows} rader, ${xlsxItemsToAdd.length} nye`;
                     
-                    // Show duplicate warning if any
                     if (xlsxDuplicates.length > 0) {
-                        xlsxDuplicateWarning.style.display = 'block';
-                        xlsxDuplicateCount.textContent = xlsxDuplicates.length;
-                        xlsxDuplicateDetails.innerHTML = xlsxDuplicates.map(d => 
-                            `<div style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                ${escapeHtml(d.name)} @ ${escapeHtml(d.location || 'ukjent')}
-                                ${d._duplicate_reason ? `<span style="color: #888;"> - ${escapeHtml(d._duplicate_reason)}</span>` : ''}
-                            </div>`
-                        ).join('');
-                    } else {
-                        xlsxDuplicateWarning.style.display = 'none';
+                        document.getElementById('xlsxDuplicateWarning').style.display = 'block';
+                        document.getElementById('xlsxDuplicateCount').textContent = xlsxDuplicates.length;
                     }
                     
-                    // Populate table
-                    xlsxTableBody.innerHTML = xlsxItemsToAdd.map((item, idx) => `
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                            <td style="padding: 8px;"><input type="checkbox" checked data-idx="${idx}" class="xlsx-item-check"></td>
-                            <td style="padding: 8px; color: #e0e0e0;">${escapeHtml(item.name)}</td>
-                            <td style="padding: 8px; color: #8892b0;">${escapeHtml(item.location || '-')}</td>
-                            <td style="padding: 8px; color: #5a6c8a;">${escapeHtml(item.category || 'other')}</td>
-                        </tr>
-                    `).join('');
+                    populateXlsxTable();
+                    document.getElementById('xlsxPreview').classList.add('active');
                     
-                    // Update button count
-                    updateXlsxAddCount();
-                    
-                    // Add checkbox listeners
-                    document.querySelectorAll('.xlsx-item-check').forEach(cb => {
-                        cb.addEventListener('change', updateXlsxAddCount);
-                    });
-                    
-                    xlsxPreview.style.display = 'block';
-                    xlsxDropZone.innerHTML = `
-                        <div class="icon">✅</div>
-                        <p>Fil lastet: ${escapeHtml(file.name)}</p>
-                        <span class="formats">Dra ny fil for å erstatte</span>
-                        <input type="file" id="xlsxFileInput" accept=".xlsx">
-                    `;
-                    document.getElementById('xlsxFileInput').addEventListener('change', () => {
-                        const newFile = document.getElementById('xlsxFileInput').files[0];
-                        if (newFile) handleXlsxUpload(newFile);
-                    });
+                    const fileItem = document.getElementById(`file-${index}`);
+                    if (fileItem) {
+                        fileItem.className = 'file-item success';
+                        fileItem.querySelector('.file-status').textContent = '✓ Parset';
+                    }
                 } else {
-                    showXlsxMessage(data.error, 'error');
-                    resetXlsxUI();
+                    throw new Error(data.error);
                 }
             } catch (error) {
-                showXlsxMessage('Feil: ' + error.message, 'error');
-                resetXlsxUI();
+                const fileItem = document.getElementById(`file-${index}`);
+                if (fileItem) {
+                    fileItem.className = 'file-item error';
+                    fileItem.querySelector('.file-status').textContent = '✗ Feil: ' + error.message;
+                }
             }
+        }
+        
+        async function handleGenericUpload(file, index) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                const fileItem = document.getElementById(`file-${index}`);
+                if (data.success) {
+                    if (fileItem) {
+                        fileItem.className = 'file-item success';
+                        fileItem.querySelector('.file-status').textContent = '✓ Lastet opp';
+                    }
+                    updateStats(data.stats);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                const fileItem = document.getElementById(`file-${index}`);
+                if (fileItem) {
+                    fileItem.className = 'file-item error';
+                    fileItem.querySelector('.file-status').textContent = '✗ Feil: ' + error.message;
+                }
+            }
+        }
+        
+        function resetUploadZone() {
+            uploadZone.innerHTML = `
+                <div class="icon">📄</div>
+                <p>Dra og slipp filer her eller klikk for å velge</p>
+                <span class="formats">Støtter: PDF, XLSX (auto-detektert)</span>
+            `;
+            fileInput.value = '';
+        }
+        
+        // PDF enhancement
+        let xlsxItemsToAdd = [];
+        let xlsxDuplicates = [];
+        let enhanceTimer = null;
+        let currentCategory = 'vault';
+        
+        function setDocContext(value) {
+            document.getElementById('docContext').value = value;
+        }
+        
+        document.getElementById('enhanceBtn').addEventListener('click', async () => {
+            const rawText = document.getElementById('pdfContent').value.trim();
+            const docContext = document.getElementById('docContext').value.trim();
+            currentCategory = document.getElementById('docCategory').value;
+            
+            if (!rawText) {
+                showMessage('Ingen tekst å behandle', 'error');
+                return;
+            }
+            
+            if (!docContext) {
+                showMessage('Beskriv hva dokumentet handler om', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('enhanceBtn');
+            btn.disabled = true;
+            let seconds = 0;
+            
+            enhanceTimer = setInterval(() => {
+                seconds++;
+                btn.innerHTML = `<span class="loading"></span> AI jobber... ${seconds}s`;
+            }, 1000);
+            
+            try {
+                const response = await fetch('/enhance-pdf', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: rawText, context: docContext, category: currentCategory })
+                });
+                
+                clearInterval(enhanceTimer);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('enhanceInfo').textContent = `${data.original_chars} → ${data.enhanced_chars} tegn`;
+                    document.getElementById('enhancedContent').value = data.enhanced_text;
+                    document.getElementById('pdfPreview').classList.remove('active');
+                    document.getElementById('enhancedPreview').classList.add('active');
+                } else {
+                    showMessage(data.error, 'error');
+                }
+            } catch (error) {
+                clearInterval(enhanceTimer);
+                showMessage('Feil: ' + error.message, 'error');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = '🤖 Strukturer med AI';
+        });
+        
+        document.getElementById('acceptRawBtn').addEventListener('click', async () => {
+            const content = document.getElementById('pdfContent').value.trim();
+            if (!content) {
+                showMessage('Ingen innhold å legge til', 'error');
+                return;
+            }
+            currentCategory = document.getElementById('docCategory').value;
+            await addToVault(content, document.getElementById('acceptRawBtn'));
+        });
+        
+        document.getElementById('acceptEnhancedBtn').addEventListener('click', async () => {
+            const content = document.getElementById('enhancedContent').value.trim();
+            if (!content) {
+                showMessage('Ingen innhold å legge til', 'error');
+                return;
+            }
+            await addToVault(content, document.getElementById('acceptEnhancedBtn'));
+        });
+        
+        async function addToVault(content, btn) {
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Legger til...';
+            
+            try {
+                const response = await fetch('/approve-summary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content, category: currentCategory })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(data.message + ' - Husk å laste inn søkeindeks!', 'success');
+                    document.getElementById('pdfPreview').classList.remove('active');
+                    document.getElementById('enhancedPreview').classList.remove('active');
+                    updateStats(data.stats);
+                } else {
+                    showMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('Feil: ' + error.message, 'error');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+        
+        document.getElementById('backToRawBtn').addEventListener('click', () => {
+            document.getElementById('enhancedPreview').classList.remove('active');
+            document.getElementById('pdfPreview').classList.add('active');
+        });
+        
+        document.getElementById('cancelPdfBtn').addEventListener('click', () => {
+            if (enhanceTimer) clearInterval(enhanceTimer);
+            document.getElementById('pdfPreview').classList.remove('active');
+            document.getElementById('pdfContent').value = '';
+        });
+        
+        document.getElementById('cancelEnhancedBtn').addEventListener('click', () => {
+            if (enhanceTimer) clearInterval(enhanceTimer);
+            document.getElementById('enhancedPreview').classList.remove('active');
+            document.getElementById('enhancedContent').value = '';
+        });
+        
+        // XLSX handling
+        function populateXlsxTable() {
+            const tbody = document.getElementById('xlsxTableBody');
+            tbody.innerHTML = xlsxItemsToAdd.map((item, idx) => `
+                <tr>
+                    <td><input type="checkbox" checked data-idx="${idx}" class="xlsx-item-check"></td>
+                    <td>${escapeHtml(item.name)}</td>
+                    <td>${escapeHtml(item.location || '-')}</td>
+                    <td>${escapeHtml(item.category || 'other')}</td>
+                </tr>
+            `).join('');
+            
+            document.querySelectorAll('.xlsx-item-check').forEach(cb => {
+                cb.addEventListener('change', updateXlsxAddCount);
+            });
+            
+            updateXlsxAddCount();
         }
         
         function updateXlsxAddCount() {
             const checked = document.querySelectorAll('.xlsx-item-check:checked').length;
-            xlsxAddCount.textContent = checked;
-            approveXlsxBtn.disabled = checked === 0;
+            document.getElementById('xlsxAddCount').textContent = checked;
+            document.getElementById('approveXlsxBtn').disabled = checked === 0;
         }
         
         function toggleDuplicateDetails() {
             const details = document.getElementById('xlsxDuplicateDetails');
             details.style.display = details.style.display === 'none' ? 'block' : 'none';
+            if (details.style.display === 'block') {
+                details.innerHTML = xlsxDuplicates.map(d => 
+                    `<div style="padding: 4px 0;">${escapeHtml(d.name)} @ ${escapeHtml(d.location || 'ukjent')}</div>`
+                ).join('');
+            }
         }
         
-        // Approve XLSX
-        approveXlsxBtn.addEventListener('click', async () => {
+        document.getElementById('approveXlsxBtn').addEventListener('click', async () => {
             const checkedIdxs = Array.from(document.querySelectorAll('.xlsx-item-check:checked')).map(cb => parseInt(cb.dataset.idx));
             const itemsToSend = checkedIdxs.map(idx => xlsxItemsToAdd[idx]);
             
             if (itemsToSend.length === 0) {
-                showXlsxMessage('Ingen komponenter valgt', 'error');
+                showMessage('Ingen komponenter valgt', 'error');
                 return;
             }
             
-            approveXlsxBtn.disabled = true;
-            approveXlsxBtn.textContent = '⏳ Lagrer...';
+            const btn = document.getElementById('approveXlsxBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Lagrer...';
             
             try {
                 const response = await fetch('/approve-xlsx', {
@@ -1195,21 +1159,106 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    showXlsxMessage(`✅ ${data.message} - Husk å laste inn søkeindeks!`, 'success');
-                    resetXlsxUI();
+                    showMessage(`✅ ${data.message} - Husk å laste inn søkeindeks!`, 'success');
+                    document.getElementById('xlsxPreview').classList.remove('active');
                 } else {
-                    showXlsxMessage(data.error, 'error');
+                    showMessage(data.error, 'error');
                 }
             } catch (error) {
-                showXlsxMessage('Feil: ' + error.message, 'error');
+                showMessage('Feil: ' + error.message, 'error');
             }
             
-            approveXlsxBtn.disabled = false;
-            approveXlsxBtn.textContent = `✅ Legg til ${xlsxAddCount.textContent} komponenter`;
+            btn.disabled = false;
+            btn.innerHTML = `✅ Legg til <span id="xlsxAddCount">0</span> komponenter`;
         });
         
-        // Cancel XLSX
-        cancelXlsxBtn.addEventListener('click', resetXlsxUI);
+        document.getElementById('cancelXlsxBtn').addEventListener('click', () => {
+            document.getElementById('xlsxPreview').classList.remove('active');
+        });
+        
+        // Text input
+        document.getElementById('addTextBtn').addEventListener('click', async () => {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                showMessage('Vennligst skriv inn tekst', 'error', 'textMessage');
+                return;
+            }
+            
+            const btn = document.getElementById('addTextBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Legger til...';
+            
+            try {
+                const response = await fetch('/add-text', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(data.message, 'success', 'textMessage');
+                    document.getElementById('textInput').value = '';
+                    updateStats(data.stats);
+                } else {
+                    showMessage(data.error, 'error', 'textMessage');
+                }
+            } catch (error) {
+                showMessage('Feil: ' + error.message, 'error', 'textMessage');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = 'Legg til i kunnskapsbasen';
+        });
+        
+        // Reload embeddings
+        document.getElementById('reloadBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('reloadBtn');
+            const status = document.getElementById('reloadStatus');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span>';
+            status.textContent = 'Laster inn...';
+            
+            try {
+                const response = await fetch('/reload', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    status.textContent = `Lastet ${data.chunks} biter`;
+                    status.style.color = '#E5A124';
+                } else {
+                    status.textContent = 'Innlasting feilet';
+                    status.style.color = '#ff6464';
+                }
+            } catch (error) {
+                status.textContent = 'Feil: ' + error.message;
+                status.style.color = '#ff6464';
+            }
+            
+            btn.disabled = false;
+            btn.textContent = '🔄 Last inn embeddings';
+        });
+        
+        function updateStats(stats) {
+            if (stats) {
+                document.getElementById('chunk-count').textContent = stats.chunks;
+                document.getElementById('vault-size').textContent = stats.size_kb + ' KB';
+            }
+        }
+        
+        function showMessage(msg, type, targetId = 'uploadMessage') {
+            const msgEl = document.getElementById(targetId);
+            msgEl.className = 'message ' + type;
+            msgEl.textContent = msg;
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
     </script>
 </body>
 </html>

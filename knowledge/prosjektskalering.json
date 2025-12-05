@@ -1,0 +1,82 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-12-04",
+  "description": "Prosjektskalering - visuell sammenligning av prototype vs produksjon",
+  
+  "scaling_paths": {
+    "3d_printing": {
+      "name_no": "3D-printing skaleringsveier",
+      "name_en": "3D Printing Scaling Paths",
+      "prototype": {
+        "method": "3D-printing",
+        "description": "Enkelt å iterere, lav oppstartskostnad",
+        "visual": "Enkelt design, rask prototyping"
+      },
+      "paths": [
+        {
+          "target_quantity": "1-10 stk",
+          "method": "3D-print flere",
+          "description": "Fortsett med 3D-printing for små kvantiteter",
+          "cost": "Lav",
+          "time": "Rask",
+          "visual": "Samme design, flere kopier"
+        },
+        {
+          "target_quantity": "10-100 stk",
+          "method": "Silikonform + resin",
+          "description": "Lag silikonform av originalen, støp resin-kopier",
+          "cost": "Medium",
+          "time": "Medium",
+          "visual": "Form + støpte deler, høyere kvalitet"
+        },
+        {
+          "target_quantity": "100+ stk",
+          "method": "Injeksjonsstøping",
+          "description": "Lag stålform for injeksjonsstøping (krever ekstern produsent)",
+          "cost": "Høy oppstart, lav per enhet",
+          "time": "Lang oppstart",
+          "visual": "Profesjonell finish, konsistent kvalitet"
+        }
+      ],
+      "mermaid_diagram": "flowchart TD\n    A[Prototype: 3D-print] --> B{Antall stk?}\n    B -->|1-10| C[3D-print flere]\n    B -->|10-100| D[Silikonform + resin]\n    B -->|100+| E[Injeksjonsstøping]\n    C --> F[Kostnad: Lav<br/>Tid: Rask]\n    D --> G[Kostnad: Medium<br/>Tid: Medium]\n    E --> H[Kostnad: Høy oppstart<br/>Tid: Lang oppstart]\n    style A fill:#E5A124\n    style C fill:#4CAF50\n    style D fill:#FF9800\n    style E fill:#2196F3"
+    },
+    
+    "laser_cutting": {
+      "name_no": "Laserkutting skaleringsveier",
+      "name_en": "Laser Cutting Scaling Paths",
+      "prototype": {
+        "method": "Laserkutting",
+        "description": "Rask prototyping, enkel å endre design",
+        "visual": "Enkelt design, rask produksjon"
+      },
+      "paths": [
+        {
+          "target_quantity": "1-50 stk",
+          "method": "Laserkutt flere",
+          "description": "Fortsett med laserkutting for små til medium kvantiteter",
+          "cost": "Lav",
+          "time": "Rask",
+          "visual": "Samme design, flere kopier"
+        },
+        {
+          "target_quantity": "50-500 stk",
+          "method": "CNC-fresing",
+          "description": "Bruk CNC for større kvantiteter og mer komplekse deler",
+          "cost": "Medium",
+          "time": "Medium",
+          "visual": "Mer presis, kan håndtere tykkere materialer"
+        },
+        {
+          "target_quantity": "500+ stk",
+          "method": "Stansing/Die-cutting",
+          "description": "Lag stempel for masseproduksjon (krever ekstern produsent)",
+          "cost": "Høy oppstart, lav per enhet",
+          "time": "Lang oppstart",
+          "visual": "Høy hastighet, konsistent kvalitet"
+        }
+      ],
+      "mermaid_diagram": "flowchart TD\n    A[Prototype: Laserkutting] --> B{Antall stk?}\n    B -->|1-50| C[Laserkutt flere]\n    B -->|50-500| D[CNC-fresing]\n    B -->|500+| E[Stansing/Die-cutting]\n    C --> F[Kostnad: Lav<br/>Tid: Rask]\n    D --> G[Kostnad: Medium<br/>Tid: Medium]\n    E --> H[Kostnad: Høy oppstart<br/>Tid: Lang oppstart]\n    style A fill:#E5A124\n    style C fill:#4CAF50\n    style D fill:#FF9800\n    style E fill:#2196F3"
+    }
+  }
+}
+

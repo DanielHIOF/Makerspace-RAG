@@ -185,7 +185,10 @@
             </div>
             
             <div class="input-row">
-                <input type="text" id="input" placeholder="Skriv ditt spørsmål her..." autocomplete="off">
+                <div class="input-wrapper">
+                    <input type="text" id="input" placeholder="Skriv ditt spørsmål her..." autocomplete="off">
+                    <div id="commandSuggestions" class="command-suggestions" style="display: none;"></div>
+                </div>
                 <button id="sendBtn" class="send-btn">Send</button>
             </div>
             
@@ -339,6 +342,30 @@
             font-family: 'Consolas', monospace;
         }
         
+        .message pre {
+            background: var(--bg-tertiary);
+            padding: 12px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 8px 0;
+            border: 1px solid var(--border);
+        }
+        
+        .message pre code {
+            background: transparent;
+            padding: 0;
+        }
+        
+        .message .mermaid {
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+            border: 1px solid var(--border);
+            overflow-x: auto;
+            text-align: center;
+        }
+        
         .message a.chat-link {
             color: var(--brand);
             text-decoration: underline;
@@ -461,8 +488,13 @@
             flex: 1;
         }
         
-        #input {
+        .input-wrapper {
             flex: 1;
+            position: relative;
+        }
+        
+        #input {
+            width: 100%;
             background: var(--bg-primary);
             border: 2px solid var(--border);
             border-radius: 12px;
@@ -470,6 +502,7 @@
             color: var(--text-primary);
             font-size: 1rem;
             outline: none;
+            box-sizing: border-box;
             transition: all 0.2s;
         }
         
@@ -480,6 +513,61 @@
         
         #input::placeholder {
             color: var(--text-secondary);
+        }
+        
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+        }
+        
+        .command-suggestions {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            margin-bottom: 8px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--brand);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .command-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .command-item:last-child {
+            border-bottom: none;
+        }
+        
+        .command-item:hover,
+        .command-item.selected {
+            background: var(--brand);
+            color: #1a1a2e;
+        }
+        
+        .command-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .command-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        .command-item:hover .command-desc,
+        .command-item.selected .command-desc {
+            opacity: 1;
         }
         
         .send-btn {
@@ -530,6 +618,48 @@
         }
     </style>
 
+    <!-- Mermaid.js for diagram rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#E5A124',
+                primaryTextColor: '#1a1a2e',
+                primaryBorderColor: '#c98b1d',
+                lineColor: '#E5A124',
+                secondaryColor: '#f5b835',
+                tertiaryColor: '#e9ecef',
+                background: '#ffffff',
+                mainBkgColor: '#ffffff',
+                textColor: '#1a1a2e'
+            },
+            darkMode: false
+        });
+        
+        // Update Mermaid theme when user switches theme
+        function updateMermaidTheme(isDark) {
+            mermaid.initialize({ 
+                startOnLoad: false,
+                theme: isDark ? 'dark' : 'default',
+                themeVariables: {
+                    primaryColor: '#E5A124',
+                    primaryTextColor: isDark ? '#f1f1f1' : '#1a1a2e',
+                    primaryBorderColor: '#c98b1d',
+                    lineColor: '#E5A124',
+                    secondaryColor: '#f5b835',
+                    tertiaryColor: isDark ? '#1e1e28' : '#e9ecef',
+                    background: isDark ? '#16161d' : '#ffffff',
+                    mainBkgColor: isDark ? '#1e1e28' : '#ffffff',
+                    textColor: isDark ? '#f1f1f1' : '#1a1a2e'
+                },
+                darkMode: isDark
+            });
+        }
+    </script>
+
     <script>
         // Theme toggle
         const themeToggle = document.getElementById('themeToggle');
@@ -544,7 +674,11 @@
             const next = current === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
+            updateMermaidTheme(next === 'dark');
         });
+        
+        // Initialize Mermaid theme on load
+        updateMermaidTheme(savedTheme === 'dark');
         
         // Chat functionality
         const chatArea = document.getElementById('chatArea');
@@ -557,6 +691,22 @@
         let selectedLang = '';
         let conversationHistory = [];  // Track conversation history
         let conversationSummary = '';  // Track compressed summary of older messages
+        let commandSuggestionsVisible = false;
+        let selectedCommandIndex = -1;
+        
+        // Available commands
+        const commands = [
+            { name: '/nybegynner', desc: 'Enkel forklaring for nybegynnere', value: '/nybegynner ' },
+            { name: '/ekspert', desc: 'Teknisk og detaljert forklaring', value: '/ekspert ' },
+            { name: '/norsk', desc: 'Svar på norsk', value: '/norsk ' },
+            { name: '/english', desc: 'Answer in English', value: '/english ' },
+            { name: '/prusa', desc: 'Fokus på Prusa-printere og PrusaSlicer', value: '/prusa ' },
+            { name: '/3d', desc: 'Fokus på 3D-printing generelt', value: '/3d ' },
+            { name: '/laser', desc: 'Fokus på laserkutting', value: '/laser ' },
+            { name: '/cnc', desc: 'Fokus på CNC-fresing', value: '/cnc ' },
+            { name: '/elektronikk', desc: 'Fokus på elektronikk og Arduino', value: '/elektronikk ' },
+            { name: '/lodding', desc: 'Fokus på lodding', value: '/lodding ' }
+        ];
         
         const levelDescriptions = {
             '/nybegynner ': 'Nybegynner: Enkelt språk, steg-for-steg, ingen faguttrykk',
@@ -614,15 +764,48 @@
         }
         
         function formatMessage(text) {
-            return text
-                // First handle markdown links: [text](url)
-                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>')
-                // Then handle raw URLs (not already in href)
-                .replace(/(?<!href="|">)(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>')
-                .replace(/\n/g, '<br>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/`(.*?)`/g, '<code>$1</code>');
+            // First handle Mermaid diagrams: ```mermaid ... ```
+            let mermaidDiagrams = [];
+            text = text.replace(/```mermaid\n([\s\S]*?)```/g, (match, diagram) => {
+                const id = 'mermaid-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                mermaidDiagrams.push({ id: id, content: diagram.trim() });
+                return `<div class="mermaid" id="${id}">${diagram.trim()}</div>`;
+            });
+            
+            // Handle code blocks (but not mermaid)
+            text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+                if (lang === 'mermaid') return match; // Already handled
+                const langClass = lang ? ` class="language-${lang}"` : '';
+                return `<pre><code${langClass}>${code.trim()}</code></pre>`;
+            });
+            
+            // Then handle markdown links: [text](url)
+            text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>');
+            
+            // Then handle raw URLs (not already in href)
+            text = text.replace(/(?<!href="|">)(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="chat-link">$1</a>');
+            
+            // Handle line breaks
+            text = text.replace(/\n/g, '<br>');
+            
+            // Handle markdown formatting
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            text = text.replace(/`(.*?)`/g, '<code>$1</code>');
+            
+            // Render Mermaid diagrams after DOM is updated
+            if (mermaidDiagrams.length > 0) {
+                setTimeout(() => {
+                    mermaidDiagrams.forEach(diagram => {
+                        const element = document.getElementById(diagram.id);
+                        if (element) {
+                            mermaid.run({ nodes: [element] });
+                        }
+                    });
+                }, 100);
+            }
+            
+            return text;
         }
         
         function showLoading() {
@@ -677,10 +860,123 @@
             input.focus();
         }
         
-        sendBtn.addEventListener('click', sendMessage);
-        input.addEventListener('keypress', e => {
-            if (e.key === 'Enter') sendMessage();
+        // Command suggestions functionality
+        const commandSuggestions = document.getElementById('commandSuggestions');
+        
+        function showCommandSuggestions() {
+            commandSuggestionsVisible = true;
+            selectedCommandIndex = -1;
+            updateCommandSuggestions();
+            commandSuggestions.style.display = 'block';
+        }
+        
+        function hideCommandSuggestions() {
+            commandSuggestionsVisible = false;
+            commandSuggestions.style.display = 'none';
+        }
+        
+        function updateCommandSuggestions() {
+            const inputValue = input.value;
+            const query = inputValue.substring(inputValue.lastIndexOf('/') + 1).toLowerCase();
+            
+            const filtered = commands.filter(cmd => 
+                cmd.name.toLowerCase().includes(query)
+            );
+            
+            commandSuggestions.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                hideCommandSuggestions();
+                return;
+            }
+            
+            filtered.forEach((cmd, index) => {
+                const item = document.createElement('div');
+                item.className = 'command-item' + (index === selectedCommandIndex ? ' selected' : '');
+                item.innerHTML = `
+                    <div class="command-name">${cmd.name}</div>
+                    <div class="command-desc">${cmd.desc}</div>
+                `;
+                item.addEventListener('click', () => {
+                    insertCommand(cmd.value);
+                });
+                commandSuggestions.appendChild(item);
+            });
+        }
+        
+        function insertCommand(commandValue) {
+            const inputValue = input.value;
+            const lastSlashIndex = inputValue.lastIndexOf('/');
+            if (lastSlashIndex !== -1) {
+                input.value = inputValue.substring(0, lastSlashIndex) + commandValue;
+            } else {
+                input.value = commandValue;
+            }
+            hideCommandSuggestions();
+            input.focus();
+        }
+        
+        // Input event listeners
+        input.addEventListener('input', (e) => {
+            const value = e.target.value;
+            const lastChar = value[value.length - 1];
+            const lastSlashIndex = value.lastIndexOf('/');
+            
+            if (lastChar === '/' || (lastSlashIndex !== -1 && value.length > lastSlashIndex)) {
+                showCommandSuggestions();
+            } else {
+                hideCommandSuggestions();
+            }
         });
+        
+        input.addEventListener('keydown', (e) => {
+            if (!commandSuggestionsVisible) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+                return;
+            }
+            
+            const items = commandSuggestions.querySelectorAll('.command-item');
+            
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedCommandIndex = Math.min(selectedCommandIndex + 1, items.length - 1);
+                updateCommandSuggestions();
+                items[selectedCommandIndex]?.scrollIntoView({ block: 'nearest' });
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedCommandIndex = Math.max(selectedCommandIndex - 1, -1);
+                updateCommandSuggestions();
+                if (selectedCommandIndex >= 0) {
+                    items[selectedCommandIndex]?.scrollIntoView({ block: 'nearest' });
+                }
+            } else if (e.key === 'Enter' && selectedCommandIndex >= 0) {
+                e.preventDefault();
+                const query = input.value.substring(input.value.lastIndexOf('/') + 1).toLowerCase();
+                const filtered = commands.filter(c => 
+                    c.name.toLowerCase().includes(query)
+                );
+                const cmd = filtered[selectedCommandIndex];
+                if (cmd) {
+                    insertCommand(cmd.value);
+                }
+            } else if (e.key === 'Escape') {
+                hideCommandSuggestions();
+            } else if (e.key === 'Enter') {
+                // If Enter pressed without selection, send message
+                sendMessage();
+            }
+        });
+        
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!input.contains(e.target) && !commandSuggestions.contains(e.target)) {
+                hideCommandSuggestions();
+            }
+        });
+        
+        sendBtn.addEventListener('click', sendMessage);
         
         // New chat button - clears conversation
         document.getElementById('newChatBtn').addEventListener('click', () => {
@@ -688,6 +984,7 @@
             conversationSummary = '';  // Reset summary too
             messages.innerHTML = '';
             welcome.style.display = 'block';
+            hideCommandSuggestions();
             input.focus();
         });
         
