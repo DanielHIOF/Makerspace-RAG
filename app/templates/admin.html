@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makerspace - Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --brand: #E5A124;
+            --brand-dark: #c98b1d;
+            --brand-light: #f5b835;
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e9ecef;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6c757d;
+            --border: rgba(0,0,0,0.1);
+            --shadow: rgba(0,0,0,0.08);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0d0d12;
+            --bg-secondary: #16161d;
+            --bg-tertiary: #1e1e28;
+            --text-primary: #f1f1f1;
+            --text-secondary: #9ca3af;
+            --border: rgba(255,255,255,0.1);
+            --shadow: rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .header {
+            padding: 12px 24px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .logo-sub {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn:hover {
+            background: var(--brand);
+            border-color: var(--brand);
+            color: #1a1a2e;
+        }
+
+        .icon-btn.danger:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+
+        .theme-icon.dark { display: none; }
+        [data-theme="dark"] .theme-icon.light { display: none; }
+        [data-theme="dark"] .theme-icon.dark { display: inline; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            color: var(--brand);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .page-title .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+            background: var(--bg-secondary);
+            border-radius: 12px 12px 0 0;
+            padding: 0 20px;
+        }
+
+        .tab {
+            padding: 16px 32px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
+        }
+
+        .tab.active {
+            color: var(--brand);
+            border-bottom-color: var(--brand);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--bg-secondary);
+            border-radius: 0 0 12px 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px var(--shadow);
+            border: 1px solid var(--border);
+            border-top: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Stats */
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 20px 30px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--brand);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed var(--brand);
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(229, 161, 36, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--brand-light);
+            background: rgba(229, 161, 36, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .upload-zone .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .upload-zone p {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .upload-zone .formats {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .file-item .file-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-item .file-status {
+            margin-left: 10px;
+            font-size: 0.85rem;
+        }
+
+        .file-item.pending .file-status { color: var(--text-secondary); }
+        .file-item.processing .file-status { color: var(--brand); }
+        .file-item.success .file-status { color: #00c864; }
+        .file-item.error .file-status { color: #ff6464; }
+
+        .message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: rgba(0, 200, 100, 0.15);
+            border: 1px solid rgba(0, 200, 100, 0.3);
+            color: #00c864;
+            display: block;
+        }
+
+        .message.error {
+            background: rgba(255, 100, 100, 0.15);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            color: #ff6464;
+            display: block;
+        }
+
+        .btn {
+            background: var(--brand);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(229, 161, 36, 0.3);
+            background: var(--brand-light);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--brand);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Text input */
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            padding: 15px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            margin-bottom: 15px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(229, 161, 36, 0.2);
+        }
+
+        /* Preview sections */
+        .preview-section {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .preview-section.active {
+            display: block;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .preview-header h3 {
+            color: var(--brand);
+            font-size: 1.1rem;
+        }
+
+        .preview-info {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-primary);
+        }
+
+        .btn-success {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1b5e20;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--brand);
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .quick-tag {
+            background: rgba(229, 161, 36, 0.2);
+            border: 1px solid rgba(229, 161, 36, 0.5);
+            color: var(--brand);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .quick-tag:hover {
+            background: rgba(229, 161, 36, 0.4);
+        }
+
+        .tag-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .context-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(229, 161, 36, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(229, 161, 36, 0.3);
+        }
+
+        .context-box label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--brand);
+            font-weight: 500;
+        }
+
+        .hint-text {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        .section-divider {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Table styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .data-table th {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--border);
+            color: var(--brand);
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .info-box {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .info-box.warning {
+            background: rgba(255, 152, 0, 0.15);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            color: #ffb74d;
+        }
+
+        .info-box.success {
+            background: rgba(100, 200, 100, 0.1);
+            border: 1px solid rgba(100, 200, 100, 0.3);
+            color: #8f8;
+        }
+
+        /* Components iframe */
+        .components-frame {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="/static/makerspace-logo.png" alt="Makerspace" class="logo-img">
+            <div>
+                <div class="logo-text">MAKERSPACE</div>
+                <div class="logo-sub">Admin Panel</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <a href="{{ url_for('index') }}" class="icon-btn" title="Tilbake til chat">💬</a>
+            <button class="icon-btn" id="themeToggle" title="Bytt tema">
+                <span class="theme-icon light">☀️</span>
+                <span class="theme-icon dark">🌙</span>
+            </button>
+            <a href="{{ url_for('logout') }}" class="icon-btn danger" title="Logg ut">🚪</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>Administrer kunnskapsbasen</h1>
+            <p class="subtitle">Last opp filer og administrer komponenter</p>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="chunk-count">{{ stats.chunks }}</div>
+                <div class="stat-label">Kunnskapsbiter</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="vault-size">{{ stats.size_kb }} KB</div>
+                <div class="stat-label">Database størrelse</div>
+            </div>
+            <div class="stat-card">
+                <button class="btn" id="reloadBtn" style="margin-top: 5px;">🔄 Last inn embeddings</button>
+                <div class="stat-label" id="reloadStatus">Klikk etter å ha lagt til innhold</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('uploads', this)">📁 Uploads</button>
+            <button class="tab" onclick="switchTab('components', this)">📦 Komponenter</button>
+        </div>
+
+        <!-- Uploads Tab -->
+        <div id="tabUploads" class="tab-content active">
+            <!-- Unified Upload Zone -->
+            <div class="upload-zone" id="uploadZone">
+                <div class="icon">📄</div>
+                <p>Dra og slipp filer her eller klikk for å velge</p>
+                <span class="formats">Støtter: PDF, XLSX (auto-detektert)</span>
+                <input type="file" id="fileInput" accept=".pdf,.xlsx" multiple>
+            </div>
+
+            <div id="fileList" class="file-list"></div>
+            <div id="uploadMessage" class="message"></div>
+
+            <!-- PDF Preview Section -->
+            <div id="pdfPreview" class="preview-section">
+                <div class="preview-header">
+                    <h3>📄 PDF Ekstrahering</h3>
+                    <span id="pdfInfo" class="preview-info"></span>
+                </div>
+                <textarea id="pdfContent" style="height: 300px; font-family: monospace; font-size: 0.85rem;"></textarea>
+                
+                <div class="context-box">
+                    <label>🎯 Hva handler dokumentet om?</label>
+                    <input type="text" id="docContext" class="input-field" placeholder="F.eks: 'Epilog laser bruksanvisning', 'HMS-regler for 3D-printing'">
+                    <div class="tag-row">
+                        <button type="button" class="quick-tag" onclick="setDocContext('Utstyrsmanual')">📖 Manual</button>
+                        <button type="button" class="quick-tag" onclick="setDocContext('HMS og sikkerhet')">⚠️ HMS</button>
+                        <button type="button" class="quick-tag" onclick="setDocContext('Feilsøkingsguide')">🔧 Feilsøking</button>
+                        <button type="button" class="quick-tag" onclick="setDocContext('Materialinnstillinger')">⚙️ Innstillinger</button>
+                    </div>
+
+                    <div class="section-divider">
+                        <label>📂 Hvor skal innholdet lagres?</label>
+                        <select id="docCategory" class="select-field">
+                            <option value="vault">📚 Generell kunnskap (vault.txt)</option>
+                            <option value="utstyr">🔧 Utstyr (utstyr.json)</option>
+                            <option value="regler">⚠️ Regler (regler.json)</option>
+                            <option value="rom">🏠 Rom (rom.json)</option>
+                            <option value="ressurser">🔗 Ressurser (ressurser.json)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="preview-actions">
+                    <button class="btn" id="enhanceBtn">🤖 Strukturer med AI</button>
+                    <button class="btn btn-success" id="acceptRawBtn">✅ Godkjenn rå tekst</button>
+                    <button class="btn btn-secondary" id="cancelPdfBtn">❌ Avbryt</button>
+                </div>
+            </div>
+
+            <!-- Enhanced Preview -->
+            <div id="enhancedPreview" class="preview-section">
+                <div class="preview-header">
+                    <h3>🤖 AI-strukturert tekst</h3>
+                    <span id="enhanceInfo" class="preview-info"></span>
+                </div>
+                <textarea id="enhancedContent" style="height: 350px; font-family: monospace; font-size: 0.85rem;"></textarea>
+                <div class="preview-actions">
+                    <button class="btn btn-success" id="acceptEnhancedBtn">✅ Godkjenn</button>
+                    <button class="btn btn-secondary" id="backToRawBtn">⬅️ Tilbake til rå tekst</button>
+                    <button class="btn btn-secondary" id="cancelEnhancedBtn">❌ Avbryt</button>
+                </div>
+            </div>
+
+            <!-- XLSX Preview Section -->
+            <div id="xlsxPreview" class="preview-section">
+                <div class="preview-header">
+                    <h3>📊 Excel Import</h3>
+                    <span id="xlsxInfo" class="preview-info"></span>
+                </div>
+
+                <div id="xlsxDuplicateWarning" class="info-box warning" style="display: none;">
+                    <span>⚠️ <span id="xlsxDuplicateCount">0</span> duplikater filtrert bort</span>
+                    <button type="button" onclick="toggleDuplicateDetails()" class="quick-tag" style="margin-left: 10px;">Vis detaljer</button>
+                    <div id="xlsxDuplicateDetails" style="display: none; margin-top: 10px; max-height: 150px; overflow-y: auto; font-size: 0.85rem;"></div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>✓</th>
+                                <th>Navn</th>
+                                <th>Lokasjon</th>
+                                <th>Kategori</th>
+                            </tr>
+                        </thead>
+                        <tbody id="xlsxTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="preview-actions">
+                    <button class="btn btn-success" id="approveXlsxBtn">✅ Legg til <span id="xlsxAddCount">0</span> komponenter</button>
+                    <button class="btn btn-secondary" id="cancelXlsxBtn">❌ Avbryt</button>
+                </div>
+            </div>
+
+            <!-- Text Input -->
+            <div style="margin-top: 30px;">
+                <h3 style="color: var(--brand); margin-bottom: 15px;">✍️ Legg til tekst direkte</h3>
+                <textarea id="textInput" placeholder="Lim inn eller skriv tekst her. Den blir automatisk delt opp i biter for kunnskapsbasen..."></textarea>
+                <button class="btn" id="addTextBtn">Legg til i kunnskapsbasen</button>
+                <div id="textMessage" class="message"></div>
+            </div>
+        </div>
+
+        <!-- Components Tab -->
+        <div id="tabComponents" class="tab-content">
+            <div id="componentsLoading" style="padding: 20px; text-align: center;">
+                <p style="color: var(--text-secondary); margin-bottom: 20px;">Loading components...</p>
+            </div>
+            <iframe id="componentsIframe" src="/components" class="components-frame" 
+                    sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+                    style="display: none;"></iframe>
+        </div>
+        
+        <script>
+            // Handle components iframe loading
+            document.getElementById('componentsIframe').addEventListener('load', function() {
+                const iframe = this;
+                const loadingDiv = document.getElementById('componentsLoading');
+                console.log('Components iframe loaded');
+                
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const body = iframeDoc ? iframeDoc.body : null;
+                    
+                    if (body) {
+                        console.log('Iframe body content length:', body.innerHTML.length);
+                        if (body.innerHTML.trim().length > 0) {
+                            iframe.style.display = 'block';
+                            loadingDiv.style.display = 'none';
+                        } else {
+                            console.error('Iframe body is empty!');
+                            loadingDiv.innerHTML = '<p style="color: #ff6464;">Error: Components page loaded but body is empty. Check server logs.</p>';
+                        }
+                    } else {
+                        console.warn('Cannot access iframe document (might be CORS)');
+                        iframe.style.display = 'block';
+                        loadingDiv.style.display = 'none';
+                    }
+                } catch (e) {
+                    console.error('Error accessing iframe content:', e);
+                    // Show iframe anyway - might work despite CORS
+                    iframe.style.display = 'block';
+                    loadingDiv.style.display = 'none';
+                }
+            });
+        </script>
+    </div>
+    
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+
+        // Tab switching
+        function switchTab(tab, buttonElement) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            if (buttonElement) buttonElement.classList.add('active');
+            
+            if (tab === 'uploads') {
+                document.getElementById('tabUploads').classList.add('active');
+            } else if (tab === 'components') {
+                document.getElementById('tabComponents').classList.add('active');
+            }
+        }
+
+        // File upload handling
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadMessage = document.getElementById('uploadMessage');
+        const fileList = document.getElementById('fileList');
+        
+        uploadZone.addEventListener('click', () => fileInput.click());
+        
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+        
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+        
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            if (files.length) handleFileUpload(files);
+        });
+        
+        fileInput.addEventListener('change', () => {
+            const files = Array.from(fileInput.files);
+            if (files.length) handleFileUpload(files);
+        });
+        
+        async function handleFileUpload(files) {
+            // Hide all previews
+            document.querySelectorAll('.preview-section').forEach(s => s.classList.remove('active'));
+            
+            // Show file list
+            fileList.innerHTML = files.map((f, i) => `
+                <div class="file-item pending" id="file-${i}">
+                    <span class="file-name">📄 ${escapeHtml(f.name)}</span>
+                    <span class="file-status">Venter...</span>
+                </div>
+            `).join('');
+            
+            uploadZone.innerHTML = '<span class="loading"></span> Behandler filer...';
+            uploadMessage.className = 'message';
+            uploadMessage.style.display = 'none';
+            
+            // Process each file
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileItem = document.getElementById(`file-${i}`);
+                
+                if (fileItem) {
+                    fileItem.className = 'file-item processing';
+                    fileItem.querySelector('.file-status').textContent = 'Behandler...';
+                }
+                
+                const ext = file.name.toLowerCase().split('.').pop();
+                
+                if (ext === 'pdf') {
+                    await handlePDFFile(file, i);
+                } else if (ext === 'xlsx') {
+                    await handleXLSXFile(file, i);
+                } else {
+                    // Generic upload for other file types
+                    await handleGenericUpload(file, i);
+                }
+            }
+            
+            resetUploadZone();
+        }
+        
+        async function handlePDFFile(file, index) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/extract-pdf', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('pdfInfo').textContent = `${data.filename} | ${data.page_count} sider | ${data.char_count} tegn`;
+                    document.getElementById('pdfContent').value = data.text;
+                    document.getElementById('pdfPreview').classList.add('active');
+                    
+                    const fileItem = document.getElementById(`file-${index}`);
+                    if (fileItem) {
+                        fileItem.className = 'file-item success';
+                        fileItem.querySelector('.file-status').textContent = '✓ Ekstrahert';
+                    }
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                const fileItem = document.getElementById(`file-${index}`);
+                if (fileItem) {
+                    fileItem.className = 'file-item error';
+                    fileItem.querySelector('.file-status').textContent = '✗ Feil: ' + error.message;
+                }
+            }
+        }
+        
+        async function handleXLSXFile(file, index) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/extract-xlsx', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    xlsxItemsToAdd = data.items_to_add || [];
+                    xlsxDuplicates = data.duplicates_skipped || [];
+                    
+                    document.getElementById('xlsxInfo').textContent = `${data.filename} - ${data.total_rows} rader, ${xlsxItemsToAdd.length} nye`;
+                    
+                    if (xlsxDuplicates.length > 0) {
+                        document.getElementById('xlsxDuplicateWarning').style.display = 'block';
+                        document.getElementById('xlsxDuplicateCount').textContent = xlsxDuplicates.length;
+                    }
+                    
+                    populateXlsxTable();
+                    document.getElementById('xlsxPreview').classList.add('active');
+                    
+                    const fileItem = document.getElementById(`file-${index}`);
+                    if (fileItem) {
+                        fileItem.className = 'file-item success';
+                        fileItem.querySelector('.file-status').textContent = '✓ Parset';
+                    }
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                const fileItem = document.getElementById(`file-${index}`);
+                if (fileItem) {
+                    fileItem.className = 'file-item error';
+                    fileItem.querySelector('.file-status').textContent = '✗ Feil: ' + error.message;
+                }
+            }
+        }
+        
+        async function handleGenericUpload(file, index) {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                const fileItem = document.getElementById(`file-${index}`);
+                if (data.success) {
+                    if (fileItem) {
+                        fileItem.className = 'file-item success';
+                        fileItem.querySelector('.file-status').textContent = '✓ Lastet opp';
+                    }
+                    updateStats(data.stats);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                const fileItem = document.getElementById(`file-${index}`);
+                if (fileItem) {
+                    fileItem.className = 'file-item error';
+                    fileItem.querySelector('.file-status').textContent = '✗ Feil: ' + error.message;
+                }
+            }
+        }
+        
+        function resetUploadZone() {
+            uploadZone.innerHTML = `
+                <div class="icon">📄</div>
+                <p>Dra og slipp filer her eller klikk for å velge</p>
+                <span class="formats">Støtter: PDF, XLSX (auto-detektert)</span>
+            `;
+            fileInput.value = '';
+        }
+        
+        // PDF enhancement
+        let xlsxItemsToAdd = [];
+        let xlsxDuplicates = [];
+        let enhanceTimer = null;
+        let currentCategory = 'vault';
+        
+        function setDocContext(value) {
+            document.getElementById('docContext').value = value;
+        }
+        
+        document.getElementById('enhanceBtn').addEventListener('click', async () => {
+            const rawText = document.getElementById('pdfContent').value.trim();
+            const docContext = document.getElementById('docContext').value.trim();
+            currentCategory = document.getElementById('docCategory').value;
+            
+            if (!rawText) {
+                showMessage('Ingen tekst å behandle', 'error');
+                return;
+            }
+            
+            if (!docContext) {
+                showMessage('Beskriv hva dokumentet handler om', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('enhanceBtn');
+            btn.disabled = true;
+            let seconds = 0;
+            
+            enhanceTimer = setInterval(() => {
+                seconds++;
+                btn.innerHTML = `<span class="loading"></span> AI jobber... ${seconds}s`;
+            }, 1000);
+            
+            try {
+                const response = await fetch('/enhance-pdf', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: rawText, context: docContext, category: currentCategory })
+                });
+                
+                clearInterval(enhanceTimer);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('enhanceInfo').textContent = `${data.original_chars} → ${data.enhanced_chars} tegn`;
+                    document.getElementById('enhancedContent').value = data.enhanced_text;
+                    document.getElementById('pdfPreview').classList.remove('active');
+                    document.getElementById('enhancedPreview').classList.add('active');
+                } else {
+                    showMessage(data.error, 'error');
+                }
+            } catch (error) {
+                clearInterval(enhanceTimer);
+                showMessage('Feil: ' + error.message, 'error');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = '🤖 Strukturer med AI';
+        });
+        
+        document.getElementById('acceptRawBtn').addEventListener('click', async () => {
+            const content = document.getElementById('pdfContent').value.trim();
+            if (!content) {
+                showMessage('Ingen innhold å legge til', 'error');
+                return;
+            }
+            currentCategory = document.getElementById('docCategory').value;
+            await addToVault(content, document.getElementById('acceptRawBtn'));
+        });
+        
+        document.getElementById('acceptEnhancedBtn').addEventListener('click', async () => {
+            const content = document.getElementById('enhancedContent').value.trim();
+            if (!content) {
+                showMessage('Ingen innhold å legge til', 'error');
+                return;
+            }
+            await addToVault(content, document.getElementById('acceptEnhancedBtn'));
+        });
+        
+        async function addToVault(content, btn) {
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Legger til...';
+            
+            try {
+                const response = await fetch('/approve-summary', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content, category: currentCategory })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(data.message + ' - Husk å laste inn søkeindeks!', 'success');
+                    document.getElementById('pdfPreview').classList.remove('active');
+                    document.getElementById('enhancedPreview').classList.remove('active');
+                    updateStats(data.stats);
+                } else {
+                    showMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('Feil: ' + error.message, 'error');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+        
+        document.getElementById('backToRawBtn').addEventListener('click', () => {
+            document.getElementById('enhancedPreview').classList.remove('active');
+            document.getElementById('pdfPreview').classList.add('active');
+        });
+        
+        document.getElementById('cancelPdfBtn').addEventListener('click', () => {
+            if (enhanceTimer) clearInterval(enhanceTimer);
+            document.getElementById('pdfPreview').classList.remove('active');
+            document.getElementById('pdfContent').value = '';
+        });
+        
+        document.getElementById('cancelEnhancedBtn').addEventListener('click', () => {
+            if (enhanceTimer) clearInterval(enhanceTimer);
+            document.getElementById('enhancedPreview').classList.remove('active');
+            document.getElementById('enhancedContent').value = '';
+        });
+        
+        // XLSX handling
+        function populateXlsxTable() {
+            const tbody = document.getElementById('xlsxTableBody');
+            tbody.innerHTML = xlsxItemsToAdd.map((item, idx) => `
+                <tr>
+                    <td><input type="checkbox" checked data-idx="${idx}" class="xlsx-item-check"></td>
+                    <td>${escapeHtml(item.name)}</td>
+                    <td>${escapeHtml(item.location || '-')}</td>
+                    <td>${escapeHtml(item.category || 'other')}</td>
+                </tr>
+            `).join('');
+            
+            document.querySelectorAll('.xlsx-item-check').forEach(cb => {
+                cb.addEventListener('change', updateXlsxAddCount);
+            });
+            
+            updateXlsxAddCount();
+        }
+        
+        function updateXlsxAddCount() {
+            const checked = document.querySelectorAll('.xlsx-item-check:checked').length;
+            document.getElementById('xlsxAddCount').textContent = checked;
+            document.getElementById('approveXlsxBtn').disabled = checked === 0;
+        }
+        
+        function toggleDuplicateDetails() {
+            const details = document.getElementById('xlsxDuplicateDetails');
+            details.style.display = details.style.display === 'none' ? 'block' : 'none';
+            if (details.style.display === 'block') {
+                details.innerHTML = xlsxDuplicates.map(d => 
+                    `<div style="padding: 4px 0;">${escapeHtml(d.name)} @ ${escapeHtml(d.location || 'ukjent')}</div>`
+                ).join('');
+            }
+        }
+        
+        document.getElementById('approveXlsxBtn').addEventListener('click', async () => {
+            const checkedIdxs = Array.from(document.querySelectorAll('.xlsx-item-check:checked')).map(cb => parseInt(cb.dataset.idx));
+            const itemsToSend = checkedIdxs.map(idx => xlsxItemsToAdd[idx]);
+            
+            if (itemsToSend.length === 0) {
+                showMessage('Ingen komponenter valgt', 'error');
+                return;
+            }
+            
+            const btn = document.getElementById('approveXlsxBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Lagrer...';
+            
+            try {
+                const response = await fetch('/approve-xlsx', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: itemsToSend })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(`✅ ${data.message} - Husk å laste inn søkeindeks!`, 'success');
+                    document.getElementById('xlsxPreview').classList.remove('active');
+                } else {
+                    showMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('Feil: ' + error.message, 'error');
+            }
+            
+            btn.disabled = false;
+            btn.innerHTML = `✅ Legg til <span id="xlsxAddCount">0</span> komponenter`;
+        });
+        
+        document.getElementById('cancelXlsxBtn').addEventListener('click', () => {
+            document.getElementById('xlsxPreview').classList.remove('active');
+        });
+        
+        // Text input
+        document.getElementById('addTextBtn').addEventListener('click', async () => {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                showMessage('Vennligst skriv inn tekst', 'error', 'textMessage');
+                return;
+            }
+            
+            const btn = document.getElementById('addTextBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Legger til...';
+            
+            try {
+                const response = await fetch('/add-text', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(data.message, 'success', 'textMessage');
+                    document.getElementById('textInput').value = '';
+                    updateStats(data.stats);
+                } else {
+                    showMessage(data.error, 'error', 'textMessage');
+                }
+            } catch (error) {
+                showMessage('Feil: ' + error.message, 'error', 'textMessage');
+            }
+            
+            btn.disabled = false;
+            btn.textContent = 'Legg til i kunnskapsbasen';
+        });
+        
+        // Reload embeddings
+        document.getElementById('reloadBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('reloadBtn');
+            const status = document.getElementById('reloadStatus');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span>';
+            status.textContent = 'Laster inn...';
+            
+            try {
+                const response = await fetch('/reload', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    status.textContent = `Lastet ${data.chunks} biter`;
+                    status.style.color = '#E5A124';
+                } else {
+                    status.textContent = 'Innlasting feilet';
+                    status.style.color = '#ff6464';
+                }
+            } catch (error) {
+                status.textContent = 'Feil: ' + error.message;
+                status.style.color = '#ff6464';
+            }
+            
+            btn.disabled = false;
+            btn.textContent = '🔄 Last inn embeddings';
+        });
+        
+        function updateStats(stats) {
+            if (stats) {
+                document.getElementById('chunk-count').textContent = stats.chunks;
+                document.getElementById('vault-size').textContent = stats.size_kb + ' KB';
+            }
+        }
+        
+        function showMessage(msg, type, targetId = 'uploadMessage') {
+            const msgEl = document.getElementById(targetId);
+            msgEl.className = 'message ' + type;
+            msgEl.textContent = msg;
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

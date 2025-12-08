@@ -1,0 +1,43 @@
+/**
+ * Makerspace RAG - CSS Variables
+ * Brand colors and theme definitions
+ */
+
+:root {
+    /* Brand Colors */
+    --brand: #E5A124;
+    --brand-dark: #c98b1d;
+    --brand-light: #f5b835;
+
+    /* Light mode (default) */
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #e9ecef;
+    --text-primary: #1a1a2e;
+    --text-secondary: #6c757d;
+    --border: rgba(0,0,0,0.1);
+    --shadow: rgba(0,0,0,0.08);
+    --msg-user: var(--brand);
+    --msg-user-text: #ffffff;
+    --msg-assistant: #ffffff;
+    --msg-assistant-border: rgba(0,0,0,0.1);
+
+    /* Status Colors */
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+}
+
+/* Dark mode */
+[data-theme="dark"] {
+    --bg-primary: #0d0d12;
+    --bg-secondary: #16161d;
+    --bg-tertiary: #1e1e28;
+    --text-primary: #f1f1f1;
+    --text-secondary: #9ca3af;
+    --border: rgba(255,255,255,0.1);
+    --shadow: rgba(0,0,0,0.3);
+    --msg-assistant: #1e1e28;
+    --msg-assistant-border: rgba(255,255,255,0.1);
+}

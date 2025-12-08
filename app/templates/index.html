@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makerspace Assistant</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/variables.css">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/chat.css">
+</head>
+<body class="chat-page">
+    <header class="header">
+        <div class="logo">
+            <img src="/static/makerspace-logo.png" alt="Makerspace" class="logo-img">
+            <div>
+                <div class="logo-text">MAKERSPACE</div>
+                <div class="logo-sub">Hogskolen i Ostfold</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" id="newChatBtn" title="Ny samtale">&#128260;</button>
+            <button class="icon-btn" id="themeToggle" title="Bytt tema">
+                <span class="theme-icon light">&#9728;&#65039;</span>
+                <span class="theme-icon dark">&#127769;</span>
+            </button>
+            <a href="/admin" class="icon-btn" title="Admin">&#9881;&#65039;</a>
+        </div>
+    </header>
+
+    <!-- Chat Area -->
+    <main class="chat-area" id="chatArea">
+        <div class="welcome-message" id="welcome">
+            <div class="welcome-icon">
+                <img src="/static/makerspace-logo.png" alt="Makerspace" width="140" height="140">
+            </div>
+            <h2>Hva skal vi lage i dag?</h2>
+            <p>Din AI-assistent for 3D-printing, laserkutting, elektronikk og maker-prosjekter</p>
+
+            <div class="category-grid">
+                <div class="category" onclick="askQuestion('Jeg vil komme i gang med 3D-printing, hva trenger jeg a vite?')">
+                    <span class="cat-icon">&#128424;&#65039;</span>
+                    <span class="cat-label">3D-Printing</span>
+                </div>
+                <div class="category" onclick="askQuestion('Hvordan bruker jeg laserkutteren trygt?')">
+                    <span class="cat-icon">&#9889;</span>
+                    <span class="cat-label">Laserkutter</span>
+                </div>
+                <div class="category" onclick="askQuestion('Hjelp meg i gang med elektronikk og Arduino')">
+                    <span class="cat-icon">&#128268;</span>
+                    <span class="cat-label">Elektronikk</span>
+                </div>
+                <div class="category" onclick="askQuestion('Hvilke materialer kan jeg bruke i makerspacet?')">
+                    <span class="cat-icon">&#129521;</span>
+                    <span class="cat-label">Materialer</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="messages" id="messages"></div>
+    </main>
+
+    <!-- Input Area -->
+    <footer class="input-area">
+        <div class="level-desc-bar" id="levelDescBar">Normal: Balansert forklaring med korte definisjoner av faguttrykk</div>
+
+        <div class="input-container">
+            <div class="side-panel left">
+                <div class="control-group">
+                    <label>Niva</label>
+                    <div class="btn-group">
+                        <button class="ctrl-btn" data-value="/nybegynner " title="Enkel forklaring for nybegynnere">1</button>
+                        <button class="ctrl-btn active" data-value="" title="Normal forklaring">2</button>
+                        <button class="ctrl-btn" data-value="/ekspert " title="Teknisk og detaljert">3</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-wrapper">
+                    <input type="text" id="input" placeholder="Skriv ditt sporsmal her... (Ctrl+Enter for a sende)" autocomplete="off">
+                    <div id="commandSuggestions" class="command-suggestions" style="display: none;"></div>
+                </div>
+                <button id="sendBtn" class="send-btn">Send</button>
+            </div>
+
+            <div class="side-panel right">
+                <div class="control-group">
+                    <label>Sprak</label>
+                    <div class="btn-group">
+                        <button class="lang-btn active" data-value="" title="Automatisk sprakgjenkjenning">Auto</button>
+                        <button class="lang-btn" data-value="/norsk " title="Svar pa norsk">NO</button>
+                        <button class="lang-btn" data-value="/english " title="Answer in English">EN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="brand-bar"></div>
+    </footer>
+
+    <!-- Mermaid.js for diagram rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+    <!-- Application JS -->
+    <script src="/static/js/theme.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/chat.js"></script>
+</body>
+</html>

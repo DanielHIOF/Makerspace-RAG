@@ -1,0 +1,10 @@
+"""
+Makerspace RAG - Route Blueprints
+"""
+
+from app.routes.public import public_bp
+from app.routes.auth import auth_bp
+from app.routes.admin import admin_bp
+from app.routes.api import api_bp
+
+__all__ = ['public_bp', 'auth_bp', 'admin_bp', 'api_bp']

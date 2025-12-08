@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komponenter - Makerspace Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        /* Subtle scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+        }
+        
+        :root {
+            --brand: #E5A124;
+            --brand-dark: #c98b1d;
+            --brand-light: #f5b835;
+            --bg: #0d0d12;
+            --card: #16161d;
+            --text: #e0e0e0;
+            --muted: #8892b0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            padding: 20px;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        h1 { color: var(--brand); font-size: 2rem; }
+        
+        .header-actions { display: flex; gap: 15px; }
+        
+        .btn {
+            background: var(--brand);
+            color: #1a1a2e;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: var(--brand-light);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: rgba(229, 161, 36, 0.1);
+            border: 2px solid var(--brand);
+            color: var(--brand);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(229, 161, 36, 0.2);
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover { background: #c82333; }
+        
+        /* Search bar */
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--brand);
+        }
+        
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background: var(--card);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--brand);
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        
+        /* Table */
+        .table-container {
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+        }
+        
+        th {
+            background: rgba(0,0,0,0.3);
+            color: var(--brand);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tr { border-bottom: 1px solid rgba(255,255,255,0.05); }
+        tr:hover { background: rgba(229, 161, 36, 0.05); }
+        tr:last-child { border-bottom: none; }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .badge-yes { background: rgba(0,200,100,0.2); color: #00c864; }
+        .badge-no { background: rgba(100,100,100,0.2); color: #888; }
+        .badge-restock { background: rgba(255,100,100,0.2); color: #ff6464; }
+        
+        .actions { display: flex; gap: 10px; }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+        
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .filter-group label {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        
+        .filter-group select {
+            padding: 10px 14px;
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.9rem;
+            cursor: pointer;
+            min-width: 150px;
+        }
+        
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--brand);
+        }
+        
+        .filter-group select option {
+            background: var(--card);
+            color: var(--text);
+        }
+        
+        .btn-filter {
+            padding: 10px 16px;
+            background: transparent;
+            border: 1px solid var(--brand);
+            color: var(--brand);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .btn-filter:hover {
+            background: rgba(229, 161, 36, 0.1);
+        }
+        
+        .btn-filter.active {
+            background: var(--brand);
+            color: #1a1a2e;
+        }
+        
+        /* Tabs - Page Navigation Style */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+            background: var(--card);
+            padding: 8px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 18px 32px;
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .tab:hover {
+            color: var(--text);
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .tab.active {
+            color: #1a1a2e;
+            background: var(--brand);
+            box-shadow: 0 4px 15px rgba(229, 161, 36, 0.3);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .restock-section {
+            margin-top: 30px;
+        }
+        
+        .restock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .restock-header h2 {
+            color: var(--brand);
+            font-size: 1.4rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Komponenter</h1>
+            <div class="header-actions">
+                <a href="/admin" class="btn btn-secondary">Tilbake</a>
+                <button class="btn" onclick="openAddModal()">+ Legg til</button>
+            </div>
+        </header>
+        
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Sok etter komponenter..." onkeyup="applyFilters()">
+            <button class="btn" onclick="applyFilters()">Sok</button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="totalCount">-</div>
+                <div class="stat-label">Komponenter</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="locationCount">-</div>
+                <div class="stat-label">Hylleplasser</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="restockCount">-</div>
+                <div class="stat-label">Trenger restock</div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('all', this)">Alle komponenter</button>
+            <button class="tab" onclick="switchTab('restock', this)">Trenger restock</button>
+        </div>
+        
+        <!-- All Components Tab -->
+        <div id="tabAll" class="tab-content active">
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Hylleplass</label>
+                    <select id="filterLocation" onchange="applyFilters()">
+                        <option value="">Alle hylleplasser</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Forbruksvare</label>
+                    <select id="filterForbruksvare" onchange="applyFilters()">
+                        <option value="">Alle</option>
+                        <option value="true">Ja</option>
+                        <option value="false">Nei</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Restock-status</label>
+                    <select id="filterRestock" onchange="applyFilters()">
+                        <option value="">Alle</option>
+                        <option value="true">Trenger restock</option>
+                        <option value="false">Ikke restock</option>
+                    </select>
+                </div>
+                <div class="filter-group" style="align-self: flex-end;">
+                    <button class="btn-filter" onclick="clearFilters()">Nullstill filtre</button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Navn</th>
+                            <th>Hylleplass</th>
+                            <th>Antall</th>
+                            <th>Forbruksvare</th>
+                            <th>Restock</th>
+                            <th>Handlinger</th>
+                        </tr>
+                    </thead>
+                    <tbody id="componentsTable">
+                        <tr><td colspan="6" style="text-align:center; color: var(--muted);">Laster...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Restock Tab -->
+        <div id="tabRestock" class="tab-content">
+            <div class="restock-header">
+                <h2>Komponenter som trenger restock</h2>
+                <span class="stat-label" id="restockTableCount">0 komponenter</span>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Navn</th>
+                            <th>Hylleplass</th>
+                            <th>Antall</th>
+                            <th>Forbruksvare</th>
+                            <th>Handlinger</th>
+                        </tr>
+                    </thead>
+                    <tbody id="restockTable">
+                        <tr><td colspan="5" style="text-align:center; color: var(--muted);">Laster...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2 id="modalTitle">Rediger komponent</h2>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                
+                <div class="form-group">
+                    <label>Navn</label>
+                    <input type="text" id="editName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Hylleplass</label>
+                    <input type="text" id="editHylleplass" required placeholder="F.eks: A3, KOMPONENTVEGG">
+                </div>
+                
+                <div class="form-group">
+                    <label>Antall</label>
+                    <input type="number" id="editAntall" min="0" value="0">
+                </div>
+                
+                <div class="form-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="editForbruksvare">
+                        Forbruksvare
+                    </label>
+                    
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="editRestock">
+                        Trenger restock
+                    </label>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Avbryt</button>
+                    <button type="submit" class="btn">Lagre</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <style>
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .modal-content h2 {
+            color: var(--brand);
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--brand);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: var(--text);
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--brand);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .toast.success { background: #00c864; }
+        .toast.error { background: #dc3545; }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+    
+    <script>
+        let allComponents = [];
+        let allHylleplasser = [];
+        let currentTab = 'all';
+        
+        // Wait for all required elements to be available
+        function waitForElements(selectors, callback, maxAttempts = 50) {
+            // Convert selectors to element IDs (remove #)
+            const elementIds = selectors.map(sel => sel.replace('#', ''));
+            const elements = elementIds.map(id => document.getElementById(id));
+            const allFound = elements.every(el => el !== null);
+            
+            if (allFound) {
+                console.log('All required elements found, executing callback');
+                callback();
+            } else if (maxAttempts > 0) {
+                setTimeout(() => waitForElements(selectors, callback, maxAttempts - 1), 100);
+            } else {
+                const missing = selectors.filter((sel, idx) => elements[idx] === null);
+                console.warn('Some elements not found after waiting:', missing);
+                console.log('Proceeding anyway - will render what we can');
+                // Try to proceed anyway - elements might be in hidden tab
+                callback();
+            }
+        }
+        
+        // Load data function
+        let dataLoaded = false;
+        async function initializeData() {
+            if (dataLoaded) {
+                console.log('Data already loaded, skipping');
+                return;
+            }
+            
+            console.log('Initializing data load...');
+            await loadHylleplasser();
+            await loadComponents();
+            dataLoaded = true;
+        }
+        
+        // Function to try initializing when elements are ready
+        function tryInitialize() {
+            const table = document.getElementById('componentsTable');
+            if (table && !dataLoaded) {
+                console.log('Table found, initializing data');
+                initializeData();
+            } else if (!table) {
+                console.log('Table not found yet, will retry');
+            }
+        }
+        
+        // Load components on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOMContentLoaded fired');
+            const requiredElements = [
+                '#filterLocation',
+                '#searchInput',
+                '#filterForbruksvare',
+                '#filterRestock',
+                '#componentsTable',
+                '#restockTable'
+            ];
+            
+            waitForElements(requiredElements, initializeData);
+            
+            // Also setup form listener
+            waitForElements(['#editForm'], setupFormListener);
+            
+            // Try immediately
+            tryInitialize();
+            
+            // Fallback: try loading after 1 second regardless
+            setTimeout(() => {
+                if (!dataLoaded) {
+                    console.log('Fallback: Loading data after timeout');
+                    initializeData();
+                }
+            }, 1000);
+        });
+        
+        // Also try on window load (for iframe scenarios)
+        window.addEventListener('load', () => {
+            console.log('Window load fired');
+            if (!dataLoaded) {
+                setTimeout(() => {
+                    console.log('Window loaded, trying to initialize');
+                    tryInitialize();
+                    if (!dataLoaded) {
+                        initializeData();
+                    }
+                }, 500);
+            }
+        });
+        
+        // Also try loading when page becomes visible (for iframe scenarios)
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && !dataLoaded) {
+                console.log('Page became visible, loading data');
+                initializeData();
+            }
+        });
+        
+        async function loadHylleplasser() {
+            try {
+                console.log('Loading hylleplasser from API...');
+                const res = await fetch('/api/hylleplasser');
+                
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                }
+                
+                const data = await res.json();
+                allHylleplasser = data.hylleplasser || [];
+                console.log(`Loaded ${allHylleplasser.length} hylleplasser:`, allHylleplasser);
+                
+                const select = document.getElementById('filterLocation');
+                if (!select) {
+                    console.warn('filterLocation element not found');
+                    return;
+                }
+                select.innerHTML = '<option value="">Alle hylleplasser</option>';
+                allHylleplasser.forEach(loc => {
+                    const option = document.createElement('option');
+                    option.value = loc;
+                    option.textContent = loc;
+                    select.appendChild(option);
+                });
+            } catch (err) {
+                console.error('Failed to load hylleplasser:', err);
+            }
+        }
+        
+        async function loadComponents() {
+            try {
+                console.log('Loading components from API...');
+                const res = await fetch('/api/components');
+                
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                }
+                
+                const data = await res.json();
+                console.log('API Response:', { 
+                    componentsCount: data.components?.length || 0,
+                    total: data.total,
+                    locations: data.locations 
+                });
+                
+                allComponents = data.components || [];
+                console.log(`Loaded ${allComponents.length} components`);
+                
+                if (allComponents.length === 0) {
+                    console.warn('No components found in database');
+                    showToast('Ingen komponenter funnet i databasen', 'error');
+                }
+                
+                // Update stats first
+                updateStats(data);
+                
+                // Try to render immediately - check if table exists
+                const tbody = document.getElementById('componentsTable');
+                if (tbody) {
+                    console.log('Table element found, calling applyFilters');
+                    applyFilters();
+                } else {
+                    console.warn('Table element not found yet, will retry');
+                    // Still try to apply filters (it handles missing elements gracefully now)
+                    applyFilters();
+                    // Retry after delay
+                    setTimeout(() => {
+                        const retryTbody = document.getElementById('componentsTable');
+                        if (retryTbody && allComponents.length > 0) {
+                            console.log('Found table on retry, rendering now');
+                            applyFilters();
+                        }
+                    }, 1000);
+                }
+            } catch (err) {
+                console.error('Failed to load components:', err);
+                showToast('Kunne ikke laste komponenter: ' + err.message, 'error');
+            }
+        }
+        
+        function renderTable(components) {
+            const tbody = document.getElementById('componentsTable');
+            if (!tbody) {
+                console.error('componentsTable element not found - cannot render table');
+                // Try to find it again after a short delay
+                setTimeout(() => {
+                    const retryTbody = document.getElementById('componentsTable');
+                    if (retryTbody) {
+                        console.log('Found componentsTable on retry, rendering now');
+                        renderTable(components);
+                    }
+                }, 500);
+                return;
+            }
+            
+            console.log(`Rendering ${components.length} components to table`);
+            
+            if (components.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--muted);">Ingen komponenter funnet</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = components.map(c => `
+                <tr>
+                    <td>${escapeHtml(c.name)}</td>
+                    <td><strong>${escapeHtml(c.hylleplass)}</strong></td>
+                    <td>${c.antall || 0}</td>
+                    <td>${c.forbruksvare ? '<span class="badge badge-yes">Ja</span>' : '<span class="badge badge-no">Nei</span>'}</td>
+                    <td>${c.restock ? '<span class="badge badge-restock">Ja!</span>' : '<span class="badge badge-no">Nei</span>'}</td>
+                    <td class="actions">
+                        <button class="btn btn-sm btn-secondary" onclick="editComponent(${c.id})">Rediger</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteComponent(${c.id}, '${escapeHtml(c.name)}')">Slett</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            console.log('Table rendered successfully');
+        }
+        
+        function renderRestockTable(components) {
+            const tbody = document.getElementById('restockTable');
+            if (!tbody) {
+                console.warn('restockTable element not found');
+                return;
+            }
+            
+            const restockComponents = components.filter(c => c.restock === true);
+            
+            const restockCountEl = document.getElementById('restockTableCount');
+            if (restockCountEl) {
+                restockCountEl.textContent = `${restockComponents.length} komponenter`;
+            }
+            
+            if (restockComponents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: var(--muted);">Ingen komponenter trenger restock</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = restockComponents.map(c => `
+                <tr>
+                    <td>${escapeHtml(c.name)}</td>
+                    <td><strong>${escapeHtml(c.hylleplass)}</strong></td>
+                    <td>${c.antall || 0}</td>
+                    <td>${c.forbruksvare ? '<span class="badge badge-yes">Ja</span>' : '<span class="badge badge-no">Nei</span>'}</td>
+                    <td class="actions">
+                        <button class="btn btn-sm btn-secondary" onclick="editComponent(${c.id})">Rediger</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteComponent(${c.id}, '${escapeHtml(c.name)}')">Slett</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function updateStats(data) {
+            const totalCountEl = document.getElementById('totalCount');
+            const locationCountEl = document.getElementById('locationCount');
+            const restockCountEl = document.getElementById('restockCount');
+            
+            if (totalCountEl) totalCountEl.textContent = data.total || 0;
+            if (locationCountEl) locationCountEl.textContent = data.locations || 0;
+            if (restockCountEl) restockCountEl.textContent = data.restock_needed || 0;
+        }
+        
+        function applyFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const filterLocationEl = document.getElementById('filterLocation');
+            const filterForbruksvareEl = document.getElementById('filterForbruksvare');
+            const filterRestockEl = document.getElementById('filterRestock');
+            
+            // Use empty strings as defaults if elements not found (for initial render)
+            const searchQuery = searchInput ? searchInput.value.toLowerCase() : '';
+            const filterLocation = filterLocationEl ? filterLocationEl.value : '';
+            const filterForbruksvare = filterForbruksvareEl ? filterForbruksvareEl.value : '';
+            const filterRestock = filterRestockEl ? filterRestockEl.value : '';
+            
+            let filtered = allComponents.filter(c => {
+                // Search filter
+                const matchesSearch = !searchQuery || 
+                    c.name.toLowerCase().includes(searchQuery) || 
+                    c.hylleplass.toLowerCase().includes(searchQuery);
+                
+                // Location filter
+                const matchesLocation = !filterLocation || c.hylleplass === filterLocation;
+                
+                // Forbruksvare filter
+                const matchesForbruksvare = filterForbruksvare === '' || 
+                    (filterForbruksvare === 'true' && c.forbruksvare) ||
+                    (filterForbruksvare === 'false' && !c.forbruksvare);
+                
+                // Restock filter
+                const matchesRestock = filterRestock === '' ||
+                    (filterRestock === 'true' && c.restock) ||
+                    (filterRestock === 'false' && !c.restock);
+                
+                return matchesSearch && matchesLocation && matchesForbruksvare && matchesRestock;
+            });
+            
+            if (currentTab === 'all') {
+                renderTable(filtered);
+            } else {
+                renderRestockTable(filtered);
+            }
+        }
+        
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterLocation').value = '';
+            document.getElementById('filterForbruksvare').value = '';
+            document.getElementById('filterRestock').value = '';
+            applyFilters();
+        }
+        
+        function switchTab(tab, buttonElement) {
+            currentTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            }
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            if (tab === 'all') {
+                document.getElementById('tabAll').classList.add('active');
+                applyFilters();
+            } else {
+                document.getElementById('tabRestock').classList.add('active');
+                renderRestockTable(allComponents);
+            }
+        }
+        
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = 'Legg til komponent';
+            document.getElementById('editId').value = '';
+            document.getElementById('editName').value = '';
+            document.getElementById('editHylleplass').value = '';
+            document.getElementById('editAntall').value = '0';
+            document.getElementById('editForbruksvare').checked = false;
+            document.getElementById('editRestock').checked = false;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        
+        function editComponent(id) {
+            const c = allComponents.find(x => x.id === id);
+            if (!c) return;
+            
+            document.getElementById('modalTitle').textContent = 'Rediger komponent';
+            document.getElementById('editId').value = c.id;
+            document.getElementById('editName').value = c.name;
+            document.getElementById('editHylleplass').value = c.hylleplass;
+            document.getElementById('editAntall').value = c.antall || 0;
+            document.getElementById('editForbruksvare').checked = c.forbruksvare;
+            document.getElementById('editRestock').checked = c.restock;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('editModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // Setup form event listener after DOM is ready
+        function setupFormListener() {
+            const editForm = document.getElementById('editForm');
+            if (editForm) {
+                editForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const id = document.getElementById('editId').value;
+                const payload = {
+                    name: document.getElementById('editName').value,
+                    hylleplass: document.getElementById('editHylleplass').value.toUpperCase(),
+                    antall: parseInt(document.getElementById('editAntall').value) || 0,
+                    forbruksvare: document.getElementById('editForbruksvare').checked,
+                    restock: document.getElementById('editRestock').checked
+                };
+                
+                try {
+                    const url = id ? `/api/components/${id}` : '/api/components';
+                    const method = id ? 'PUT' : 'POST';
+                    
+                    const res = await fetch(url, {
+                        method: method,
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (res.ok) {
+                        showToast(id ? 'Komponent oppdatert!' : 'Komponent lagt til!', 'success');
+                        closeModal();
+                        await loadHylleplasser();
+                        await loadComponents();
+                    } else {
+                        const err = await res.json();
+                        showToast(err.error || 'Noe gikk galt', 'error');
+                    }
+                } catch (err) {
+                    showToast('Nettverksfeil', 'error');
+                }
+                });
+            } else {
+                console.warn('editForm element not found');
+            }
+        }
+        
+        async function deleteComponent(id, name) {
+            if (!confirm(`Slett "${name}"?`)) return;
+            
+            try {
+                const res = await fetch(`/api/components/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    showToast('Komponent slettet', 'success');
+                    await loadHylleplasser();
+                    await loadComponents();
+                } else {
+                    showToast('Kunne ikke slette', 'error');
+                }
+            } catch (err) {
+                showToast('Nettverksfeil', 'error');
+            }
+        }
+        
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+        
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>

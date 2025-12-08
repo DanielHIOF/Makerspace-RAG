@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Makerspace</title>
+    <style>
+        :root {
+            --brand: #E5A124;
+            --brand-light: #f5b835;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d0d12;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e0e0e0;
+        }
+        
+        .login-box {
+            background: #16161d;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .logo svg {
+            width: 60px;
+            height: 60px;
+        }
+        
+        h1 {
+            color: var(--brand);
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 1.5rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #8892b0;
+            margin-bottom: 32px;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #9ca3af;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 14px 16px;
+            background: #0d0d12;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--brand);
+        }
+        
+        .btn {
+            width: 100%;
+            background: var(--brand);
+            color: #1a1a2e;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+        }
+        
+        .btn:hover {
+            background: var(--brand-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(229, 161, 36, 0.3);
+        }
+        
+        .flash {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .flash.error {
+            background: rgba(255,100,100,0.15);
+            border: 1px solid rgba(255,100,100,0.3);
+            color: #ff6b6b;
+        }
+        
+        .flash.success {
+            background: rgba(229, 161, 36, 0.15);
+            border: 1px solid rgba(229, 161, 36, 0.3);
+            color: var(--brand);
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+        
+        .back-link a {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        
+        .back-link a:hover {
+            color: var(--brand);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="logo">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#E5A124" d="M50 10 C30 10, 15 30, 15 50 C15 65, 25 78, 40 83 L40 90 L60 90 L60 83 C75 78, 85 65, 85 50 C85 30, 70 10, 50 10 Z M45 95 L55 95 L55 92 L45 92 Z"/>
+            </svg>
+        </div>
+        <h1>MAKERSPACE Admin</h1>
+        <p class="subtitle">Logg inn for å administrere</p>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="username">Brukernavn</label>
+                <input type="text" id="username" name="username" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="password">Passord</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">Logg inn</button>
+        </form>
+        
+        <div class="back-link">
+            <a href="{{ url_for('index') }}">← Tilbake til chat</a>
+        </div>
+    </div>
+</body>
+</html>

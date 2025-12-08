@@ -3,7 +3,16 @@
     "allow": [
       "Bash(dir /s /b 'C:\\Program Files\\MariaDB*')",
       "Bash(powershell -Command:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(tree:*)",
+      "Bash(timeout:*)",
+      "Bash(curl:*)",
+      "Bash(xcopy:*)",
+      "Bash(npm install)",
+      "Bash(npm run build:*)",
+      "Bash(dir /s /b \"C:\\Food-E\\Makerspace-RAG\\app\\static\\react\")",
+      "Bash(pip install:*)",
+      "Bash(dir /s /b \"C:\\Food-E\\Makerspace-RAG\\app\")"
     ],
     "deny": [],
     "ask": []

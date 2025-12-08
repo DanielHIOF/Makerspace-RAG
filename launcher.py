@@ -141,16 +141,15 @@ def ensure_models():
 
 def run_flask_app():
     print("\n[*] Starting Flask web server...")
-    
+
     script_dir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(script_dir)
-    
+
     try:
-        from app import app, load_vault
-        
-        print("  [.] Loading knowledge base...")
-        load_vault()
-        
+        # Use new app factory
+        from app import create_app
+        flask_app = create_app()
+
         print(f"\n{'=' * 60}")
         print(f"  SERVER READY!")
         print(f"{'=' * 60}")
@@ -159,22 +158,22 @@ def run_flask_app():
         print(f"  Login:  admin / makerspace2024")
         print(f"\n  Press Ctrl+C to stop")
         print(f"{'=' * 60}\n")
-        
+
         def open_browser():
             time.sleep(1.5)
             webbrowser.open(f'http://localhost:{FLASK_PORT}/')
-        
+
         import threading
         threading.Thread(target=open_browser, daemon=True).start()
-        
-        app.run(
+
+        flask_app.run(
             host='0.0.0.0',
             port=FLASK_PORT,
             debug=False,
             threaded=True,
             use_reloader=False
         )
-        
+
     except ImportError as e:
         print(f"  [X] Import error: {e}")
         return False
