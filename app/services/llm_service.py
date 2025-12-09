@@ -210,10 +210,13 @@ FEIL FORMAT (IKKE GJØR DETTE):
 * Kulepunkt med stjerne (FEIL)
 :sparkles: Emoji (FEIL)
 Prusa Mini+ uten fet skrift (FEIL)
+1. Prusa MK3s (FEIL - nummerert liste)
 
 RIKTIG FORMAT:
-- Kulepunkt med bindestrek (RIKTIG)
-**Prusa Mini+**: med fet skrift (RIKTIG)"""
+**Prusa Mini+**: med fet skrift og kolon (RIKTIG)
+**1N4148**: med fet skrift og kolon (RIKTIG)
+
+VIKTIG: Hver utstyr/komponent skal stå på EGEN linje med **fet navn**: beskrivelse."""
 
     def _build_chat_prompt(self, context_text, level_instruction, language_instruction,
                            category_instruction, tool_hint, needs_wiring_diagram=False):
@@ -302,16 +305,32 @@ Har du tatt HMS-kurset for lodding?
 ===== EKSEMPEL 3 - KOMPONENTER =====
 BRUKER: Har dere motstander?
 SVAR:
-Ja, vi har **motstander** tilgjengelig på Komponentveggen i D1-044.
+Ja, vi har motstander tilgjengelig på Komponentveggen i D1-044. Her er noen av verdiene vi har:
 
-Du finner et bredt utvalg verdier:
+**220Ω**: Perfekt for LED-kretser med 5V.
 
-- 220Ω (for LED-kretser)
-- 1kΩ og 10kΩ (for generell bruk)
-- 100Ω og 470Ω (for strømbegrensning)
+**1kΩ**: Generell bruk, pull-up/pull-down motstander.
+
+**10kΩ**: For spenningsdelere og sensorkretser.
 
 Hva slags prosjekt skal du bruke motstandene til?
 ===== SLUTT EKSEMPEL 3 =====
+
+===== EKSEMPEL 5 - KOMPONENTER MED LISTE =====
+BRUKER: Har dere dioder?
+SVAR:
+Ja, vi har flere typer dioder på Komponentveggen i D1-044:
+
+**1N4148**: Standard signaldiode for generelle kretser.
+
+**1N4007**: Likeretterdiode for høyere strøm.
+
+**LED 5mm rød**: Lysdiode for indikatorer og prosjekter.
+
+**LED 5mm grønn**: Lysdiode for indikatorer og prosjekter.
+
+Hva skal du bruke diodene til?
+===== SLUTT EKSEMPEL 5 =====
 
 ===== EKSEMPEL 4 - KORT SVAR =====
 BRUKER: Hvor finner jeg laserkutteren?
@@ -334,14 +353,18 @@ KRITISKE REGLER:
 FEIL FORMAT (IKKE GJØR DETTE):
 * Kulepunkt med stjerne (FEIL)
 :sparkles: Emoji (FEIL)
-Prusa Mini+ uten fet skrift (FEIL)
-1. Nummerert liste for ikke-sekvensielle ting (FEIL)
+1N4148 Diode: uten fet skrift (FEIL)
+1. LED 5mm Red (FEIL - nummerert liste)
+LED 5mm Green uten formatering (FEIL)
 forst, gjor, nar (FEIL - mangler ø/å)
 
 RIKTIG FORMAT:
-- Kulepunkt med bindestrek (RIKTIG)
-**Prusa Mini+**: med fet skrift og kolon (RIKTIG)
-først, gjør, når (RIKTIG - korrekt norsk)"""
+**1N4148**: med fet skrift og kolon (RIKTIG)
+**LED 5mm rød**: med fet skrift og kolon (RIKTIG)
+- Kulepunkt KUN for HMS-regler, ikke komponenter
+først, gjør, når (RIKTIG - korrekt norsk)
+
+VIKTIG: Hver komponent/utstyr skal ha EGEN linje med **fet navn** etterfulgt av kolon og beskrivelse."""
 
     def generate_with_small_model(self, prompt, max_tokens=200, temperature=0.3):
         """Generate text using the small/fast model."""
