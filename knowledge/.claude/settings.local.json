@@ -14,7 +14,9 @@
       "Bash(pip install:*)",
       "Bash(dir /s /b \"C:\\Food-E\\Makerspace-RAG\\app\")",
       "mcp__context7__resolve-library-id",
-      "mcp__context7__get-library-docs"
+      "mcp__context7__get-library-docs",
+      "Bash(pyinstaller:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []
