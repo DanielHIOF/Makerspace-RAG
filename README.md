@@ -1,6 +1,6 @@
 # Makerspace RAG
 
-En RAG (Retrieval-Augmented Generation) chatbot for Makerspace ved Hogskolen i Ostfold. Gir veiledning om digitalt fabrikasjonsutstyr, HMS-regler og komponentlager.
+En RAG (Retrieval-Augmented Generation) chatbot for Makerspace ved Høgskolen i Østfold. Gir veiledning om digitalt fabrikasjonsutstyr, HMS-regler og komponentlager.
 
 ---
 
@@ -16,24 +16,24 @@ En RAG (Retrieval-Augmented Generation) chatbot for Makerspace ved Hogskolen i O
 8. [Kunnskapsbase](#kunnskapsbase)
 9. [Database](#database)
 10. [Konfigurasjon](#konfigurasjon)
-11. [Feilsoking](#feilsoking)
+11. [Feilsøking](#feilsøking)
 12. [Prosjektstruktur](#prosjektstruktur)
 
 ---
 
 ## Hva er Makerspace RAG?
 
-Makerspace RAG er en intelligent chatbot som bruker kunstig intelligens for a hjelpe brukere av Makerspace. Systemet kombinerer:
+Makerspace RAG er en intelligent chatbot som bruker kunstig intelligens for å hjelpe brukere av Makerspace. Systemet kombinerer:
 
-- **Lokal LLM (Ollama)**: Kjorer AI-modellen lokalt pa din maskin - ingen data sendes til skyen
-- **RAG-teknologi**: Henter relevant informasjon fra kunnskapsbasen for a gi presise svar
-- **Semantisk sok**: Forstar meningen bak sporsmalet, ikke bare nokkeldord
+- **Lokal LLM (Ollama)**: Kjører AI-modellen lokalt på din maskin - ingen data sendes til skyen
+- **RAG-teknologi**: Henter relevant informasjon fra kunnskapsbasen for å gi presise svar
+- **Semantisk søk**: Forstår meningen bak spørsmålet, ikke bare nøkkelord
 
 ### Hvordan det fungerer
 
-1. Bruker stiller et sporsmal i chatten
-2. Systemet soker i kunnskapsbasen etter relevant informasjon
-3. AI-modellen genererer et svar basert pa den hentede informasjonen
+1. Bruker stiller et spørsmål i chatten
+2. Systemet søker i kunnskapsbasen etter relevant informasjon
+3. AI-modellen genererer et svar basert på den hentede informasjonen
 4. Svaret vises i chatten med kilder og referanser
 
 ---
@@ -45,20 +45,20 @@ Makerspace RAG er en intelligent chatbot som bruker kunstig intelligens for a hj
 | Funksjon | Beskrivelse |
 |----------|-------------|
 | **Kontekstbevisst chat** | Husker tidligere meldinger i samtalen |
-| **Flerspraklig** | Stotter norsk og engelsk |
-| **Ferdighetsniva** | Tilpasser svar til nybegynner eller ekspert |
+| **Flerspråklig** | Støtter norsk og engelsk |
+| **Ferdighetsnivå** | Tilpasser svar til nybegynner eller ekspert |
 | **Kildeangivelse** | Viser hvor informasjonen kommer fra |
 
 ### Utstyrsveiledning
 
 - Bruksanvisninger for alle maskiner
 - HMS-regler og sikkerhetsinstrukser
-- Feilsoking og vedlikehold
+- Feilsøking og vedlikehold
 - Materialguider
 
 ### Komponentlager
 
-- Sok etter elektroniske komponenter
+- Søk etter elektroniske komponenter
 - Se lagerstatus og plassering
 - Tekniske spesifikasjoner
 - Koblingsdiagrammer
@@ -94,17 +94,17 @@ Makerspace RAG er en intelligent chatbot som bruker kunstig intelligens for a hj
 
 ### GPU-akselerasjon (Sterkt anbefalt)
 
-For rask AI-respons anbefales det sterkt a bruke en NVIDIA GPU:
+For rask AI-respons anbefales det sterkt å bruke en NVIDIA GPU:
 
 **Fordeler med GPU:**
 - 5-10x raskere svar fra AI
-- Bedre handtering av lange dokumenter
-- Stotte for storre AI-modeller
+- Bedre håndtering av lange dokumenter
+- Støtte for større AI-modeller
 
 **Kompatible GPUer:**
 - NVIDIA RTX 3060 eller nyere (anbefalt)
 - NVIDIA GTX 1660 eller nyere (minimum)
-- Krever CUDA-stotte
+- Krever CUDA-støtte
 
 **Slik aktiverer du GPU:**
 1. Installer [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda-downloads)
@@ -115,7 +115,7 @@ For rask AI-respons anbefales det sterkt a bruke en NVIDIA GPU:
 
 ## Hurtigstart (Exe)
 
-For sluttbrukere som bare vil kjore programmet:
+For sluttbrukere som bare vil kjøre programmet:
 
 ### Steg 1: Start programmet
 
@@ -123,24 +123,24 @@ For sluttbrukere som bare vil kjore programmet:
 dist\MakerspaceRAG\MakerspaceRAG.exe
 ```
 
-### Steg 2: Forste gangs oppsett
+### Steg 2: Første gangs oppsett
 
-Ved forste oppstart vil programmet:
+Ved første oppstart vil programmet:
 
 1. **Sjekke Ollama** - Installerer automatisk hvis mangler
 2. **Laste ned AI-modeller** - llama3 og mxbai-embed-large (~4 GB)
 3. **Konfigurere database** - Velg lokal eller ekstern database
-4. **Starte nettleser** - Apner automatisk http://localhost:5000
+4. **Starte nettleser** - Åpner automatisk http://localhost:5000
 
 ### Steg 3: Databasevalg
 
-Du far valget mellom:
+Du får valget mellom:
 
-**[1] Lokal database** - MariaDB pa samme maskin
+**[1] Lokal database** - MariaDB på samme maskin
 - Enklest oppsett
 - Krever MariaDB installert
 
-**[2] Ekstern database** - MariaDB pa annen maskin
+**[2] Ekstern database** - MariaDB på annen maskin
 - For delt tilgang
 - Oppgi IP, brukernavn og passord
 
@@ -150,7 +150,7 @@ Du far valget mellom:
 
 ### Forutsetninger
 
-Installer folgende for du begynner:
+Installer følgende før du begynner:
 
 1. **Python 3.10+**: [python.org](https://python.org)
 2. **Node.js 18+**: [nodejs.org](https://nodejs.org)
@@ -185,7 +185,17 @@ GRANT ALL PRIVILEGES ON makerspace_rag.* TO 'makerspace'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-### Steg 4: Ollama og AI-modeller
+### Steg 4: Importer komponentdata (VIKTIG - kun første gang!)
+
+Dette scriptet importerer alle komponenter fra JSON til databasen:
+
+```bash
+python installer/import_data.py
+```
+
+Velg alternativ 1 for direkte import. Scriptet hopper over hvis data allerede finnes.
+
+### Steg 5: Ollama og AI-modeller
 
 ```bash
 # Installer Ollama fra ollama.com, deretter:
@@ -193,7 +203,7 @@ ollama pull llama3
 ollama pull mxbai-embed-large
 ```
 
-### Steg 5: Bygg React-frontend
+### Steg 6: Bygg React-frontend
 
 ```bash
 cd frontend
@@ -202,13 +212,13 @@ npm run build
 cd ..
 ```
 
-### Steg 6: Start applikasjonen
+### Steg 7: Start applikasjonen
 
 ```bash
 python run.py
 ```
 
-Apne http://localhost:5000 i nettleseren.
+Åpne http://localhost:5000 i nettleseren.
 
 ---
 
@@ -218,37 +228,37 @@ Apne http://localhost:5000 i nettleseren.
 
 **Slik bruker du chatten:**
 
-1. Skriv sporsmalet ditt i tekstfeltet nederst
+1. Skriv spørsmålet ditt i tekstfeltet nederst
 2. Trykk Enter eller klikk Send-knappen
-3. Vent pa svar (kan ta noen sekunder)
+3. Vent på svar (kan ta noen sekunder)
 4. Les svaret og eventuelle kilder
 
-**Tips for gode sporsmal:**
+**Tips for gode spørsmål:**
 
-| Bra sporsmal | Darlig sporsmal |
+| Bra spørsmål | Dårlig spørsmål |
 |--------------|-----------------|
 | "Hvordan bruker jeg laserkutteren Epilog?" | "Laser" |
 | "Hvilke sikkerhetstiltak gjelder for 3D-printing?" | "Regler" |
-| "Har dere 10k ohm motstander pa lager?" | "Motstand" |
+| "Har dere 10k ohm motstander på lager?" | "Motstand" |
 
-### Velge ferdighetsniva
+### Velge ferdighetsnivå
 
-Klikk pa innstillinger-ikonet for a velge:
+Klikk på innstillinger-ikonet for å velge:
 
 - **Nybegynner**: Detaljerte forklaringer, steg-for-steg instrukser
-- **Ekspert**: Kortfattede svar, teknisk sprak
+- **Ekspert**: Kortfattede svar, teknisk språk
 
-### Sok etter komponenter
+### Søk etter komponenter
 
-1. Skriv "sok etter [komponent]" i chatten
-2. Eller bruk sokefeltet i komponentoversikten
+1. Skriv "søk etter [komponent]" i chatten
+2. Eller bruk søkefeltet i komponentoversikten
 3. Resultatene viser lagerstatus og plassering
 
 ---
 
 ## Administrasjonspanel
 
-Ga til http://localhost:5000/admin
+Gå til http://localhost:5000/admin
 
 **Standard innlogging:**
 - Brukernavn: `admin`
@@ -258,7 +268,7 @@ Ga til http://localhost:5000/admin
 
 #### 1. Last opp dokumenter
 
-Stottede formater:
+Støttede formater:
 - PDF (.pdf)
 - Tekstfiler (.txt, .md)
 - HTML (.html)
@@ -274,19 +284,19 @@ Stottede formater:
 - Legg til nye komponenter
 - Rediger eksisterende
 - Oppdater lagerstatus
-- Slett utgatte komponenter
+- Slett utgåtte komponenter
 
 #### 3. Se statistikk
 
-- Antall sporsmal
-- Populare emner
+- Antall spørsmål
+- Populære emner
 - Responstider
 
 ---
 
 ## Kunnskapsbase
 
-Kunnskapsbasen er kjernen i RAG-systemet. Den inneholder all informasjon boten kan svare pa.
+Kunnskapsbasen er kjernen i RAG-systemet. Den inneholder all informasjon boten kan svare på.
 
 ### Filstruktur
 
@@ -295,7 +305,7 @@ knowledge/
    components.json      # Elektroniske komponenter
    utstyr.json          # Maskiner og utstyr
    regler.json          # HMS og sikkerhet
-   rom.json             # Rominfo og atider
+   rom.json             # Rominfo og åpningstider
    ressurser.json       # Lenker og ressurser
    prosessflyt.json     # Arbeidsflyter
    prosjektideer.json   # Prosjektforslag
@@ -305,14 +315,14 @@ knowledge/
 
 #### Metode 1: Via admin-panelet (anbefalt)
 
-1. Ga til Admin > Kunnskapsbase
+1. Gå til Admin > Kunnskapsbase
 2. Klikk "Legg til innhold"
 3. Fyll ut skjema med tittel, kategori og innhold
 4. Klikk Lagre
 
 #### Metode 2: Redigere JSON-filer direkte
 
-Apne relevant JSON-fil i `knowledge/`-mappen:
+Åpne relevant JSON-fil i `knowledge/`-mappen:
 
 **Eksempel - Legge til nytt utstyr i utstyr.json:**
 
@@ -322,8 +332,8 @@ Apne relevant JSON-fil i `knowledge/`-mappen:
   "kategori": "3D-printer",
   "beskrivelse": "Avansert FDM 3D-printer med automatisk kalibrering",
   "plassering": "Rom 101",
-  "hms": "Krever opplaering for bruk. Ikke beryr varm dyse.",
-  "bruksanvisning": "1. Sla pa printeren...",
+  "hms": "Krever opplæring før bruk. Ikke berør varm dyse.",
+  "bruksanvisning": "1. Slå på printeren...",
   "materialer": ["PLA", "PETG", "ASA"]
 }
 ```
@@ -332,9 +342,9 @@ Apne relevant JSON-fil i `knowledge/`-mappen:
 
 ```json
 {
-  "navn": "LED 5mm Rod",
+  "navn": "LED 5mm Rød",
   "kategori": "LED",
-  "beskrivelse": "Standard 5mm rod LED, 20mA, 2V",
+  "beskrivelse": "Standard 5mm rød LED, 20mA, 2V",
   "antall": 500,
   "plassering": "Skuff A3",
   "datablad": "https://...",
@@ -348,12 +358,12 @@ Apne relevant JSON-fil i `knowledge/`-mappen:
 #### Metode 3: Last opp dokumenter
 
 1. Legg PDF/tekstfiler i `uploads/`-mappen
-2. Kjor: `python -c "from app.services.knowledge_service import process_uploads; process_uploads()"`
+2. Kjør: `python -c "from app.services.knowledge_service import process_uploads; process_uploads()"`
 3. Dokumentene blir automatisk chunked og indeksert
 
 ### Vault.txt - Prosesserte chunks
 
-Filen `vault.txt` inneholder alle tekstbiter som boten soker i. Hver linje er en "chunk" pa ~1000 tegn.
+Filen `vault.txt` inneholder alle tekstbiter som boten søker i. Hver linje er en "chunk" på ~1000 tegn.
 
 **Regenerere vault.txt:**
 ```bash
@@ -418,27 +428,27 @@ Component.query.filter_by(name='Arduino Uno').delete()
 db.session.commit()
 
 # Slett alle i en kategori
-Component.query.filter_by(category='Utgatt').delete()
+Component.query.filter_by(category='Utgått').delete()
 db.session.commit()
 ```
 
 ### Ekstern database (nettverkstilgang)
 
-For a kjore databasen pa en annen maskin:
+For å kjøre databasen på en annen maskin:
 
-**Pa database-serveren:**
+**På database-serveren:**
 
-1. Kjor setup-scriptet:
+1. Kjør setup-scriptet:
    ```bash
    python installer/setup_database.py
    ```
 
-2. Apne brannmur:
+2. Åpne brannmur:
    ```cmd
    netsh advfirewall firewall add rule name="MariaDB" dir=in action=allow protocol=tcp localport=3306
    ```
 
-**Pa applikasjons-serveren:**
+**På applikasjons-serveren:**
 
 Rediger `.env`:
 ```env
@@ -453,7 +463,7 @@ DB_NAME=makerspace_rag
 
 ## Konfigurasjon
 
-### Miljovariable (.env)
+### Miljøvariable (.env)
 
 Kopier `.env.example` til `.env` og tilpass:
 
@@ -483,16 +493,16 @@ ADMIN_PASSWORD=endre-dette-passordet
 
 ### Endre AI-modell
 
-For a bruke en annen modell:
+For å bruke en annen modell:
 
 1. Last ned modellen: `ollama pull <modellnavn>`
 2. Oppdater `.env`: `LLM_MODEL=<modellnavn>`
-3. Start applikasjonen pa nytt
+3. Start applikasjonen på nytt
 
 **Anbefalte modeller:**
 - `llama3` - God balanse mellom kvalitet og hastighet
 - `llama3:70b` - Beste kvalitet (krever kraftig GPU)
-- `mistral` - Rask, god pa norsk
+- `mistral` - Rask, god på norsk
 
 ### Endre port
 
@@ -503,13 +513,13 @@ FLASK_PORT=8080
 
 ---
 
-## Feilsoking
+## Feilsøking
 
 ### Vanlige problemer
 
 #### "Kan ikke koble til database"
 
-1. Sjekk at MariaDB kjorer: `net start MariaDB`
+1. Sjekk at MariaDB kjører: `net start MariaDB`
 2. Verifiser tilkobling: `mysql -u makerspace -p makerspace_rag`
 3. Sjekk brannmur for port 3306
 
@@ -529,13 +539,13 @@ FLASK_PORT=8080
 
 1. Sjekk at informasjonen finnes i kunnskapsbasen
 2. Regenerer embeddings
-3. Pruv mer spesifikke sporsmal
+3. Prøv mer spesifikke spørsmål
 
 ### Logger
 
 Logger finnes i:
 - `app.log` - Applikasjonslogg
-- Konsollvinduet ved kjoring
+- Konsollvinduet ved kjøring
 
 ---
 
@@ -557,7 +567,7 @@ Makerspace-RAG/
          public.py               # Offentlige sider
       services/                  # Forretningslogikk
          llm_service.py          # AI-integrasjon
-         search_service.py       # Sok og RAG
+         search_service.py       # Søk og RAG
          embedding_service.py    # Vektorembeddings
          knowledge_service.py    # Kunnskapsbase
       static/react/              # Bygget frontend
@@ -598,12 +608,6 @@ Resultat: `dist/MakerspaceRAG/MakerspaceRAG.exe`
 
 ---
 
-## Bidra til prosjektet
-
-Se [CONTRIBUTING.md](CONTRIBUTING.md) for retningslinjer.
-
----
-
 ## Lisens
 
-Dette prosjektet er utviklet for Hogskolen i Ostfold.
+Dette prosjektet er utviklet for Høgskolen i Østfold - kun for internbruk.

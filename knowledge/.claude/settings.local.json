@@ -16,7 +16,8 @@
       "mcp__context7__resolve-library-id",
       "mcp__context7__get-library-docs",
       "Bash(pyinstaller:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(del \"C:\\Food-E\\Makerspace-RAG\\CONTRIBUTING.md\")"
     ],
     "deny": [],
     "ask": []
