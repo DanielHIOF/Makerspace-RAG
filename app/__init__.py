@@ -62,4 +62,10 @@ def create_app(config_name=None):
     app.register_blueprint(api_bp, url_prefix='/api')
     app.register_blueprint(file_bp)
 
+    # Preload search service with embeddings on startup
+    print("  [SEARCH] Preloading search service and embeddings...")
+    from app.services.search_service import get_search_service
+    get_search_service()
+    print("  [SEARCH] Search service ready!")
+
     return app

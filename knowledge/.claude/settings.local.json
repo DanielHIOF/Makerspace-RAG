@@ -12,7 +12,9 @@
       "Bash(npm run build:*)",
       "Bash(dir /s /b \"C:\\Food-E\\Makerspace-RAG\\app\\static\\react\")",
       "Bash(pip install:*)",
-      "Bash(dir /s /b \"C:\\Food-E\\Makerspace-RAG\\app\")"
+      "Bash(dir /s /b \"C:\\Food-E\\Makerspace-RAG\\app\")",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs"
     ],
     "deny": [],
     "ask": []

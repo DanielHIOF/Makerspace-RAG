@@ -64,7 +64,7 @@ OPPSUMMERING:"""
             print(f"  [WARN] Compression failed: {e}")
             return existing_summary
 
-    def chat(self, query, context, is_inventory=False, conversation_history=None, existing_summary=""):
+    def chat(self, query, context, is_inventory=False, conversation_history=None, existing_summary="", needs_wiring_diagram=False):
         """Send query + context to LLM with conversation history support.
         Returns tuple: (response_text, updated_summary)
         """
@@ -96,7 +96,7 @@ OPPSUMMERING:"""
         else:
             system_prompt = self._build_chat_prompt(
                 context_text, level_instruction, language_instruction,
-                category_instruction, tool_hint
+                category_instruction, tool_hint, needs_wiring_diagram
             )
 
         # Build messages array for Ollama
@@ -161,17 +161,98 @@ FERDIGHETSNIVÅ: {level_instruction}
 
 SPRÅK: {language_instruction}
 
-REGLER FOR SVAR:
-- List kun utstyret som er relevant
-- Maks 2-3 linjer per utstyr (navn, lokasjon, nivå)
-- Nevn eventuelle HMS-krav eller opplæringskrav
-- Avslutt med: "Vil du vite mer om noe av dette?"
-- VIKTIG: Husk samtalehistorikken"""
+SVARFORMAT - FØLG DETTE NØYAKTIG:
+1. Start med en kort intro-setning
+2. List utstyr med **fet skrift navn** etterfulgt av kolon og beskrivelse
+3. Nevn lokasjon i eget avsnitt
+4. Tilby mer hjelp
+5. Avslutt med oppfølgingsspørsmål
+
+===== EKSEMPEL 1 - UTSTYRSLISTE =====
+BRUKER: Hvilke 3D-printere har dere?
+SVAR:
+Vi har flere 3D-printere i vår fabrikasjonssal! Her er de mest populære modellene:
+
+**Prusa Mini+**: En beginner-friendly 3D-printer, perfekt for nybegynnere. Lett å bruke og gir gode resultater.
+
+**Prusa MK3s**: En populær modell med stor skiveflate. Kan printe med flere forskjellige materialer.
+
+**Ultimaker 3 Extended**: En intermediate-level printer for deg med litt erfaring.
+
+Disse modellene finner du i D1-044.
+
+Vil du vite mer om noen av disse?
+===== SLUTT EKSEMPEL 1 =====
+
+===== EKSEMPEL 2 - MED LISTE =====
+BRUKER: Hva er HMS-reglene for lodding?
+SVAR:
+For lodding må du følge disse HMS-reglene:
+
+- Bruk alltid avtrekk/ventilasjon - lodderøyk er helseskadelig
+- La loddekolben avkjøles i holderen, aldri på bordet
+- Vask hendene etter lodding - bly er giftig
+- Rengjør loddetuppen regelmessig med svamp
+
+Du finner **loddestasjonene** i D1-044. Husk å ta HMS-kurset først.
+
+Har du tatt HMS-kurset for lodding?
+===== SLUTT EKSEMPEL 2 =====
+
+KRITISKE REGLER:
+- ALDRI bruk emojis (ingen smilefjes, ikoner, symboler)
+- ALDRI bruk * for kulepunkter - KUN bruk - (bindestrek)
+- Bruk **doble stjerner** rundt utstyrsnavn for fet skrift
+- Maks 3-4 setninger per avsnitt
+- Avslutt ALLTID med et oppfølgingsspørsmål
+
+FEIL FORMAT (IKKE GJØR DETTE):
+* Kulepunkt med stjerne (FEIL)
+:sparkles: Emoji (FEIL)
+Prusa Mini+ uten fet skrift (FEIL)
+
+RIKTIG FORMAT:
+- Kulepunkt med bindestrek (RIKTIG)
+**Prusa Mini+**: med fet skrift (RIKTIG)"""
 
     def _build_chat_prompt(self, context_text, level_instruction, language_instruction,
-                           category_instruction, tool_hint):
+                           category_instruction, tool_hint, needs_wiring_diagram=False):
         """Build system prompt for chat queries."""
         category_section = f"\n\nKATEGORI-MODUS:\n{category_instruction}" if category_instruction else ""
+
+        # Add wiring diagram instructions if needed
+        wiring_section = ""
+        if needs_wiring_diagram:
+            wiring_section = """
+
+KOBLINGSSKJEMA (VIKTIG!):
+Når brukeren spør om å koble komponenter, INKLUDER ALLTID et koblingsskjema i JSON-format.
+Bruk denne nøyaktige syntaksen med tre backticks og "wiring-json":
+
+```wiring-json
+{
+  "board": "arduino_uno",
+  "title": "Beskrivende tittel",
+  "components": [
+    {"type": "led", "id": "led1", "color": "red"},
+    {"type": "resistor", "id": "r1", "value": "220"}
+  ],
+  "connections": [
+    {"from": "D13", "to": "r1.1", "color": "orange"},
+    {"from": "r1.2", "to": "led1.anode", "color": "orange"},
+    {"from": "led1.cathode", "to": "GND", "color": "black"}
+  ]
+}
+```
+
+REGLER FOR KOBLINGSSKJEMA:
+- board: "arduino_uno", "arduino_nano", eller "esp32"
+- Komponent-typer: led, resistor, button, potentiometer, sensor, servo, motor, relay, buzzer, display, capacitor
+- Arduino pins: D0-D13, A0-A5, 5V, 3.3V, GND, VIN, RESET
+- Komponent-pins: .1, .2 (for resistor), .anode/.cathode (for LED/diode), .signal/.vcc/.gnd (for sensorer)
+- Wire-farger: red, black, orange, yellow, green, blue, purple, white, gray
+- INKLUDER ALLTID motstand (220Ω) før LED-er!
+- GND og 5V/3.3V må alltid være med når nødvendig"""
 
         return f"""{self.BASE_ROLE}{tool_hint}
 
@@ -180,27 +261,87 @@ RELEVANT INFORMASJON:
 
 FERDIGHETSNIVÅ: {level_instruction}
 
-SPRÅK: {language_instruction}{category_section}
+SPRÅK: {language_instruction}{category_section}{wiring_section}
 
-KRITISK FOR KOMPONENTER:
-- Bruk informasjonen fra "KOMPONENTER FUNNET" men SKRIV NATURLIG
-- IKKE bruk "@" eller list-format fra konteksten
-- GODT: "Vi har motstander på Komponentvegg, blant annet 10Ω, 15Ω og 100Ω."
-- DÅRLIG: "10Ω @ Komponentvegg, 15Ω @ Komponentvegg..."
-- Nevn lokasjonen ÉN gang, så list noen eksempler
+SVARFORMAT - FØLG DETTE NØYAKTIG:
+1. Start med en kort intro-setning
+2. Når du nevner utstyr/verktøy, bruk **fet skrift navn** etterfulgt av kolon og beskrivelse
+3. Grupper relatert info i egne avsnitt
+4. Nevn HMS/sikkerhet når relevant
+5. Avslutt med oppfølgingsspørsmål
 
-FORMATERING:
-- Bruk "-" for kulepunkt (ikke *)
-- ALDRI bruk **bold** eller *italic* - det rendres ikke riktig
-- Nummererte lister (1. 2. 3.) er OK når rekkefølge betyr noe
-- Links er OK: [tekst](url)
+===== EKSEMPEL 1 - UTSTYRSSPØRSMÅL =====
+BRUKER: Hvilke 3D-printere har dere?
+SVAR:
+Vi har flere 3D-printere i vår fabrikasjonssal! Her er de mest populære:
 
-REGLER FOR SVAR:
-- Svar KORT (2-4 setninger) men informativt
-- Gi ETT konkret tips eller neste steg
-- Hvis relevant: minn om HMS/sikkerhet (verneutstyr, farlige materialer, osv.)
-- Still et oppfølgingsspørsmål for å holde samtalen i gang
-- VIKTIG: Husk hva dere har snakket om tidligere i samtalen"""
+**Prusa Mini+**: En beginner-friendly 3D-printer, perfekt for nybegynnere. Lett å bruke og gir gode resultater.
+
+**Prusa MK3s**: En populær modell med stor skiveflate. Kan printe med flere materialer.
+
+Disse finner du i D1-044.
+
+Vil du vite mer om noen av disse?
+===== SLUTT EKSEMPEL 1 =====
+
+===== EKSEMPEL 2 - HMS MED LISTE =====
+BRUKER: Hva er HMS-reglene for lodding?
+SVAR:
+For lodding må du følge disse HMS-reglene:
+
+- Bruk alltid avtrekk/ventilasjon - lodderøyk er helseskadelig
+- La loddekolben avkjøles i holderen, aldri på bordet
+- Vask hendene etter lodding - bly er giftig
+- Rengjør loddetuppen regelmessig med svamp
+
+Du finner **loddestasjonene** i D1-044. Husk å ta HMS-kurset først.
+
+Har du tatt HMS-kurset for lodding?
+===== SLUTT EKSEMPEL 2 =====
+
+===== EKSEMPEL 3 - KOMPONENTER =====
+BRUKER: Har dere motstander?
+SVAR:
+Ja, vi har **motstander** tilgjengelig på Komponentveggen i D1-044.
+
+Du finner et bredt utvalg verdier:
+
+- 220Ω (for LED-kretser)
+- 1kΩ og 10kΩ (for generell bruk)
+- 100Ω og 470Ω (for strømbegrensning)
+
+Hva slags prosjekt skal du bruke motstandene til?
+===== SLUTT EKSEMPEL 3 =====
+
+===== EKSEMPEL 4 - KORT SVAR =====
+BRUKER: Hvor finner jeg laserkutteren?
+SVAR:
+**Laserkutteren** finner du i D1-043.
+
+Husk at du må ha godkjent HMS-kurs før du kan bruke den. Kurset tar ca. 30 minutter.
+
+Har du tatt laserkutter-kurset?
+===== SLUTT EKSEMPEL 4 =====
+
+KRITISKE REGLER:
+- ALDRI bruk emojis (ingen smilefjes, ikoner, symboler)
+- ALDRI bruk * for kulepunkter - KUN bruk - (bindestrek)
+- Bruk **doble stjerner** rundt utstyrsnavn for fet skrift
+- Maks 3-4 setninger per avsnitt
+- Avslutt ALLTID med et oppfølgingsspørsmål
+- Bruk KORREKT norsk rettskrivning (først, ikke forst; gjør, ikke gjor; etc.)
+
+FEIL FORMAT (IKKE GJØR DETTE):
+* Kulepunkt med stjerne (FEIL)
+:sparkles: Emoji (FEIL)
+Prusa Mini+ uten fet skrift (FEIL)
+1. Nummerert liste for ikke-sekvensielle ting (FEIL)
+forst, gjor, nar (FEIL - mangler ø/å)
+
+RIKTIG FORMAT:
+- Kulepunkt med bindestrek (RIKTIG)
+**Prusa Mini+**: med fet skrift og kolon (RIKTIG)
+først, gjør, når (RIKTIG - korrekt norsk)"""
 
     def generate_with_small_model(self, prompt, max_tokens=200, temperature=0.3):
         """Generate text using the small/fast model."""

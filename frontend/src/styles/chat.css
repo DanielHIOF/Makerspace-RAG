@@ -158,11 +158,12 @@
 }
 
 .message {
-    padding: 20px 24px;
+    padding: 24px 32px;
     border-radius: 18px;
     line-height: 1.75;
     animation: fadeIn 0.3s ease;
     font-size: 1.05rem;
+    display: block;
 }
 
 .message.user {
@@ -180,6 +181,15 @@
     max-width: 85%;
     border-bottom-left-radius: 4px;
     box-shadow: 0 2px 8px var(--shadow);
+}
+
+.message p {
+    display: block;
+    margin-bottom: 0.75em;
+}
+
+.message p:last-child {
+    margin-bottom: 0;
 }
 
 .message code {

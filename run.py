@@ -43,4 +43,4 @@ if __name__ == '__main__':
     print(f"    2. Open http://localhost:{port}")
     print(f"{'='*60}\n")
 
-    app.run(host=host, port=port, debug=debug)
+    app.run(host=host, port=port, debug=debug, use_reloader=False)

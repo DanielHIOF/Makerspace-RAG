@@ -46,6 +46,7 @@ class QueryAnalysis:
     is_inventory: bool
     is_component: bool
     is_code_example: bool
+    needs_wiring_diagram: bool
     raw_query: str
 
     @property
@@ -65,7 +66,8 @@ class QueryAnalysis:
             'language': self.language[0],
             'is_inventory': self.is_inventory,
             'is_component': self.is_component,
-            'is_code_example': self.is_code_example
+            'is_code_example': self.is_code_example,
+            'needs_wiring_diagram': self.needs_wiring_diagram
         }
 
 
@@ -207,6 +209,28 @@ class QueryClassifier:
         r'koble.*til', r'connect.*to'
     ]
 
+    # Wiring diagram patterns - queries that should generate visual wiring diagrams
+    WIRING_DIAGRAM_PATTERNS = [
+        r'koblingsskjema', r'koblingsdiagram', r'wiring.*diagram',
+        r'koble.*led', r'koble.*motor', r'koble.*sensor', r'koble.*servo',
+        r'koble.*knapp', r'koble.*button', r'koble.*relay', r'koble.*rele',
+        r'koble.*display', r'koble.*lcd', r'koble.*oled',
+        r'connect.*led', r'connect.*motor', r'connect.*sensor', r'connect.*servo',
+        r'connect.*button', r'connect.*relay', r'connect.*display',
+        r'hvordan.*koble.*arduino', r'how.*connect.*arduino',
+        r'hvordan.*koble.*esp32', r'how.*connect.*esp32',
+        r'vis.*kobling', r'show.*wiring', r'show.*connection',
+        r'krets.*diagram', r'circuit.*diagram',
+        r'pin.*diagram', r'pinout',
+        r'koble.*til.*arduino', r'connect.*to.*arduino',
+        r'koble.*til.*esp32', r'connect.*to.*esp32',
+        r'koble.*til.*raspberry', r'connect.*to.*raspberry',
+        r'led.*arduino', r'arduino.*led',
+        r'motor.*arduino', r'arduino.*motor',
+        r'sensor.*arduino', r'arduino.*sensor',
+        r'breadboard.*kobling', r'breadboard.*connection'
+    ]
+
     @classmethod
     def classify(cls, query: str) -> ClassificationResult:
         """
@@ -338,6 +362,15 @@ class QueryClassifier:
         return any(re.search(p, query_lower, re.IGNORECASE) for p in cls.CODE_EXAMPLE_PATTERNS)
 
     @classmethod
+    def needs_wiring_diagram(cls, query: str) -> bool:
+        """
+        Detect if query should generate a visual wiring diagram.
+        These queries ask about connecting components to Arduino/ESP32/Raspberry Pi.
+        """
+        query_lower = query.lower()
+        return any(re.search(p, query_lower, re.IGNORECASE) for p in cls.WIRING_DIAGRAM_PATTERNS)
+
+    @classmethod
     def analyze(cls, query: str) -> QueryAnalysis:
         """
         Full analysis of a query - returns QueryAnalysis with all detected attributes.
@@ -352,6 +385,7 @@ class QueryClassifier:
             is_inventory=cls.is_inventory_query(query),
             is_component=cls.is_component_query(query),
             is_code_example=cls.is_code_example_query(query),
+            needs_wiring_diagram=cls.needs_wiring_diagram(query),
             raw_query=query
         )
 

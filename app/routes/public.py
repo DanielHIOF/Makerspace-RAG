@@ -114,8 +114,11 @@ def chat():
 
     inventory_query = analysis.is_inventory
     component_query = analysis.is_component
+    needs_wiring = analysis.needs_wiring_diagram
 
     print(f"  Kategori: {analysis.category} (confidence: {analysis.classification.confidence})")
+    if needs_wiring:
+        print(f"  [WIRING] Koblingsskjema forespurt")
     if detected_tool:
         print(f"  Verktoy: {detected_tool} (confidence: {analysis.tool.confidence})")
 
