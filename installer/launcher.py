@@ -6,6 +6,7 @@ One-click launcher that sets up everything and starts the application
 import os
 import sys
 import time
+import json
 import webbrowser
 import threading
 import subprocess
@@ -17,6 +18,7 @@ PROJECT_ROOT = SCRIPT_DIR.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 ENV_FILE = PROJECT_ROOT / '.env'
+FIRST_RUN_MARKER = PROJECT_ROOT / '.initialized'
 
 
 def print_banner():
@@ -38,6 +40,17 @@ def print_status(message, status="INFO"):
     icons = {"INFO": "i", "OK": "+", "WARN": "!", "ERROR": "x", "WAIT": "~"}
     icon = icons.get(status, "*")
     print(f"  [{icon}] {message}")
+
+
+def is_first_run():
+    """Check if this is the first run."""
+    return not FIRST_RUN_MARKER.exists()
+
+
+def mark_initialized():
+    """Mark that first-run setup is complete."""
+    with open(FIRST_RUN_MARKER, 'w') as f:
+        f.write(f"Initialized: {time.strftime('%Y-%m-%d %H:%M:%S')}")
 
 
 def check_python_dependencies():
@@ -68,11 +81,6 @@ def setup_ollama():
     """Run Ollama setup."""
     from installer.setup_ollama import setup_ollama as run_setup
     return run_setup()
-
-
-def is_first_run():
-    """Check if this is the first run (no .env file)."""
-    return not ENV_FILE.exists()
 
 
 def load_env_config():
@@ -191,8 +199,6 @@ def setup_local_database():
             check_mariadb_running,
             configure_remote_access,
             run_sql_script,
-            configure_firewall,
-            restart_mariadb,
             SCRIPT_DIR as DB_SCRIPT_DIR
         )
 
@@ -275,6 +281,63 @@ def check_database():
         return False
 
 
+def import_components():
+    """Import components from JSON to database."""
+    print_status("Importing components to database...", "WAIT")
+
+    try:
+        from app import create_app
+        from app.extensions import db
+        from app.models.component import Component
+
+        app = create_app()
+
+        with app.app_context():
+            # Check if data already exists
+            existing_count = Component.query.count()
+            if existing_count > 0:
+                print_status(f"Database already has {existing_count} components - skipping import", "OK")
+                return True
+
+            # Read JSON file
+            json_path = PROJECT_ROOT / 'knowledge' / 'components.json'
+            if not json_path.exists():
+                print_status("components.json not found - skipping import", "WARN")
+                return True
+
+            with open(json_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            # Import components
+            imported = 0
+            for kategori_key, kategori_data in data.items():
+                kategori_navn = kategori_data.get('name_no', kategori_key)
+                components = kategori_data.get('components', [])
+
+                for comp in components:
+                    name = comp.get('name', comp.get('id', 'Ukjent'))
+                    location = comp.get('location', 'Ukjent')
+
+                    db_comp = Component(
+                        name=name,
+                        hylleplass=location.upper() if location else 'UKJENT',
+                        kategori=kategori_navn,
+                        forbruksvare=comp.get('forbruksvare', False),
+                        restock=comp.get('restock', False),
+                        antall=comp.get('antall', 0)
+                    )
+                    db.session.add(db_comp)
+                    imported += 1
+
+            db.session.commit()
+            print_status(f"Imported {imported} components", "OK")
+            return True
+
+    except Exception as e:
+        print_status(f"Component import error: {e}", "ERROR")
+        return False
+
+
 def open_browser_delayed(url, delay=3):
     """Open browser after a delay."""
     time.sleep(delay)
@@ -316,41 +379,27 @@ def start_application():
     app.run(host=host, port=port, debug=False, use_reloader=False)
 
 
-def main():
-    """Main launcher function."""
-    print_banner()
+def run_first_time_setup():
+    """Run first-time setup wizard."""
+    print("\n" + "="*60)
+    print("  FIRST TIME SETUP")
+    print("="*60)
 
-    first_run = is_first_run()
-
-    # Step 1: Check Python dependencies
-    print("\n[Step 1/5] Checking Python dependencies...")
-    if not check_python_dependencies():
-        print_status("Failed to install dependencies", "ERROR")
-        input("\nPress Enter to exit...")
-        return 1
-
-    # Step 2: Setup Ollama
-    print("\n[Step 2/5] Setting up Ollama...")
+    # Step 1: Ollama
+    print("\n[1/4] Setting up Ollama...")
     if not setup_ollama():
-        print_status("Ollama setup failed", "ERROR")
-        print_status("You can try installing Ollama manually from https://ollama.com", "INFO")
-        input("\nPress Enter to exit...")
-        return 1
+        print_status("Ollama setup failed - you can install it manually later", "WARN")
 
-    # Step 3: Database configuration (first run or reconfigure)
-    print("\n[Step 3/5] Database configuration...")
-    if first_run:
-        print_status("First run detected - running setup wizard", "INFO")
-        config = run_database_config_wizard()
+    # Step 2: Database configuration
+    print("\n[2/4] Database configuration...")
+    config = run_database_config_wizard()
 
-        # If local, setup the database
-        if config.get('DB_HOST', 'localhost') == 'localhost':
-            setup_local_database()
-    else:
-        print_status("Using existing configuration", "OK")
+    # If local, setup the database
+    if config.get('DB_HOST', 'localhost') == 'localhost':
+        setup_local_database()
 
-    # Step 4: Check database connection
-    print("\n[Step 4/5] Checking database connection...")
+    # Step 3: Check database connection
+    print("\n[3/4] Checking database connection...")
     db_ok = check_database()
 
     if not db_ok:
@@ -367,11 +416,56 @@ def main():
                 setup_local_database()
             db_ok = check_database()
         elif choice == "3":
-            return 1
-        # choice == "2" continues anyway
+            return False
 
-    # Step 5: Start application
-    print("\n[Step 5/5] Starting application...")
+    # Step 4: Import components
+    if db_ok:
+        print("\n[4/4] Importing component data...")
+        import_components()
+
+    # Mark as initialized
+    mark_initialized()
+
+    print("\n" + "="*60)
+    print_status("First time setup complete!", "OK")
+    print("="*60)
+
+    return True
+
+
+def main():
+    """Main launcher function."""
+    print_banner()
+
+    first_run = is_first_run()
+
+    if first_run:
+        print("\n  This appears to be the first time running Makerspace RAG.")
+        print("  Do you want to run the setup wizard?\n")
+        print("    [1] Yes - Run first time setup (recommended)")
+        print("    [2] No - Just start the application")
+        print()
+
+        choice = input("  Enter choice (1/2) [1]: ").strip() or "1"
+
+        if choice == "1":
+            if not run_first_time_setup():
+                input("\nPress Enter to exit...")
+                return 1
+        else:
+            print_status("Skipping setup wizard", "INFO")
+            mark_initialized()
+    else:
+        print_status("Configuration found - starting application", "OK")
+
+    # Quick checks before starting
+    print("\n[Starting] Verifying setup...")
+
+    # Check dependencies (silent if OK)
+    check_python_dependencies()
+
+    # Start application
+    print("\n[Starting] Launching application...")
     try:
         start_application()
     except KeyboardInterrupt:

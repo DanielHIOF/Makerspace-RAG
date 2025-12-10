@@ -1,6 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 """
-PyInstaller spec file for Makerspace RAG
+PyInstaller spec file for Makerspace RAG - ONE FILE BUILD
 Build with: pyinstaller installer/makerspace_rag.spec
 """
 
@@ -22,15 +22,11 @@ app_data = [
     (str(PROJECT_ROOT / 'vault.txt'), '.'),
     (str(PROJECT_ROOT / 'knowledge'), 'knowledge'),
 
-    # JSON data files
-    (str(PROJECT_ROOT / 'utstyr.json'), '.'),
-    (str(PROJECT_ROOT / 'sikkerhet.json'), '.'),
-    (str(PROJECT_ROOT / 'rom.json'), '.'),
-
     # Installer scripts and database setup
     (str(PROJECT_ROOT / 'installer' / 'database_setup.sql'), 'installer'),
     (str(PROJECT_ROOT / 'installer' / 'setup_database.py'), 'installer'),
     (str(PROJECT_ROOT / 'installer' / 'setup_ollama.py'), 'installer'),
+    (str(PROJECT_ROOT / 'installer' / 'import_data.py'), 'installer'),
 
     # Environment template
     (str(PROJECT_ROOT / '.env.example'), '.'),
@@ -80,16 +76,21 @@ a = Analysis(
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
+# ONE-FILE executable - alt pakket i én fil
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
     [],
-    exclude_binaries=True,
     name='MakerspaceRAG',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
+    upx_exclude=[],
+    runtime_tmpdir=None,
     console=True,  # Show console for status messages
     disable_windowed_traceback=False,
     argv_emulation=False,
@@ -97,15 +98,4 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon=str(PROJECT_ROOT / 'app' / 'static' / 'makerspace-logo.ico') if (PROJECT_ROOT / 'app' / 'static' / 'makerspace-logo.ico').exists() else None,
-)
-
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='MakerspaceRAG',
 )
